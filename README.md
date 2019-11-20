@@ -1,5 +1,5 @@
-# the-ocean
-Here's how the issue names work:
+# The Ocean: ECS 189L final project
+Here's how issue names in this repo work:
 
 Small tasks are contained into "Epics", which represent big tasks.
 
