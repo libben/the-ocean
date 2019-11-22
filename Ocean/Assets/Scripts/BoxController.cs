@@ -8,8 +8,25 @@ public class BoxController : MonoBehaviour
 	private int CurrentWorld = 1;
 	[SerializeField]
 	private float KillingVelocity = 5;
+	private Rigidbody2D BoxBody;
 
 	private bool BeingGrabbed = false;
+
+	void Awake()
+	{
+		BoxBody = gameObject.GetComponent<Rigidbody2D>();
+	}
+
+	public void ToggleGrabbed()
+	{
+		BeingGrabbed = !BeingGrabbed;
+
+		if (BeingGrabbed)
+			BoxBody.gravityScale = 0;
+		else
+			BoxBody.gravityScale = 1;
+	}
+	
 
     void OnTriggerEnter2D(Collider2D other)
 	{

@@ -44,6 +44,11 @@ namespace OceanGame
 		float originalXScale;                   //Original scale on X axis
 		int direction = 1;                      //Direction player is facing
 
+		[SerializeField]
+		private float GravityGunRange = 0.5f;
+		[SerializeField]
+		private bool GravityGunActive = false;
+		[SerializeField]
 		private BoxController GrabbedBox = null; // for gravity gun grabbing boxes
 
 		void Start()
@@ -67,8 +72,10 @@ namespace OceanGame
 			//Process ground and air movements
 			GroundMovement();
 			MidAirMovement();
+			GravityGunControl();
 
-			// TESTING PURPOSES: See the ray that determines whether player can switch worlds. Should be from player but it's below the player for some reason.
+			// TESTING PURPOSES:
+			// See the ray that determines whether player can switch worlds. Should be from player but it's below the player for some reason.
 			/*
 			if (WorldsController.PlayerCurrentWorld > 1)
 			{
@@ -79,6 +86,8 @@ namespace OceanGame
 				Raycast(transform.position, gameObject.GetComponent<Rigidbody2D>().velocity, 1f, LayersManager.GetLayerMaskWorld1());
 			}
 			*/
+			// See the ray that determines whether a box is within gravity gun range.
+			Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 		}
 
 		void PhysicsCheck()
@@ -110,7 +119,7 @@ namespace OceanGame
 			
 			
 			//If the sign of the velocity and direction don't match, flip the character
-			if (xVelocity * direction < 0f)
+			if (xVelocity * direction < 0f && !GravityGunActive)
 				FlipCharacterDirection();
 
 			//Apply the desired velocity 
@@ -174,6 +183,36 @@ namespace OceanGame
 			transform.localScale = scale;
 		}
 
+		void GravityGunControl()
+		{
+			if (input.GravityGunPressed)
+			{
+				// Gun off: try to turn it on
+				if (!GravityGunActive)
+				{
+					// Check if box is in front of us.
+					var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+					if (boxInRange)
+					{
+						GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
+						GrabbedBox.ToggleGrabbed();
+						GravityGunActive = true;
+					}
+				}
+				// Gun on and holding a box: turn it off and drop the box.
+				else if (GrabbedBox)
+				{
+					GrabbedBox.ToggleGrabbed();
+					GrabbedBox = null;
+					GravityGunActive = false;
+				}
+			}
+
+			if (GrabbedBox)
+			{
+				GrabbedBox.gameObject.GetComponent<Rigidbody2D>().velocity = rigidBody.velocity;
+			}
+		}
 
 		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
 		//functionality
@@ -205,7 +244,15 @@ namespace OceanGame
 			return hit;
 		}
 
+		public bool GetGravityGunActive()
+		{
+			return GravityGunActive;
+		}
 
+		public BoxController GetGrabbedBox()
+		{
+			return GrabbedBox;
+		}
 	}
 
 }
