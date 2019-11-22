@@ -58,7 +58,10 @@ namespace OceanGame
 				if (currentBox)
 				{
 					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
+					{
 						currentBox.gameObject.layer = (int)Layers.OBJECTS1;
+						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects1";
+					}
 				}
 			}
 			// 1->2
@@ -73,7 +76,10 @@ namespace OceanGame
 				if (currentBox)
 				{
 					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
+					{
 						currentBox.gameObject.layer = (int)Layers.OBJECTS2;
+						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects2";
+					}
 				}
 			}
 		}
