@@ -22,6 +22,7 @@ namespace OceanGame
 		public float jumpForce = 6.3f;          //Initial force of jump
 		public float jumpHoldForce = 1.9f;      //Incremental force when jump is held
 		public float jumpHoldDuration = .1f;    //How long the jump key can be held
+		public float MaxJumpVelocity = 20f;
 
 		[Header("Environment Check Properties")]
 		public float footOffset = .4f;          //X Offset of feet raycast
@@ -107,7 +108,7 @@ namespace OceanGame
 			// Before adjusting the collider box myself, it was making the player float above ground weirdly.
 			// That's why we can just use 0,0 as the origin.
 
-			if (Raycast(new Vector2(0,0), Vector2.down, groundDistance))
+			if (Raycast(Vector2.zero, Vector2.down, groundDistance))
 			{
 				isOnGround = true;
 				playerJumped = false;
@@ -145,6 +146,7 @@ namespace OceanGame
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
 				coyoteTime = Time.time + coyoteDuration;
+
 		}
 
 		void MidAirMovement()
@@ -182,6 +184,8 @@ namespace OceanGame
 			//If player is falling to fast, reduce the Y velocity to the max
 			if (rigidBody.velocity.y < maxFallSpeed)
 				rigidBody.velocity = new Vector2(rigidBody.velocity.x, maxFallSpeed);
+			else if (rigidBody.velocity.y > MaxJumpVelocity)
+				rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxJumpVelocity);
 		
 		}
 
@@ -227,7 +231,11 @@ namespace OceanGame
 						else
 						{
 							OtherCollider = gameObject.AddComponent<BoxCollider2D>();
-							OtherCollider.offset = new Vector2((gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
+							OtherCollider.isTrigger = true;
+							if (gameObject.transform.position.x < GrabbedBox.transform.position.x)
+								OtherCollider.offset = new Vector2(-1 * (gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
+							else
+								OtherCollider.offset = new Vector2((gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
 							OtherCollider.size = GrabbedBox.gameObject.GetComponent<BoxCollider2D>().size;
 						}
 	
@@ -292,6 +300,11 @@ namespace OceanGame
 		public BoxController GetGrabbedBox()
 		{
 			return GrabbedBox;
+		}
+
+		void OnTriggerEnter2D(Collider2D other)
+		{
+			rigidBody.velocity = Vector2.zero;
 		}
 	}
 
