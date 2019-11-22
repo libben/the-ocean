@@ -44,8 +44,7 @@ namespace OceanGame
 		float originalXScale;                   //Original scale on X axis
 		int direction = 1;                      //Direction player is facing
 
-		const float smallAmount = .05f;         //A small amount used for hanging position
-
+		private BoxController GrabbedBox = null; // for gravity gun grabbing boxes
 
 		void Start()
 		{
@@ -57,8 +56,7 @@ namespace OceanGame
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
 
-			//Record the player's height from the collider
-			playerHeight = bodyCollider.size.y;
+			groundLayer = LayersManager.GetLayerMaskWorld1();
 		}
 
 		void FixedUpdate()
@@ -69,6 +67,18 @@ namespace OceanGame
 			//Process ground and air movements
 			GroundMovement();
 			MidAirMovement();
+
+			// TESTING PURPOSES: See the ray that determines whether player can switch worlds. Should be from player but it's below the player for some reason.
+			/*
+			if (WorldsController.PlayerCurrentWorld > 1)
+			{
+				Raycast(transform.position, gameObject.GetComponent<Rigidbody2D>().velocity, 1f, LayersManager.GetLayerMaskWorld2());
+			}
+			else
+			{
+				Raycast(transform.position, gameObject.GetComponent<Rigidbody2D>().velocity, 1f, LayersManager.GetLayerMaskWorld1());
+			}
+			*/
 		}
 
 		void PhysicsCheck()
@@ -94,9 +104,11 @@ namespace OceanGame
 
 			// Tighten the player's jump arc by reducing velocity if they jumped.
 			// We might want to have this happen for all falls OR none at all.
+			
 			if (playerJumped)
 				xVelocity /= airSpeedDivisor;
-
+			
+			
 			//If the sign of the velocity and direction don't match, flip the character
 			if (xVelocity * direction < 0f)
 				FlipCharacterDirection();
