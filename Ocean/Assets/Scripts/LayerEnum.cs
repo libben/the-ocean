@@ -18,4 +18,22 @@ namespace OceanGame
 		PLAYERW1,
 		PLAYERW2
 	};
+
+	static class LayersManager
+	{
+		public static int GetLayerMaskWorld1()
+		{
+			return LayerMask.GetMask("Platforms1", "Objects1", "ObjectsPersistent");
+		}
+
+		public static int GetLayerMaskWorld2()
+		{
+			return LayerMask.GetMask("Platforms2", "Objects2", "ObjectsPersistent");
+		}
+
+		public static int GetLayerMaskAll()
+		{
+			return LayerMask.GetMask("Platforms1", "Platforms2", "Objects1", "Objects2", "ObjectsPersistent");
+		}
+	}
 }

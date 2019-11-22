@@ -47,8 +47,6 @@ namespace OceanGame
 			JumpPressed = JumpPressed || Input.GetButtonDown("Jump");
 			JumpHeld = JumpHeld || Input.GetButton("Jump");
 			SwitchPressed = SwitchPressed || Input.GetButtonDown("SwitchWorlds");
-			if (SwitchPressed)
-				Debug.Log("SWITCHING WORLDS...?");
 		}
 
 
