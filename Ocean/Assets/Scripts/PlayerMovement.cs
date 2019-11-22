@@ -44,12 +44,15 @@ namespace OceanGame
 		float originalXScale;                   //Original scale on X axis
 		int direction = 1;                      //Direction player is facing
 
+		// Gravity gun related fields
 		[SerializeField]
 		private float GravityGunRange = 0.5f;
 		[SerializeField]
 		private bool GravityGunActive = false;
 		[SerializeField]
-		private BoxController GrabbedBox = null; // for gravity gun grabbing boxes
+		private BoxController GrabbedBox = null;
+
+		private bool CanMove = true;
 
 		void Start()
 		{
@@ -70,8 +73,12 @@ namespace OceanGame
 			PhysicsCheck();
 
 			//Process ground and air movements
-			GroundMovement();
-			MidAirMovement();
+			if (CanMove)
+			{
+				GroundMovement();
+				MidAirMovement();
+			}
+
 			GravityGunControl();
 
 			// TESTING PURPOSES:
@@ -192,11 +199,18 @@ namespace OceanGame
 				{
 					// Check if box is in front of us.
 					var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
-					if (boxInRange)
+					if (boxInRange && boxInRange.transform.gameObject.name == "Box")
 					{
 						GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 						GrabbedBox.ToggleGrabbed();
 						GravityGunActive = true;
+
+						// If player grabs a box but isn't on the ground, they should be stuck.
+						if (!isOnGround)
+						{
+							rigidBody.gravityScale = 0;
+							CanMove = false;
+						}
 					}
 				}
 				// Gun on and holding a box: turn it off and drop the box.
@@ -205,6 +219,12 @@ namespace OceanGame
 					GrabbedBox.ToggleGrabbed();
 					GrabbedBox = null;
 					GravityGunActive = false;
+
+					if (!CanMove)
+					{
+						rigidBody.gravityScale = 1;
+						CanMove = true;
+					}
 				}
 			}
 
