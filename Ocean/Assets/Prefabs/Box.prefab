@@ -130,7 +130,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.75, y: 0.75}
   m_EdgeRadius: 0
 --- !u!114 &7478445020089268396
 MonoBehaviour:
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentWorld: 1
+  KillingVelocity: 5
 --- !u!61 &7478445020089268399
 BoxCollider2D:
   m_ObjectHideFlags: 0
