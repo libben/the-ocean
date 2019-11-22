@@ -51,6 +51,7 @@ namespace OceanGame
 		private bool GravityGunActive = false;
 		[SerializeField]
 		private BoxController GrabbedBox = null;
+		private BoxCollider2D OtherCollider = null;
 
 		private bool CanMove = true;
 
@@ -132,6 +133,15 @@ namespace OceanGame
 			//Apply the desired velocity 
 			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
 
+			if (GrabbedBox)
+			{
+				GrabbedBox.gameObject.GetComponent<Rigidbody2D>().velocity = rigidBody.velocity;
+				// Huge hack to make the box stay on the same level as the player.
+				GrabbedBox.gameObject.transform.position = new Vector3(GrabbedBox.gameObject.transform.position.x,
+																		gameObject.transform.position.y + 0.5f,
+																		GrabbedBox.gameObject.transform.position.z);
+			}
+
 			//If the player is on the ground, extend the coyote time window
 			if (isOnGround)
 				coyoteTime = Time.time + coyoteDuration;
@@ -198,7 +208,8 @@ namespace OceanGame
 				if (!GravityGunActive)
 				{
 					// Check if box is in front of us.
-					var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+					var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
+											 GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 					if (boxInRange && boxInRange.transform.gameObject.name == "Box")
 					{
 						GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
@@ -208,9 +219,18 @@ namespace OceanGame
 						// If player grabs a box but isn't on the ground, they should be stuck.
 						if (!isOnGround)
 						{
+							rigidBody.velocity = new Vector2(0,0);
 							rigidBody.gravityScale = 0;
 							CanMove = false;
 						}
+
+						else
+						{
+							OtherCollider = gameObject.AddComponent<BoxCollider2D>();
+							OtherCollider.offset = new Vector2((gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
+							OtherCollider.size = GrabbedBox.gameObject.GetComponent<BoxCollider2D>().size;
+						}
+	
 					}
 				}
 				// Gun on and holding a box: turn it off and drop the box.
@@ -225,13 +245,13 @@ namespace OceanGame
 						rigidBody.gravityScale = 1;
 						CanMove = true;
 					}
+					if (OtherCollider)
+					{
+						Destroy(OtherCollider);
+					}
 				}
 			}
 
-			if (GrabbedBox)
-			{
-				GrabbedBox.gameObject.GetComponent<Rigidbody2D>().velocity = rigidBody.velocity;
-			}
 		}
 
 		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
