@@ -47,7 +47,7 @@ namespace OceanGame
 
 		// Gravity gun related fields
 		[SerializeField]
-		private float GravityGunRange = 0.5f;
+		private float GravityGunRange = 1.5f;
 		[SerializeField]
 		private bool GravityGunActive = false;
 		[SerializeField]
