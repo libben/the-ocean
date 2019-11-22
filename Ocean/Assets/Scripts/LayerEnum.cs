@@ -35,5 +35,22 @@ namespace OceanGame
 		{
 			return LayerMask.GetMask("Platforms1", "Platforms2", "Objects1", "Objects2", "ObjectsPersistent");
 		}
+
+		public static int GetLayerMaskObjects(int currentWorld)
+		{
+			switch (currentWorld)
+			{
+				case -1:
+					return LayerMask.GetMask("Objects2", "ObjectsPersistent");
+				case 1:
+					return LayerMask.GetMask("Objects1", "ObjectsPersistent");
+				default:
+					Debug.Log("ERROR: Bad argument for GetLayerMaskObjects, no such world");
+					return 0;
+			}
+		}
+
 	}
+
+
 }
