@@ -50,7 +50,7 @@ namespace OceanGame
 			JumpPressed = JumpPressed || Input.GetButtonDown("Jump");
 			JumpHeld = JumpHeld || Input.GetButton("Jump");
 			SwitchPressed = SwitchPressed || Input.GetButtonDown("SwitchWorlds");
-			GravityGunPressed = GravityGunPressed || Input.GetButtonDown("GravityGun");
+			GravityGunPressed = GravityGunPressed || Input.GetButtonDown("GravityGun") || Input.GetButtonDown("Fire2");
 
 			if (GravityGunPressed)
 			{
