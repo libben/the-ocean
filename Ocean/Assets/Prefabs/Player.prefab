@@ -178,6 +178,6 @@ MonoBehaviour:
   isOnGround: 0
   isJumping: 0
   playerJumped: 0
-  GravityGunRange: 1
+  GravityGunRange: 0.5
   GravityGunActive: 0
   GrabbedBox: {fileID: 0}
