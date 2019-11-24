@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OceanGame
 {
 
-	public class PlayerMovement : MonoBehaviour
+	public class PlayerController : MonoBehaviour
 	{
 		// Note: much of this is from Unity 2D Training Day 2018, Berlin with minor tweaks:
 		// https://www.youtube.com/watch?v=j29NgzV8Dw4&list=PLX2vGYjWbI0REfhDHPpdIBjjrzDHDP-xT&index=1 
@@ -47,12 +47,13 @@ namespace OceanGame
 
 		// Gravity gun related fields
 		[SerializeField]
-		private float GravityGunRange = 1.5f;
+		private float GravityGunRange = 1f;
 		[SerializeField]
 		private bool GravityGunActive = false;
 		[SerializeField]
 		private BoxController GrabbedBox = null;
-		private BoxCollider2D OtherCollider = null;
+		private Vector2 BoxOffset;
+		private Vector2 OriginalColliderSize;
 
 		private bool CanMove = true;
 
@@ -65,6 +66,7 @@ namespace OceanGame
 
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
+			OriginalColliderSize = bodyCollider.size;
 
 			groundLayer = LayersManager.GetLayerMaskWorld1();
 		}
@@ -84,17 +86,6 @@ namespace OceanGame
 			GravityGunControl();
 
 			// TESTING PURPOSES:
-			// See the ray that determines whether player can switch worlds. Should be from player but it's below the player for some reason.
-			/*
-			if (WorldsController.PlayerCurrentWorld > 1)
-			{
-				Raycast(transform.position, gameObject.GetComponent<Rigidbody2D>().velocity, 1f, LayersManager.GetLayerMaskWorld2());
-			}
-			else
-			{
-				Raycast(transform.position, gameObject.GetComponent<Rigidbody2D>().velocity, 1f, LayersManager.GetLayerMaskWorld1());
-			}
-			*/
 			// See the ray that determines whether a box is within gravity gun range.
 			Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 		}
@@ -136,11 +127,7 @@ namespace OceanGame
 
 			if (GrabbedBox)
 			{
-				GrabbedBox.gameObject.GetComponent<Rigidbody2D>().velocity = rigidBody.velocity;
-				// Huge hack to make the box stay on the same level as the player.
-				GrabbedBox.gameObject.transform.position = new Vector3(GrabbedBox.gameObject.transform.position.x,
-																		gameObject.transform.position.y + 0.5f,
-																		GrabbedBox.gameObject.transform.position.z);
+				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
 			}
 
 			//If the player is on the ground, extend the coyote time window
@@ -206,60 +193,64 @@ namespace OceanGame
 
 		void GravityGunControl()
 		{
-			if (input.GravityGunPressed)
+			if (!input.GravityGunPressed)
+				return;
+
+			// Gun off: try to turn it on
+			if (!GravityGunActive)
 			{
-				// Gun off: try to turn it on
-				if (!GravityGunActive)
+				// Check if box is in front of us.
+				var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
+											GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+				if (boxInRange && boxInRange.transform.gameObject.name == "Box")
 				{
-					// Check if box is in front of us.
-					var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
-											 GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
-					if (boxInRange && boxInRange.transform.gameObject.name == "Box")
-					{
-						GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
-						GrabbedBox.ToggleGrabbed();
-						GravityGunActive = true;
-
-						// If player grabs a box but isn't on the ground, they should be stuck.
-						if (!isOnGround)
-						{
-							rigidBody.velocity = new Vector2(0,0);
-							rigidBody.gravityScale = 0;
-							CanMove = false;
-						}
-
-						else
-						{
-							OtherCollider = gameObject.AddComponent<BoxCollider2D>();
-							OtherCollider.isTrigger = true;
-							if (gameObject.transform.position.x < GrabbedBox.transform.position.x)
-								OtherCollider.offset = new Vector2(-1 * (gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
-							else
-								OtherCollider.offset = new Vector2((gameObject.transform.position.x - GrabbedBox.transform.position.x), 0.5f);
-							OtherCollider.size = GrabbedBox.gameObject.GetComponent<BoxCollider2D>().size;
-						}
-	
-					}
-				}
-				// Gun on and holding a box: turn it off and drop the box.
-				else if (GrabbedBox)
-				{
+					GravityGunActive = true;
+					
+					// Grab box, turn off its colliders, save its position relative to player, expand player collider
+					GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 					GrabbedBox.ToggleGrabbed();
-					GrabbedBox = null;
-					GravityGunActive = false;
+					var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 
-					if (!CanMove)
+					foreach (Collider2D collider in boxColliders)
+						collider.enabled = false;
+
+					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
+					bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
+					bodyCollider.offset = new Vector2(direction * BoxOffset.x / 2, bodyCollider.offset.y);
+
+					// If player grabs a box but isn't on the ground, they should be stuck dangling.
+					if (!isOnGround)
 					{
-						rigidBody.gravityScale = 1;
-						CanMove = true;
+						rigidBody.velocity = new Vector2(0,0);
+						rigidBody.gravityScale = 0;
+						CanMove = false;
 					}
-					if (OtherCollider)
-					{
-						Destroy(OtherCollider);
-					}
+
+					Debug.Log("Gravity gun on");
 				}
 			}
+			// Gun on and holding a box: turn it off, drop box, reenable its colliders, shrink player hitbox.
+			else if (GrabbedBox)
+			{
+				GravityGunActive = false;
+				bodyCollider.size = OriginalColliderSize;
+				bodyCollider.offset = new Vector2(0, bodyCollider.offset.y);
+				GrabbedBox.ToggleGrabbed();
+				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 
+				foreach (Collider2D collider in boxColliders)
+					collider.enabled = true;
+
+				GrabbedBox = null;
+
+				if (!CanMove)
+				{
+					rigidBody.gravityScale = 1;
+					CanMove = true;
+				}
+
+				Debug.Log("Gravity gun off");
+			}
 		}
 
 		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra

@@ -51,7 +51,7 @@ namespace OceanGame
 				PlayerObject.layer = (int)Layers.PLAYERW1;
 
 				// Need to inform the movement controller script that the ground is now world 1's ground
-				var movementController = PlayerObject.GetComponent<PlayerMovement>();
+				var movementController = PlayerObject.GetComponent<PlayerController>();
 				movementController.groundLayer = LayersManager.GetLayerMaskWorld1();
 
 				var currentBox = movementController.GetGrabbedBox();
@@ -69,7 +69,7 @@ namespace OceanGame
 			{
 				PlayerObject.layer = (int)Layers.PLAYERW2;
 
-				var movementController = PlayerObject.GetComponent<PlayerMovement>();
+				var movementController = PlayerObject.GetComponent<PlayerController>();
 				movementController.groundLayer = LayersManager.GetLayerMaskWorld2();
 
 				var currentBox = movementController.GetGrabbedBox();
