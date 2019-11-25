@@ -29,6 +29,16 @@ namespace OceanGame
 			}
 		}
 
+		void OnTriggerStay2D(Collider2D other)		
+		{
+			if (other.tag == "Player" || other.tag == "Box")
+			{
+				IsPressed = true;
+				gameObject.transform.localScale = new Vector2(OriginalScale.x, OriginalScale.y / 2);
+				LinkedController.OpenLatchbox();
+			}
+		}
+
 		void OnTriggerExit2D(Collider2D other)
 		{
 			IsPressed = false;
