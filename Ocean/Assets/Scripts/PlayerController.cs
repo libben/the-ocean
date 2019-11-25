@@ -25,9 +25,8 @@ namespace OceanGame
 		public float MaxJumpVelocity = 20f;
 
 		[Header("Environment Check Properties")]
-		public float footOffset = .4f;          //X Offset of feet raycast
 		public float groundDistance = .2f;      //Distance player is considered to be on the ground
-		public LayerMask groundLayer;           //Layer of the ground
+		public LayerMask groundLayer;           //Walkable layer mask (objects and platforms of current world, persistent objects)
 
 		[Header("Status Flags")]
 		public bool isOnGround;                 //Is the player on the ground?
@@ -62,7 +61,13 @@ namespace OceanGame
 			//Get a reference to the required components
 			input = GetComponent<PlayerInput>();
 			rigidBody = GetComponent<Rigidbody2D>();
-			bodyCollider = GetComponent<BoxCollider2D>();
+
+			var allPlayerColliders = gameObject.GetComponents<BoxCollider2D>();
+			foreach (BoxCollider2D collider in allPlayerColliders)
+			{
+				if (!collider.isTrigger)
+					bodyCollider = collider;
+			}
 
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
@@ -202,7 +207,7 @@ namespace OceanGame
 				// Check if box is in front of us.
 				var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
 											GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
-				if (boxInRange && boxInRange.transform.gameObject.name == "Box")
+				if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 				{
 					GravityGunActive = true;
 					
@@ -212,7 +217,8 @@ namespace OceanGame
 					var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 
 					foreach (Collider2D collider in boxColliders)
-						collider.enabled = false;
+						if (!collider.isTrigger)
+							collider.enabled = false;
 
 					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
 					bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
@@ -293,10 +299,6 @@ namespace OceanGame
 			return GrabbedBox;
 		}
 
-		void OnTriggerEnter2D(Collider2D other)
-		{
-			rigidBody.velocity = Vector2.zero;
-		}
-	}
+		}	}
 
-}
+
