@@ -8,10 +8,6 @@ namespace OceanGame
 	{
 		[SerializeField]
 		private GameObject PlayerObject;
-		[SerializeField]
-		private GameObject PlatformsWorld1;
-		[SerializeField]
-		private GameObject PlatformsWorld2;
 		private const float SwitchCooldown = 1f;
 		private float SwitchTimer = 0f;
 		private PlayerInput Input;
@@ -104,16 +100,14 @@ namespace OceanGame
 
 		void ToggleRenderers(int newWorld)
 		{
-			var world1renderer = PlatformsWorld1.GetComponent<Renderer>();
-			var world2renderer = PlatformsWorld2.GetComponent<Renderer>();
-
 			// Going from 2 to 1.
 			if (newWorld > 0)
 			{
-				world1renderer.enabled = true;
-				world2renderer.enabled = false;
-
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
+				{
+					obj.GetComponent<Renderer>().enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
 				{
 					obj.GetComponent<Renderer>().enabled = true;
 				}
@@ -121,18 +115,27 @@ namespace OceanGame
 				{
 					obj.GetComponent<Renderer>().enabled = false;
 				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
+				{
+					obj.GetComponent<Renderer>().enabled = false;
+				}
 			}
 			// Going from 1 to 2.
 			else
 			{
-				world1renderer.enabled = false;
-				world2renderer.enabled = true;
-
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
 				{
 					obj.GetComponent<Renderer>().enabled = false;
 				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
+				{
+					obj.GetComponent<Renderer>().enabled = false;
+				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS2))
+				{
+					obj.GetComponent<Renderer>().enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
 				{
 					obj.GetComponent<Renderer>().enabled = true;
 				}
