@@ -13,31 +13,31 @@ namespace OceanGame
 		public bool drawDebugRaycasts = true;   //Should the environment checks be visualized
 
 		[Header("Movement Properties")]
-		public float speed = 5f;                //Player speed
-		public float airSpeedDivisor = 3f;		//Speed reduction after player jumps (but not falling)
+		public float Speed = 5f;                //Player Speed
+		public float AirSpeedDivisor = 3f;		//Speed reduction after player jumps (but not falling)
 		public float CoyoteDurationMax = .05f;     //How long the player can jump after falling
-		public float maxFallSpeed = -20f;       //Max speed player can fall
+		public float MaxFallSpeed = -20f;       //Max Speed player can fall
 
 		[Header("Jump Properties")]
 		public float JumpForce = 8f;
 		public float MaxJumpVelocity = 20f;
 
 		[Header("Environment Check Properties")]
-		public float groundDistance = .2f;      //Distance player is considered to be on the ground
-		public LayerMask groundLayer;           //Walkable layer mask (objects and platforms of current world, persistent objects)
+		public float GroundDistance = .2f;      //Distance player is considered to be on the ground
+		public LayerMask GroundLayer;           //Walkable layer mask (objects and platforms of current world, persistent objects)
 
 		[Header("Status Flags")]
 		public bool IsGrounded;                 // Is the player on the ground?
 		public bool PlayerJumped;               // is the fall caused by player action
 
-		PlayerInput input;                      // The current inputs for the player
-		BoxCollider2D bodyCollider;             // The collider component
-		Rigidbody2D rigidBody;                  // The rigidbody component
+		PlayerInput Input;                      // The current Inputs for the player
+		BoxCollider2D BodyCollider;             // The collider component
+		Rigidbody2D RigidBody;                  // The rigidbody component
 
 		float CoyoteTime = 0;               //Variable to hold coyote duration
 
-		float originalXScale;                   //Original scale on X axis
-		int direction = 1;                      //Direction player is facing
+		float OriginalXScale;                   //Original scale on X axis
+		int Direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
 		[SerializeField]
@@ -52,20 +52,20 @@ namespace OceanGame
 		void Start()
 		{
 			//Get a reference to the required components
-			input = GetComponent<PlayerInput>();
-			rigidBody = GetComponent<Rigidbody2D>();
+			Input = GetComponent<PlayerInput>();
+			RigidBody = GetComponent<Rigidbody2D>();
 
 			var allPlayerColliders = gameObject.GetComponents<BoxCollider2D>();
 			foreach (BoxCollider2D collider in allPlayerColliders)
 			{
 				if (!collider.isTrigger)
-					bodyCollider = collider;
+					BodyCollider = collider;
 			}
 
-			originalXScale = transform.localScale.x;
-			OriginalColliderSize = bodyCollider.size;
+			OriginalXScale = transform.localScale.x;
+			OriginalColliderSize = BodyCollider.size;
 
-			groundLayer = LayersManager.GetLayerMaskWorld1();
+			GroundLayer = LayersManager.GetLayerMaskWorld1();
 		}
 
 		void FixedUpdate()
@@ -84,14 +84,14 @@ namespace OceanGame
 
 			// TESTING PURPOSES:
 			// See the ray that determines whether a box is within gravity gun range.
-			Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 		}
 
 		void PhysicsCheck()
 		{
 			IsGrounded = false;
 
-			if (Raycast(Vector2.zero, Vector2.down, groundDistance))
+			if (Raycast(Vector2.zero, Vector2.down, GroundDistance))
 			{
 				IsGrounded = true;
 				PlayerJumped = false;
@@ -100,21 +100,21 @@ namespace OceanGame
 
 		void GroundMovement()
 		{
-			//Calculate the desired velocity based on inputs
-			float xVelocity = speed * input.Horizontal;
+			//Calculate the desired velocity based on Inputs
+			float xVelocity = Speed * Input.Horizontal;
 
 			// Tighten the player's jump arc by reducing velocity if they jumped.
 			// We might want to have this happen for all falls OR none at all.
 			
 			if (PlayerJumped)
-				xVelocity /= airSpeedDivisor;
+				xVelocity /= AirSpeedDivisor;
 
-			//If the sign of the velocity and direction don't match, flip the character
-			if (xVelocity * direction < 0f && !GravityGunActive)
+			//If the sign of the velocity and Direction don't match, flip the character
+			if (xVelocity * Direction < 0f && !GravityGunActive)
 				FlipCharacterDirection();
 
 			//Apply the desired velocity 
-			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
+			RigidBody.velocity = new Vector2(xVelocity, RigidBody.velocity.y);
 
 			//If the player is on the ground, extend the coyote time window
 			if (IsGrounded)
@@ -126,37 +126,37 @@ namespace OceanGame
 		{
 			//If the jump key is pressed AND the player isn't already jumping AND EITHER
 			//the player is on the ground or within the coyote time window...
-			if (input.JumpPressed && (IsGrounded || CoyoteTime > Time.time))
+			if (Input.JumpPressed && (IsGrounded || CoyoteTime > Time.time))
 			{
 				//...The player is no longer on the groud and is jumping...
 				IsGrounded = false;
 				PlayerJumped = true;
 
 				//...add the jump force to the rigidbody...
-				rigidBody.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
+				RigidBody.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
 
 				//...and tell the Audio Manager to play the jump audio
 				//AudioManager.PlayJumpAudio();
 			}
 
-			// Limit vertical speed
-			if (rigidBody.velocity.y < maxFallSpeed)
-				rigidBody.velocity = new Vector2(rigidBody.velocity.x, maxFallSpeed);
-			else if (rigidBody.velocity.y > MaxJumpVelocity)
-				rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxJumpVelocity);
+			// Limit vertical Speed
+			if (RigidBody.velocity.y < MaxFallSpeed)
+				RigidBody.velocity = new Vector2(RigidBody.velocity.x, MaxFallSpeed);
+			else if (RigidBody.velocity.y > MaxJumpVelocity)
+				RigidBody.velocity = new Vector2(RigidBody.velocity.x, MaxJumpVelocity);
 		
 		}
 
 		void FlipCharacterDirection()
 		{
-			//Turn the character by flipping the direction
-			direction *= -1;
+			//Turn the character by flipping the Direction
+			Direction *= -1;
 
 			//Record the current scale
 			Vector3 scale = transform.localScale;
 
-			//Set the X scale to be the original times the direction
-			scale.x = originalXScale * direction;
+			//Set the X scale to be the original times the Direction
+			scale.x = OriginalXScale * Direction;
 
 			//Apply the new scale
 			transform.localScale = scale;
@@ -169,7 +169,7 @@ namespace OceanGame
 				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
 			}
 
-			if (!input.GravityGunPressed)
+			if (!Input.GravityGunPressed)
 				return;
 			else
 			{
@@ -183,7 +183,7 @@ namespace OceanGame
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
+			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right,
 										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
@@ -199,14 +199,14 @@ namespace OceanGame
 						collider.enabled = false;
 
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
-				bodyCollider.offset = new Vector2(direction * BoxOffset.x / 2, bodyCollider.offset.y);
+				BodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + BodyCollider.size.x, BodyCollider.size.y);
+				BodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2, BodyCollider.offset.y);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
 				{
-					rigidBody.velocity = new Vector2(0, 0);
-					rigidBody.gravityScale = 0;
+					RigidBody.velocity = new Vector2(0, 0);
+					RigidBody.gravityScale = 0;
 					CanMove = false;
 				}
 
@@ -220,8 +220,8 @@ namespace OceanGame
 				return;
 
 			GravityGunActive = false;
-			bodyCollider.size = OriginalColliderSize;
-			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y);
+			BodyCollider.size = OriginalColliderSize;
+			BodyCollider.offset = new Vector2(0, BodyCollider.offset.y);
 			GrabbedBox.ToggleGrabbed();
 			var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 
@@ -232,7 +232,7 @@ namespace OceanGame
 
 			if (!CanMove)
 			{
-				rigidBody.gravityScale = 1;
+				RigidBody.gravityScale = 1;
 				CanMove = true;
 			}
 
@@ -245,7 +245,7 @@ namespace OceanGame
 		{
 			//Call the overloaded Raycast() method using the ground layermask and return 
 			//the results
-			return Raycast(offset, rayDirection, length, groundLayer);
+			return Raycast(offset, rayDirection, length, GroundLayer);
 		}
 
 		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
@@ -279,6 +279,7 @@ namespace OceanGame
 			return GrabbedBox;
 		}
 
-		}	}
+	}
+}
 
 
