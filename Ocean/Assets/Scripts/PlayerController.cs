@@ -15,13 +15,11 @@ namespace OceanGame
 		[Header("Movement Properties")]
 		public float speed = 5f;                //Player speed
 		public float airSpeedDivisor = 3f;		//Speed reduction after player jumps (but not falling)
-		public float coyoteDuration = .05f;     //How long the player can jump after falling
-		public float maxFallSpeed = -25f;       //Max speed player can fall
+		public float CoyoteDurationMax = .05f;     //How long the player can jump after falling
+		public float maxFallSpeed = -20f;       //Max speed player can fall
 
 		[Header("Jump Properties")]
-		public float jumpForce = 6.3f;          //Initial force of jump
-		public float jumpHoldForce = 1.9f;      //Incremental force when jump is held
-		public float jumpHoldDuration = .1f;    //How long the jump key can be held
+		public float JumpForce = 8f;
 		public float MaxJumpVelocity = 20f;
 
 		[Header("Environment Check Properties")]
@@ -29,27 +27,22 @@ namespace OceanGame
 		public LayerMask groundLayer;           //Walkable layer mask (objects and platforms of current world, persistent objects)
 
 		[Header("Status Flags")]
-		public bool isOnGround;                 //Is the player on the ground?
-		public bool isJumping;                  //Is player jumping?
-		public bool playerJumped;               // is the fall caused by player action
+		public bool IsGrounded;                 // Is the player on the ground?
+		public bool PlayerJumped;               // is the fall caused by player action
 
-		PlayerInput input;                      //The current inputs for the player
-		BoxCollider2D bodyCollider;             //The collider component
-		Rigidbody2D rigidBody;                  //The rigidbody component
+		PlayerInput input;                      // The current inputs for the player
+		BoxCollider2D bodyCollider;             // The collider component
+		Rigidbody2D rigidBody;                  // The rigidbody component
 
-		float jumpTime;                         //Variable to hold jump duration
-		float coyoteTime;                       //Variable to hold coyote duration
-		float playerHeight;                     //Height of the player
+		float CoyoteTime = 0;               //Variable to hold coyote duration
 
 		float originalXScale;                   //Original scale on X axis
 		int direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
 		[SerializeField]
-		private float GravityGunRange = 1f;
-		[SerializeField]
+		private float GravityGunRange = 0.5f;
 		private bool GravityGunActive = false;
-		[SerializeField]
 		private BoxController GrabbedBox = null;
 		private Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
@@ -69,7 +62,6 @@ namespace OceanGame
 					bodyCollider = collider;
 			}
 
-			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
 			OriginalColliderSize = bodyCollider.size;
 
@@ -97,17 +89,12 @@ namespace OceanGame
 
 		void PhysicsCheck()
 		{
-			//Start by assuming the player isn't on the ground and the head isn't blocked
-			isOnGround = false;
-
-			// Note: The player sprite's pivot is set to Bottom, and the collider has been manually adjusted.
-			// Before adjusting the collider box myself, it was making the player float above ground weirdly.
-			// That's why we can just use 0,0 as the origin.
+			IsGrounded = false;
 
 			if (Raycast(Vector2.zero, Vector2.down, groundDistance))
 			{
-				isOnGround = true;
-				playerJumped = false;
+				IsGrounded = true;
+				PlayerJumped = false;
 			}
 		}
 
@@ -119,10 +106,9 @@ namespace OceanGame
 			// Tighten the player's jump arc by reducing velocity if they jumped.
 			// We might want to have this happen for all falls OR none at all.
 			
-			if (playerJumped)
+			if (PlayerJumped)
 				xVelocity /= airSpeedDivisor;
-			
-			
+
 			//If the sign of the velocity and direction don't match, flip the character
 			if (xVelocity * direction < 0f && !GravityGunActive)
 				FlipCharacterDirection();
@@ -130,14 +116,9 @@ namespace OceanGame
 			//Apply the desired velocity 
 			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
 
-			if (GrabbedBox)
-			{
-				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
-			}
-
 			//If the player is on the ground, extend the coyote time window
-			if (isOnGround)
-				coyoteTime = Time.time + coyoteDuration;
+			if (IsGrounded)
+				CoyoteTime = Time.time + CoyoteDurationMax;
 
 		}
 
@@ -145,35 +126,20 @@ namespace OceanGame
 		{
 			//If the jump key is pressed AND the player isn't already jumping AND EITHER
 			//the player is on the ground or within the coyote time window...
-			if (input.JumpPressed && !isJumping && (isOnGround || coyoteTime > Time.time))
+			if (input.JumpPressed && (IsGrounded || CoyoteTime > Time.time))
 			{
 				//...The player is no longer on the groud and is jumping...
-				isOnGround = false;
-				isJumping = true;
-				playerJumped = true;
-
-				//...record the time the player will stop being able to boost their jump...
-				jumpTime = Time.time + jumpHoldDuration;
+				IsGrounded = false;
+				PlayerJumped = true;
 
 				//...add the jump force to the rigidbody...
-				rigidBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+				rigidBody.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
 
 				//...and tell the Audio Manager to play the jump audio
 				//AudioManager.PlayJumpAudio();
 			}
-			//Otherwise, if currently within the jump time window...
-			else if (isJumping)
-			{
-				//...and the jump button is held, apply an incremental force to the rigidbody...
-				if (input.JumpHeld)
-					rigidBody.AddForce(new Vector2(0f, jumpHoldForce), ForceMode2D.Impulse);
 
-				//...and if jump time is past, set isJumping to false
-				if (jumpTime <= Time.time)
-					isJumping = false;
-			}
-
-			//If player is falling to fast, reduce the Y velocity to the max
+			// Limit vertical speed
 			if (rigidBody.velocity.y < maxFallSpeed)
 				rigidBody.velocity = new Vector2(rigidBody.velocity.x, maxFallSpeed);
 			else if (rigidBody.velocity.y > MaxJumpVelocity)
@@ -198,6 +164,11 @@ namespace OceanGame
 
 		void GravityGunControl()
 		{
+			if (GrabbedBox)
+			{
+				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+			}
+
 			if (!input.GravityGunPressed)
 				return;
 
@@ -225,7 +196,7 @@ namespace OceanGame
 					bodyCollider.offset = new Vector2(direction * BoxOffset.x / 2, bodyCollider.offset.y);
 
 					// If player grabs a box but isn't on the ground, they should be stuck dangling.
-					if (!isOnGround)
+					if (!IsGrounded)
 					{
 						rigidBody.velocity = new Vector2(0,0);
 						rigidBody.gravityScale = 0;
