@@ -171,63 +171,72 @@ namespace OceanGame
 
 			if (!input.GravityGunPressed)
 				return;
-
-			// Gun off: try to turn it on
-			if (!GravityGunActive)
+			else
 			{
-				// Check if box is in front of us.
-				var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
-											GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
-				if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
-				{
-					GravityGunActive = true;
-					
-					// Grab box, turn off its colliders, save its position relative to player, expand player collider
-					GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
-					GrabbedBox.ToggleGrabbed();
-					var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
-
-					foreach (Collider2D collider in boxColliders)
-						if (!collider.isTrigger)
-							collider.enabled = false;
-
-					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-					bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
-					bodyCollider.offset = new Vector2(direction * BoxOffset.x / 2, bodyCollider.offset.y);
-
-					// If player grabs a box but isn't on the ground, they should be stuck dangling.
-					if (!IsGrounded)
-					{
-						rigidBody.velocity = new Vector2(0,0);
-						rigidBody.gravityScale = 0;
-						CanMove = false;
-					}
-
-					Debug.Log("Gravity gun on");
-				}
+				if (!GravityGunActive)
+					GravityGunOn();
+				else
+					GravityGunOff();
 			}
-			// Gun on and holding a box: turn it off, drop box, reenable its colliders, shrink player hitbox.
-			else if (GrabbedBox)
+		}
+
+		void GravityGunOn()
+		{
+			// Check if box is in front of us.
+			var boxInRange = Raycast(new Vector2(direction * 0.5f, 0.5f), direction * Vector2.right,
+										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
-				GravityGunActive = false;
-				bodyCollider.size = OriginalColliderSize;
-				bodyCollider.offset = new Vector2(0, bodyCollider.offset.y);
+				GravityGunActive = true;
+
+				// Grab box, turn off its colliders, save its position relative to player, expand player collider
+				GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 				GrabbedBox.ToggleGrabbed();
 				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 
 				foreach (Collider2D collider in boxColliders)
-					collider.enabled = true;
+					if (!collider.isTrigger)
+						collider.enabled = false;
 
-				GrabbedBox = null;
+				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
+				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
+				bodyCollider.offset = new Vector2(direction * BoxOffset.x / 2, bodyCollider.offset.y);
 
-				if (!CanMove)
+				// If player grabs a box but isn't on the ground, they should be stuck dangling.
+				if (!IsGrounded)
 				{
-					rigidBody.gravityScale = 1;
-					CanMove = true;
+					rigidBody.velocity = new Vector2(0, 0);
+					rigidBody.gravityScale = 0;
+					CanMove = false;
 				}
 
-				Debug.Log("Gravity gun off");
+				Debug.Log("Gravity gun on");
 			}
+		}
+
+		void GravityGunOff()
+		{
+			if (!GrabbedBox)
+				return;
+
+			GravityGunActive = false;
+			bodyCollider.size = OriginalColliderSize;
+			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y);
+			GrabbedBox.ToggleGrabbed();
+			var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
+
+			foreach (Collider2D collider in boxColliders)
+				collider.enabled = true;
+
+			GrabbedBox = null;
+
+			if (!CanMove)
+			{
+				rigidBody.gravityScale = 1;
+				CanMove = true;
+			}
+
+			Debug.Log("Gravity gun off");
 		}
 
 		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
