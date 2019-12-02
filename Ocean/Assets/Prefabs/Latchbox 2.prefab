@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 7549931528538308519, guid: 168d8a09ebf9637409f5a07520269ad0,
         type: 3}
       propertyPath: m_Name
-      value: Latchbox Variant
+      value: Latchbox 2
       objectReference: {fileID: 0}
     - target: {fileID: 7549931528538308519, guid: 168d8a09ebf9637409f5a07520269ad0,
         type: 3}
@@ -86,6 +86,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549931528538308536, guid: 168d8a09ebf9637409f5a07520269ad0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.8396226
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549931528538308536, guid: 168d8a09ebf9637409f5a07520269ad0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.66421914
+      objectReference: {fileID: 0}
+    - target: {fileID: 7549931528538308536, guid: 168d8a09ebf9637409f5a07520269ad0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.43961373
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 168d8a09ebf9637409f5a07520269ad0, type: 3}
