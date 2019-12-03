@@ -50,7 +50,8 @@ namespace OceanGame
 		private bool GravityGunActive = false;
 		[SerializeField]
 		private BoxController GrabbedBox = null;
-		private Vector2 BoxOffset;
+		private BoxCollider2D BoxHitbox;
+		public Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
 
 		private bool CanMove = true;
@@ -91,7 +92,7 @@ namespace OceanGame
 
 			// TESTING PURPOSES:
 			// See the ray that determines whether a box is within gravity gun range.
-			Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			Raycast(new Vector2(Direction * bodyCollider.size.x / 2, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 		}
 
 		void PhysicsCheck()
@@ -217,7 +218,7 @@ namespace OceanGame
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right,
+			var boxInRange = Raycast(new Vector2(Direction * bodyCollider.size.x/2, 0.5f), Direction * Vector2.right,
 										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
@@ -227,14 +228,16 @@ namespace OceanGame
 				GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 				GrabbedBox.ToggleGrabbed();
 				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
+				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
 
 				foreach (Collider2D collider in boxColliders)
 					if (!collider.isTrigger)
 						collider.enabled = false;
 
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2, bodyCollider.offset.y);
+				//bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x), bodyCollider.size.y);
+				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x * 2) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x/2), bodyCollider.size.y);
+				bodyCollider.offset = new Vector2(Direction * BoxOffset.x + 0.25f, bodyCollider.offset.y);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
@@ -315,4 +318,3 @@ namespace OceanGame
 
 	}
 }
-
