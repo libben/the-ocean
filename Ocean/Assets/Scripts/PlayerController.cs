@@ -37,11 +37,13 @@ namespace OceanGame
 		BoxCollider2D bodyCollider;             //The collider component
 		Rigidbody2D rigidBody;                  //The rigidbody component
 
-		float JumpTime;                         //Variable to hold jump duration
-		float CoyoteTime;                       //Variable to hold coyote duration
+		private float JumpTime;                         //Variable to hold jump duration
+		private float CoyoteTime;                       //Variable to hold coyote duration
+		private float JumpGraceTime;
+		private float JumpGracePeriod = 1.2f;
 
-		float originalXScale;                   //Original scale on X axis
-		int Direction = 1;                      //Direction player is facing
+		private float originalXScale;                   //Original scale on X axis
+		private int Direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
 		[SerializeField]
@@ -53,6 +55,8 @@ namespace OceanGame
 		private BoxCollider2D BoxHitbox;
 		public Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
+		private bool BoxGrounded;
+		
 
 		private bool CanMove = true;
 
@@ -99,6 +103,8 @@ namespace OceanGame
 		{
 			//Start by assuming the player isn't on the ground and the head isn't blocked
 			IsGrounded = false;
+			BoxGrounded = false;
+			CanMove = true;
 
 			// Note: The player sprite's pivot is set to Bottom, and the collider has been manually adjusted.
 			// Before adjusting the collider box myself, it was making the player float above ground weirdly.
@@ -109,6 +115,23 @@ namespace OceanGame
 				IsGrounded = true;
 				PlayerJumped = false;
 			}
+			/*
+			// Logic for making the player dangle
+			if (GravityGunActive && Raycast(new Vector2(BoxOffset.x, 0f), Vector2.down, GroundDistance))
+			{
+				BoxGrounded = true;
+			}
+			if (!IsGrounded && BoxGrounded && (Time.time >= JumpGraceTime))
+			{
+				CanMove = false;
+			}
+			// failsafe in case player gets stuck. hope it doesn't come to this
+			if (Time.time >= JumpGraceTime + 10f)
+			{
+				Debug.Log("Freeing the player :(");
+				CanMove = true;
+			}
+			*/
 		}
 
 		void GroundMovement()
@@ -138,8 +161,10 @@ namespace OceanGame
 
 			//If the player is on the ground, extend the coyote time window
 			if (IsGrounded)
+			{
 				CoyoteTime = Time.time + CoyoteDuration;
-
+				JumpGraceTime = Time.time + JumpGracePeriod;
+			}
 		}
 
 		void MidAirMovement()
