@@ -260,15 +260,15 @@ namespace OceanGame
 						collider.enabled = false;
 
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				//bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x), bodyCollider.size.y);
 				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x * 2) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x/2), bodyCollider.size.y);
 				bodyCollider.offset = new Vector2(Direction * BoxOffset.x + 0.25f, bodyCollider.offset.y);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
+				
 				if (!IsGrounded)
 				{
 					rigidBody.velocity = new Vector2(0, 0);
-					rigidBody.gravityScale = 0;
+					//rigidBody.gravityScale = 0;
 					CanMove = false;
 				}
 
@@ -300,34 +300,24 @@ namespace OceanGame
 
 			Debug.Log("Gravity gun off");
 		}
-
-		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
-		//functionality
+		
 		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
 		{
-			//Call the overloaded Raycast() method using the ground layermask and return 
-			//the results
 			return Raycast(offset, rayDirection, length, GroundLayer);
 		}
 
 		RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
 		{
-			//Record the player's position
 			Vector2 pos = transform.position;
 
-			//Send out the desired raycasr and record the result
 			RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
 
-			//If we want to show debug raycasts in the scene...
 			if (drawDebugRaycasts)
 			{
-				//...determine the color based on if the raycast hit...
 				Color color = hit ? Color.red : Color.green;
-				//...and draw the ray in the scene view
 				Debug.DrawRay(pos + offset, rayDirection * length, color);
 			}
 
-			//Return the results of the raycast
 			return hit;
 		}
 
