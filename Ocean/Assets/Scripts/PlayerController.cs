@@ -56,7 +56,18 @@ namespace OceanGame
 		public Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
 		private bool BoxGrounded;
-		
+
+		// ADSR related fields
+		private ADSRManager ADSR;
+		[SerializeField]
+		private AnimationCurve Attack;
+		[SerializeField]
+		private AnimationCurve Decay;
+		[SerializeField]
+		private AnimationCurve Sustain;
+		[SerializeField]
+		private AnimationCurve Release;
+
 
 		private bool CanMove = true;
 

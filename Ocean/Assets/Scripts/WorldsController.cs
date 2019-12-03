@@ -119,6 +119,14 @@ namespace OceanGame
 				{
 					obj.GetComponent<Renderer>().enabled = false;
 				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
+				{
+					obj.GetComponent<Renderer>().enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
+				{
+					obj.GetComponent<Renderer>().enabled = false;
+				}
 			}
 			// Going from 1 to 2.
 			else
@@ -136,6 +144,14 @@ namespace OceanGame
 					obj.GetComponent<Renderer>().enabled = true;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
+				{
+					obj.GetComponent<Renderer>().enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
+				{
+					obj.GetComponent<Renderer>().enabled = false;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
 				{
 					obj.GetComponent<Renderer>().enabled = true;
 				}

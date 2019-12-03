@@ -6,24 +6,16 @@ namespace OceanGame
 {
 	public class ADSRManager
 	{
-		[SerializeField]
 		private float AttackDuration = 0.25f;
-		[SerializeField]
 		private AnimationCurve Attack;
 
-		[SerializeField]
 		private float DecayDuration = 0.0f;
-		[SerializeField]
 		private AnimationCurve Decay;
 
-		[SerializeField]
 		private float SustainDuration = 120.0f;
-		[SerializeField]
 		private AnimationCurve Sustain;
 
-		[SerializeField]
 		private float ReleaseDuration = 0.25f;
-		[SerializeField]
 		private AnimationCurve Release;
 
 		private GameObject Player;
