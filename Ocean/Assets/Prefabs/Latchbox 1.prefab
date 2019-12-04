@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7549931528538308537}
   - component: {fileID: 7549931528538308518}
   m_Layer: 10
-  m_Name: Latchbox
+  m_Name: Latchbox 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,15 +69,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 702589457
-  m_SortingLayer: 2
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 117f9083cc5cac742b884abcd2fd4d52, type: 3}
+  m_SortingLayerID: 277039523
+  m_SortingLayer: 1
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: 155f46c9cea8542b5a048297bded3890, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1.44, y: 1.44}
+  m_DrawMode: 1
+  m_Size: {x: 1.25, y: 1.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,12 +98,12 @@ BoxCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.57}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0.125, y: 0.125, z: 0.125, w: 0.125}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.125, y: 1.125}
-    newSize: {x: 1.44, y: 1.44}
+    oldSize: {x: 1.25, y: 1.25}
+    newSize: {x: 1.25, y: 1.25}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
@@ -121,5 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9925d5f3d99eb5b42aab61fc969c8c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpriteOpen: {fileID: 21300000, guid: c434194eb99b029428f5f937b9870b85, type: 3}
-  SpriteClosed: {fileID: 21300000, guid: 117f9083cc5cac742b884abcd2fd4d52, type: 3}
+  SpriteOpen: {fileID: 21300000, guid: b9d7db278ab51453abd355a1b88a8f89, type: 3}
+  SpriteClosed: {fileID: 21300000, guid: 155f46c9cea8542b5a048297bded3890, type: 3}
