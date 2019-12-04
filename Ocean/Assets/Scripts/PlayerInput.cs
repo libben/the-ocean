@@ -15,6 +15,8 @@ namespace OceanGame
 		public bool JumpPressed;
 		[HideInInspector]
 		public bool SwitchPressed;
+		[HideInInspector]
+		public bool GravityGunPressed;
 		private bool ReadyToClear;
 
 		void Update()
@@ -39,6 +41,7 @@ namespace OceanGame
 			JumpHeld = false;
 			SwitchPressed = false;
 			ReadyToClear = false;
+			GravityGunPressed = false;
 		}
 
 		private void ProcessInputs()
@@ -47,8 +50,7 @@ namespace OceanGame
 			JumpPressed = JumpPressed || Input.GetButtonDown("Jump");
 			JumpHeld = JumpHeld || Input.GetButton("Jump");
 			SwitchPressed = SwitchPressed || Input.GetButtonDown("SwitchWorlds");
-			if (SwitchPressed)
-				Debug.Log("SWITCHING WORLDS...?");
+			GravityGunPressed = GravityGunPressed || Input.GetButtonDown("GravityGun") || Input.GetButtonDown("Fire2");
 		}
 
 
