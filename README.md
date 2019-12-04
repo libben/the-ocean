@@ -1,12 +1,4 @@
 # The Ocean: ECS 189L final project
-Here's how issue names in this repo work:
-
-Small tasks are contained into "Epics", which represent big tasks.
-
-Where relevant, issues will be named "End Goal - Work Remaining".
-
-The right side of the dash could be any of these things:
-
-**Design**: when we must design something (example: "Boss Battle - Design" refers to the task of designing how the boss battle will go - will it involve spikes? The boss monologuing? Et cetera)
-**Draw**: when we must sketch something (does not involve the task of deciding what to sketch)
-**Implement**: when code needs to be written (does not involve the task of defining how the code should behave)
+ADSR notes:
+* Don't use this. The master branch has more up to date mechanics and scenes.
+* This is just so we can bring in the ADSR stuff at a later date, since I changed a few things in the scene and it might have merge conflicts if I try to merge it with master now (12/4/2019 11AM).
