@@ -246,24 +246,25 @@ namespace OceanGame
 				boxRenderer.enabled = true;
 				NeedToDisable = true;
 			}
-
-			Color c = boxRenderer.color;
+			
+			Color c = Color.red;
+			Color originalColor = boxRenderer.color;
 			for (float ft = 1f; ft >= 0; ft -= 0.05f)
 			{
 				if (ft < 0.1)
 				{
 					ft = 0;
 				}
-				c = boxRenderer.color;
+				c = Color.red;
 				c.a = ft;
 				boxRenderer.color = c;
 
 				yield return null;
 			}
+
 			if (c.a <= 0.1)
 			{
-				c.a = 1;
-				boxRenderer.color = c;
+				boxRenderer.color = originalColor;
 
 				if (NeedToDisable)
 					boxRenderer.enabled = false;
