@@ -12,6 +12,9 @@ namespace OceanGame
 		private PlayerController Player;
 		private PlayerInput Input;
 
+		private const float SwitchCooldown = 1f;
+		private float SwitchTimer = 0f;
+
 		public static int PlayerCurrentWorld = 1; 
 
 		void Awake()
@@ -20,15 +23,25 @@ namespace OceanGame
 			PlayerBody = PlayerObject.GetComponent<Rigidbody2D>();
 			Player = PlayerObject.GetComponent<PlayerController>();
 			ToggleRenderers(1);
+
+			foreach (GameObject overlapper in GameObject.FindGameObjectsWithTag("Overlap"))
+			{
+				var overlapSprite = overlapper.GetComponent<SpriteRenderer>();
+				var tempColor = Color.red;
+				tempColor.a = 0;
+				overlapSprite.color = tempColor;
+			}
 		}
 
 		void FixedUpdate()
 		{
-			if (Input.SwitchPressed)
+			if (Input.SwitchPressed && SwitchTimer >= SwitchCooldown)
 			{
+				SwitchTimer = 0;
 				SwitchPlayerWorld();
 				ToggleRenderers(PlayerCurrentWorld);
 			}
+			SwitchTimer += Time.deltaTime;
 		}
 
 		void SwitchPlayerWorld()
@@ -81,6 +94,11 @@ namespace OceanGame
 			{
 				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
 				{
+					var tempColor = obj.GetComponent<SpriteRenderer>().color;
+					tempColor.a = 1;
+					obj.GetComponent<SpriteRenderer>().color = tempColor;
+					IEnumerator fadeRoutine = FadeOut(obj.GetComponent<SpriteRenderer>());
+					StartCoroutine(fadeRoutine);
 					return true;
 				}
 			}
@@ -185,6 +203,21 @@ namespace OceanGame
 			}
 			return result.ToArray();
 		}
+
+		IEnumerator FadeOut(SpriteRenderer objRenderer)
+		{
+			for (float ft = 1f; ft >= 0; ft -= 0.05f)
+			{
+				if (ft < 0.1)
+					ft = 0;
+				Color c = objRenderer.color;
+				c.a = ft;
+				objRenderer.color = c;
+				yield return null;
+			}
+		}
+
+
 
 	}
 
