@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Box
+<<<<<<< HEAD
+=======
+  - LevelMarker
+  - LevelCenter
+>>>>>>> b2a6b3cb3b5fce51a80cd9c5bd7fb5583da13528
   layers:
   - Default
   - TransparentFX
