@@ -90,9 +90,18 @@ namespace OceanGame
 
 		bool CollidingInOtherWorld()
 		{
+			Vector2 playerPos;
+			if (Player.GetGravityGunActive())
+			{
+				playerPos = new Vector2(Player.transform.position.x + Player.BoxOffset.x, Player.transform.position.y);
+			}
+			else
+			{
+				playerPos = Player.transform.position;
+			}
 			foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Overlap"))
 			{
-				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
+				if (obj.GetComponent<Collider2D>().bounds.Contains(playerPos))
 				{
 					var tempColor = obj.GetComponent<SpriteRenderer>().color;
 					tempColor.a = 1;

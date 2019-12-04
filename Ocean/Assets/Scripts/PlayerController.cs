@@ -50,13 +50,26 @@ namespace OceanGame
 		private bool GravityGunActive = false;
 		[SerializeField]
 		private BoxController GrabbedBox = null;
-		private Vector2 BoxOffset;
+		public Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
+
+		// ADSR related fields
+		private ADSRController ADSR;
+		[SerializeField]
+		private AnimationCurve Attack;
+		[SerializeField]
+		private AnimationCurve Decay;
+		[SerializeField]
+		private AnimationCurve Sustain;
+		[SerializeField]
+		private AnimationCurve Release;
+		public Phase ADSRPhase;
 
 		private bool CanMove = true;
 
 		void Start()
 		{
+			ADSR = new ADSRController(Attack, Decay, Sustain, Release, this.gameObject);
 			//Get a reference to the required components
 			input = GetComponent<PlayerInput>();
 			rigidBody = GetComponent<Rigidbody2D>();
@@ -113,15 +126,9 @@ namespace OceanGame
 		void GroundMovement()
 		{
 			//Calculate the desired velocity based on inputs
-			float xVelocity = Speed * input.Horizontal;
-
-			// Tighten the player's jump arc by reducing velocity if they jumped.
-			// We might want to have this happen for all falls OR none at all.
-
-			/*
-			if (PlayerJumped)
-				xVelocity /= AirSpeedDivisor;
-			*/
+			// ADSR goes here.
+			ADSRPhase = ADSR.CurrentPhase;
+			float xVelocity = Speed * ADSR.ADSREnvelope(input.Horizontal);
 
 			//If the sign of the velocity and Direction don't match, flip the character
 			if (xVelocity * Direction < 0f && !GravityGunActive)
