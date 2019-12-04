@@ -19,6 +19,7 @@ namespace OceanGame
 			Input = PlayerObject.GetComponent<PlayerInput>();
 			PlayerBody = PlayerObject.GetComponent<Rigidbody2D>();
 			Player = PlayerObject.GetComponent<PlayerController>();
+			ToggleRenderers(1);
 		}
 
 		void FixedUpdate()
