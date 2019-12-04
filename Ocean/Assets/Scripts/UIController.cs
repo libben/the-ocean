@@ -5,17 +5,13 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private GameObject GravGunPrompt;
+    [SerializeField] private GameObject TextPromptWithPicture;
 
     // Start is called before the first frame update
     void Start()
     {
         GravGunPrompt.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        TextPromptWithPicture.SetActive(false); 
     }
 
     void OnTriggerEnter2D(Collider2D Other)
