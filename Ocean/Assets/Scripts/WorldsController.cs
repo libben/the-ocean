@@ -90,6 +90,8 @@ namespace OceanGame
 
 		bool CollidingInOtherWorld()
 		{
+			// Check if player is in bound of all overlap colliders and boxes
+			// Todo: add level-specification.
 			foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Overlap"))
 			{
 				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
@@ -98,6 +100,19 @@ namespace OceanGame
 					tempColor.a = 1;
 					obj.GetComponent<SpriteRenderer>().color = tempColor;
 					IEnumerator fadeRoutine = FadeOut(obj.GetComponent<SpriteRenderer>());
+					StartCoroutine(fadeRoutine);
+					return true;
+				}
+			}
+		
+			foreach (GameObject box in GameObject.FindGameObjectsWithTag("Box"))
+			{
+				if (box.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
+				{
+					var tempColor = box.GetComponent<SpriteRenderer>().color;
+					tempColor.a = 1;
+					box.GetComponent<SpriteRenderer>().color = tempColor;
+					IEnumerator fadeRoutine = FadeOutBox(box.GetComponent<SpriteRenderer>());
 					StartCoroutine(fadeRoutine);
 					return true;
 				}
@@ -215,6 +230,15 @@ namespace OceanGame
 				objRenderer.color = c;
 				yield return null;
 			}
+		}
+
+		IEnumerator FadeOutBox(SpriteRenderer boxRenderer)
+		{
+			// TODO: Have similar behavior to the other FadeOut coroutine, but:
+			// when first called, turn on the renderer
+			// same fadeout
+			// when reaching 0 alpha, turn off the renderer but also turn the alpha back to 1
+			yield return null;
 		}
 
 
