@@ -13,6 +13,7 @@ namespace OceanGame
 		private const float SwitchCooldown = 1f;
 		private float SwitchTimer = 0f;
 		private PlayerInput Input;
+		private bool CanSwitch = true;
 		private Collider2D PlatformsWorld1;
 		private Collider2D PlatformsWorld2;
 		private int PlayerW1Mask;
@@ -38,11 +39,12 @@ namespace OceanGame
 			Physics2D.IgnoreLayerCollision((int)Layers.PLAYERW2, (int)Layers.OBJECTS1);
 			PlayerW2Mask = Physics2D.GetLayerCollisionMask((int)Layers.PLAYERW2);
 		}
-
+		/*
 		void Update()
 		{
 			SwitchTimer += Time.deltaTime;
 		}
+		*/
 
 		void FixedUpdate()
 		{
@@ -56,7 +58,9 @@ namespace OceanGame
 
 		void SwitchPlayerWorld()
 		{
-			if (CollidingInOtherWorld())
+			CanSwitch = !CollidingInOtherWorld();
+			Debug.Log(CanSwitch);
+			if (!CanSwitch)
 				return;
 
 			PlayerCurrentWorld *= -1;
@@ -102,32 +106,29 @@ namespace OceanGame
 		{
 			// Make sure the player isn't inside a collider OR about to be in one.
 			// || PlatformsWorld1.bounds.Contains(PlayerBody.transform.position)
-			/*
-			if (PlayerCurrentWorld > 0)
-				return (PlayerBody.IsTouchingLayers(LayersManager.GetLayerMaskWorld2()) ||
-					    Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld2()));
-			else if (PlayerCurrentWorld < 0)
-				return (PlayerBody.IsTouchingLayers(LayersManager.GetLayerMaskWorld1()) ||
-						Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld1()));
-			*/
+			Vector2 differentSize = new Vector2(PlayerObject.GetComponent<BoxCollider2D>().size.x, PlayerObject.GetComponent<BoxCollider2D>().size.y - 0.4f);
+			// Current = 1
 			if (PlayerCurrentWorld > 0)
 			{
 				Physics2D.SetLayerCollisionMask((int)Layers.PLAYERW1, (PlayerW1Mask | PlayerW2Mask));
-				if (Physics2D.OverlapPoint(PlayerObject.transform.position, LayersManager.GetLayerMaskWorld2()) ||
+				/*if (Physics2D.OverlapPoint(PlayerObject.transform.position, LayersManager.GetLayerMaskWorld2()) ||
 					PlayerBody.IsTouchingLayers(LayersManager.GetLayerMaskWorld2()) ||
-					Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld2()))
+					Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld2()))*/
+				if (Physics2D.OverlapBox(PlayerObject.transform.position, differentSize, 0, LayersManager.GetLayerMaskWorld2()))
 				{
 					Physics2D.SetLayerCollisionMask((int)Layers.PLAYERW1, PlayerW1Mask);
 					return true;
 				}
 				Physics2D.SetLayerCollisionMask((int)Layers.PLAYERW1, PlayerW1Mask);
 			}
+			// Current = 2
 			else if (PlayerCurrentWorld < 0)
 			{
 				Physics2D.SetLayerCollisionMask((int)Layers.PLAYERW2, (PlayerW1Mask | PlayerW2Mask));
-				if (Physics2D.OverlapPoint(PlayerObject.transform.position, LayersManager.GetLayerMaskWorld1()) ||
+				/*if (Physics2D.OverlapPoint(PlayerObject.transform.position, LayersManager.GetLayerMaskWorld1()) ||
 					PlayerBody.IsTouchingLayers(LayersManager.GetLayerMaskWorld1()) ||
-					Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld1()))
+					Physics2D.Raycast(PlayerObject.transform.position, PlayerBody.velocity, 1f, LayersManager.GetLayerMaskWorld1()))*/
+				if (Physics2D.OverlapBox(PlayerObject.transform.position, differentSize, 0, LayersManager.GetLayerMaskWorld1()))
 				{
 					Physics2D.SetLayerCollisionMask((int)Layers.PLAYERW2, PlayerW2Mask);
 					return true;

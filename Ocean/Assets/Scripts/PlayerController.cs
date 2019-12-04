@@ -113,11 +113,13 @@ namespace OceanGame
 			// TESTING PURPOSES:
 			// See the ray that determines whether a box is within gravity gun range.
 			Raycast(new Vector2(Direction * bodyCollider.size.x / 2, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			/*
 			if (worlds.CollidingInOtherWorld())
 			{
 				spr.color = Color.red;
 			}
 			else { spr.color = Color.green; }
+			*/
 		}
 
 		void PhysicsCheck()
