@@ -38,16 +38,16 @@ namespace OceanGame
 			if (Input.SwitchPressed && SwitchTimer >= SwitchCooldown)
 			{
 				SwitchTimer = 0;
-				SwitchPlayerWorld();
-				ToggleRenderers(PlayerCurrentWorld);
+				if (SwitchPlayerWorld())
+					ToggleRenderers(PlayerCurrentWorld);
 			}
 			SwitchTimer += Time.deltaTime;
 		}
 
-		void SwitchPlayerWorld()
+		bool SwitchPlayerWorld()
 		{
 			if (CollidingInOtherWorld())
-				return;
+				return false;
 
 			PlayerCurrentWorld *= -1;
 
@@ -86,6 +86,8 @@ namespace OceanGame
 					}
 				}
 			}
+
+			return true;
 		}
 
 		bool CollidingInOtherWorld()
@@ -234,11 +236,40 @@ namespace OceanGame
 
 		IEnumerator FadeOutBox(SpriteRenderer boxRenderer)
 		{
-			// TODO: Have similar behavior to the other FadeOut coroutine, but:
-			// when first called, turn on the renderer
+			// when first called, turn on the renderer (if needed)
 			// same fadeout
-			// when reaching 0 alpha, turn off the renderer but also turn the alpha back to 1
-			yield return null;
+			// when reaching 0 alpha, turn off the renderer (if needed) but also turn the alpha back to 1
+			bool NeedToDisable = false;
+			if (!boxRenderer.enabled)
+			{
+				Debug.Log("enabling a box renderer from the other world");
+				boxRenderer.enabled = true;
+				NeedToDisable = true;
+			}
+
+			Color c = boxRenderer.color;
+			for (float ft = 1f; ft >= 0; ft -= 0.05f)
+			{
+				if (ft < 0.1)
+				{
+					ft = 0;
+				}
+				c = boxRenderer.color;
+				c.a = ft;
+				boxRenderer.color = c;
+
+				yield return null;
+			}
+			if (c.a <= 0.1)
+			{
+				c.a = 1;
+				boxRenderer.color = c;
+
+				if (NeedToDisable)
+					boxRenderer.enabled = false;
+
+				yield break;
+			}
 		}
 
 
