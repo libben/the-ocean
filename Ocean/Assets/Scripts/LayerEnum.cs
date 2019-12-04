@@ -23,12 +23,12 @@ namespace OceanGame
 	{
 		public static int GetLayerMaskWorld1()
 		{
-			return LayerMask.GetMask("Platforms1", "Objects1", "ObjectsPersistent");
+			return LayerMask.GetMask("Platforms1", "Objects1");
 		}
 
 		public static int GetLayerMaskWorld2()
 		{
-			return LayerMask.GetMask("Platforms2", "Objects2", "ObjectsPersistent");
+			return LayerMask.GetMask("Platforms2", "Objects2");
 		}
 
 		public static int GetLayerMaskAll()
