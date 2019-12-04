@@ -8,8 +8,8 @@ namespace OceanGame
 	{
 		[SerializeField]
 		private GameObject PlayerObject;
-		private const float SwitchCooldown = 1f;
-		private float SwitchTimer = 0f;
+		private Rigidbody2D PlayerBody;
+		private PlayerController Player;
 		private PlayerInput Input;
 
 		public static int PlayerCurrentWorld = 1; 
@@ -17,18 +17,14 @@ namespace OceanGame
 		void Awake()
 		{
 			Input = PlayerObject.GetComponent<PlayerInput>();
-		}
-
-		void Update()
-		{
-			SwitchTimer += Time.deltaTime;
+			PlayerBody = PlayerObject.GetComponent<Rigidbody2D>();
+			Player = PlayerObject.GetComponent<PlayerController>();
 		}
 
 		void FixedUpdate()
 		{
 			if (Input.SwitchPressed)
 			{
-				SwitchTimer = 0f;
 				SwitchPlayerWorld();
 				ToggleRenderers(PlayerCurrentWorld);
 			}
@@ -47,10 +43,9 @@ namespace OceanGame
 				PlayerObject.layer = (int)Layers.PLAYERW1;
 
 				// Need to inform the movement controller script that the ground is now world 1's ground
-				var movementController = PlayerObject.GetComponent<PlayerController>();
-				movementController.GroundLayer = LayersManager.GetLayerMaskWorld1();
+				Player.GroundLayer = LayersManager.GetLayerMaskWorld1();
 
-				var currentBox = movementController.GetGrabbedBox();
+				var currentBox = Player.GetGrabbedBox();
 				if (currentBox)
 				{
 					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
@@ -65,10 +60,9 @@ namespace OceanGame
 			{
 				PlayerObject.layer = (int)Layers.PLAYERW2;
 
-				var movementController = PlayerObject.GetComponent<PlayerController>();
-				movementController.GroundLayer = LayersManager.GetLayerMaskWorld2();
+				Player.GroundLayer = LayersManager.GetLayerMaskWorld2();
 
-				var currentBox = movementController.GetGrabbedBox();
+				var currentBox = Player.GetGrabbedBox();
 				if (currentBox)
 				{
 					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
@@ -82,42 +76,58 @@ namespace OceanGame
 
 		bool CollidingInOtherWorld()
 		{
-			var playerRigidBody = PlayerObject.GetComponent<Rigidbody2D>();
-
-			// Make sure the player isn't inside a collider OR about to be in one.
-			if (PlayerCurrentWorld > 0)
-				return (PlayerObject.GetComponent<Collider2D>().IsTouchingLayers(LayersManager.GetLayerMaskWorld2()) ||
-					    Physics2D.Raycast(PlayerObject.transform.position, playerRigidBody.velocity, 1f, LayersManager.GetLayerMaskWorld2()));
-			else if (PlayerCurrentWorld < 0)
-				return (PlayerObject.GetComponent<Collider2D>().IsTouchingLayers(LayersManager.GetLayerMaskWorld1()) ||
-						Physics2D.Raycast(PlayerObject.transform.position, playerRigidBody.velocity, 1f, LayersManager.GetLayerMaskWorld1()));
-			else
+			foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Overlap"))
 			{
-				Debug.Log("ERROR: The player doesn't appear to be in any world.");
-				return true;
+				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
+				{
+					return true;
+				}
 			}
+			return false;
 		}
 
 		void ToggleRenderers(int newWorld)
 		{
+			Renderer current;
 			// Going from 2 to 1.
 			if (newWorld > 0)
 			{
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
 				{
-					obj.GetComponent<Renderer>().enabled = true;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
+					//obj.GetComponent<Renderer>().enabled = true;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
 				{
-					obj.GetComponent<Renderer>().enabled = true;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS2))
 				{
-					obj.GetComponent<Renderer>().enabled = false;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
 				{
-					obj.GetComponent<Renderer>().enabled = false;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
+				{
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
+				{
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
 				}
 			}
 			// Going from 1 to 2.
@@ -125,19 +135,39 @@ namespace OceanGame
 			{
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
 				{
-					obj.GetComponent<Renderer>().enabled = false;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
 				{
-					obj.GetComponent<Renderer>().enabled = false;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS2))
 				{
-					obj.GetComponent<Renderer>().enabled = true;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
 				}
 				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
 				{
-					obj.GetComponent<Renderer>().enabled = true;
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
+				{
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = false;
+				}
+				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
+				{
+					if (!obj.TryGetComponent<Renderer>(out current))
+						continue;
+					current.enabled = true;
 				}
 			}
 		}
