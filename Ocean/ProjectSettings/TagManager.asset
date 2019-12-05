@@ -8,6 +8,8 @@ TagManager:
   - LevelMarker
   - LevelCenter
   - Overlap
+  - lvl
+  - WorldManager
   layers:
   - Default
   - TransparentFX

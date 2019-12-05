@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 	public class SpikeController : MonoBehaviour
 	{
@@ -11,8 +11,9 @@ namespace OceanGame
 			// Spikes should kill the player as soon as they make contact.
 			if (other.tag == "Player")
 			{
-				// Replace with actual respawn/room reset logic later
-				Destroy(other.gameObject);
+				other.GetComponent<PlayerController>().Reset();
+				GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("Reset");
+				gameObject.GetComponentInParent<ObjectContainer>().ResetObjects();
 			}
 		}
 	}

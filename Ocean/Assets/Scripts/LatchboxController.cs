@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 	public class LatchboxController : MonoBehaviour
 	{
