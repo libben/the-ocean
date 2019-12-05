@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7549931528538308536}
   - component: {fileID: 7549931528538308537}
   - component: {fileID: 7549931528538308518}
+  - component: {fileID: -4807396686995468256}
   m_Layer: 10
   m_Name: Latchbox 1
   m_TagString: Untagged
@@ -69,8 +70,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 277039523
-  m_SortingLayer: 1
+  m_SortingLayerID: 293656143
+  m_SortingLayer: 5
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 155f46c9cea8542b5a048297bded3890, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -123,3 +124,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpriteOpen: {fileID: 21300000, guid: b9d7db278ab51453abd355a1b88a8f89, type: 3}
   SpriteClosed: {fileID: 21300000, guid: 155f46c9cea8542b5a048297bded3890, type: 3}
+--- !u!114 &-4807396686995468256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7549931528538308519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d87660e3359b54e9595ae46b05619cc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

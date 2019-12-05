@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace TheOcean
+{
 public class BoxController : MonoBehaviour
 {
 	[SerializeField]
@@ -35,8 +37,10 @@ public class BoxController : MonoBehaviour
 		// Just running into a still box shouldn't kill you. (Though you might hurt your toes)
 		if (other.tag == "Player" && (gameObject.GetComponent<Rigidbody2D>().velocity.magnitude > KillingVelocity))
 		{
-			// Replace with actual respawn/room reset logic later
-			Destroy(other.gameObject);
+			other.GetComponent<PlayerController>().Reset();
+			GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("Reset");
+			gameObject.GetComponentInParent<ObjectContainer>().ResetObjects();
 		}
 	}
+}
 }

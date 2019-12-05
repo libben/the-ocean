@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 
 	public class PlayerController : MonoBehaviour
@@ -54,6 +54,9 @@ namespace OceanGame
 		private Vector2 OriginalColliderSize;
 
 		private bool CanMove = true;
+
+		private Vector3 PositionToResetTo;
+		private int DirectionToResetTo;
 
 		void Start()
 		{
@@ -107,6 +110,20 @@ namespace OceanGame
 			{
 				IsGrounded = true;
 				PlayerJumped = false;
+			}
+		}
+
+		public void UpdateResetData()
+		{
+			this.PositionToResetTo = this.transform.position;
+			this.DirectionToResetTo = this.Direction;
+		}
+
+		public void Reset()
+		{
+			this.transform.position	= PositionToResetTo;
+			if (this.DirectionToResetTo != this.Direction) {
+				FlipCharacterDirection();
 			}
 		}
 
@@ -312,7 +329,6 @@ namespace OceanGame
 		{
 			return GrabbedBox;
 		}
-
 	}
 }
 

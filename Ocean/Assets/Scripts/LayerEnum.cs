@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 	// User defined layers in Unity start from 8.
 	// Don't forget to cast to int before use.

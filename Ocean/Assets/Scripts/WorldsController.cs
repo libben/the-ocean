@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 	public class WorldsController : MonoBehaviour
 	{
@@ -15,7 +15,12 @@ namespace OceanGame
 		private const float SwitchCooldown = 1f;
 		private float SwitchTimer = 0f;
 
-		public static int PlayerCurrentWorld = 1; 
+		public static int PlayerCurrentWorld = 1;
+
+		private static int WorldToResetTo;
+
+		private readonly int[] World1Layers = {(int) Layers.BG1, (int) Layers.OBJECTS1, (int) Layers.PLATFORMS1};
+		private readonly int[] World2Layers = {(int) Layers.BG2, (int) Layers.OBJECTS2, (int) Layers.PLATFORMS2};
 
 		void Awake()
 		{
@@ -38,15 +43,29 @@ namespace OceanGame
 			if (Input.SwitchPressed && SwitchTimer >= SwitchCooldown)
 			{
 				SwitchTimer = 0;
-				if (SwitchPlayerWorld())
+				if (SwitchPlayerWorld(true))
 					ToggleRenderers(PlayerCurrentWorld);
 			}
 			SwitchTimer += Time.deltaTime;
 		}
 
-		bool SwitchPlayerWorld()
+		public void UpdateResetData()
 		{
-			if (CollidingInOtherWorld())
+			WorldToResetTo = PlayerCurrentWorld;
+		}
+
+		public void Reset()
+		{
+			if (WorldToResetTo != PlayerCurrentWorld) {
+				SwitchPlayerWorld(false);
+				ToggleRenderers(PlayerCurrentWorld);
+			}
+		}
+
+
+		bool SwitchPlayerWorld(bool CheckForCollision)
+		{
+			if (CheckForCollision && CollidingInOtherWorld())
 				return false;
 
 			PlayerCurrentWorld *= -1;
@@ -124,101 +143,51 @@ namespace OceanGame
 
 		void ToggleRenderers(int newWorld)
 		{
-			Renderer current;
-			// Going from 2 to 1.
-			if (newWorld > 0)
+			Renderer currentRenderer;
+			UnityEngine.UI.Text currentText;
+			bool enableWorld1 = newWorld > 0;
+			bool enableWorld2 = !enableWorld1;
+
+			foreach (GameObject obj in FindAllObjectsInWorld(World1Layers))
 			{
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-					//obj.GetComponent<Renderer>().enabled = true;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
+				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
+					currentText.enabled = enableWorld1;
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer))
+					currentRenderer.enabled = enableWorld1;
 			}
-			// Going from 1 to 2.
-			else
+			foreach (GameObject obj in FindAllObjectsInWorld(World2Layers))
 			{
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.OBJECTS2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.PLATFORMS2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG1))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = false;
-				}
-				foreach (GameObject obj in FindAllObjectsInWorld((int)Layers.BG2))
-				{
-					if (!obj.TryGetComponent<Renderer>(out current))
-						continue;
-					current.enabled = true;
-				}
+				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
+					currentText.enabled = enableWorld2;
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer))
+					currentRenderer.enabled = enableWorld2;
 			}
 		}
 
 		// Gets all the objects in the specified world, so that we can iterate through them and turn off their renderers. Try not to call this too much because Find is slow.
-		public GameObject[] FindAllObjectsInWorld(int world)
+		public GameObject[] FindAllObjectsInWorld(int[] layers)
 		{
 			GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
 			List<GameObject> result = new List<GameObject>();
 			foreach (GameObject obj in allObjects)
 			{
-				if (obj.layer == world)
+				if (Contains(layers, obj.layer))
+				{
 					result.Add(obj);
+				}
 			}
 			return result.ToArray();
+		}
+
+		static bool Contains(int[] list, int element)
+		{
+			for (int i = 0; i < list.Length; i++)
+			{
+				if (list[i] == element) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		IEnumerator FadeOut(SpriteRenderer objRenderer)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace TheOcean
+{
 public class CameraController : MonoBehaviour
 {
     private GameObject Player;
@@ -35,7 +37,6 @@ public class CameraController : MonoBehaviour
         if (this.transform.position.x != this.TargetX) {
             TimeSpentLerping += Time.deltaTime;
             var proportionDistanceTraveled = Mathf.Min(TimeSpentLerping/LerpDuration, 1f);
-            print(proportionDistanceTraveled);
             var newX = Mathf.SmoothStep(LerpOriginX, this.TargetX, proportionDistanceTraveled);
             var curPosition = this.transform.position;
             curPosition.x = newX;
@@ -72,6 +73,8 @@ public class CameraController : MonoBehaviour
                 target.x = TargetX;
                 this.gameObject.transform.position = target;
             }
+            Player.GetComponent<PlayerController>().UpdateResetData();
+            GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("UpdateResetData");
         }
 
     }
@@ -81,4 +84,5 @@ public class CameraController : MonoBehaviour
         LerpOriginX = gameObject.transform.position.x;
         TimeSpentLerping = 0f;
     }
+}
 }

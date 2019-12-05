@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1736143357
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c556c2740ebe247a3adcaaf8f3d78fd6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0693bdc01ea7e431b966b3108f987848, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,9 +109,9 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.5, y: -0.5}
-      - {x: 0.5, y: -0.5}
-      - {x: -0.00009393692, y: 0.511081}
+    - - {x: -0.5721092, y: -0.5}
+      - {x: 0.57211685, y: -0.5}
+      - {x: -0.00009346008, y: 0.7031963}
 --- !u!50 &49821221105445377
 Rigidbody2D:
   serializedVersion: 4
