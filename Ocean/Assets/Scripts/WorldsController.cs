@@ -152,14 +152,14 @@ namespace TheOcean
 			{
 				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
 					currentText.enabled = enableWorld1;
-				else if (obj.TryGetComponent<Renderer>(out currentRenderer))
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer) && obj.tag != "Overlap")
 					currentRenderer.enabled = enableWorld1;
 			}
 			foreach (GameObject obj in FindAllObjectsInWorld(World2Layers))
 			{
 				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
 					currentText.enabled = enableWorld2;
-				else if (obj.TryGetComponent<Renderer>(out currentRenderer))
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer) && obj.tag != "Overlap")
 					currentRenderer.enabled = enableWorld2;
 			}
 		}
