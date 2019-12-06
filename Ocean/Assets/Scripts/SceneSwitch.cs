@@ -26,10 +26,23 @@ public class SceneSwitch : MonoBehaviour
                 SceneManager.LoadScene("PrototypeRoom");
             }
         }  
+
+        if(SceneName == "Credits")
+        {
+            if (Input.anyKey)
+            {
+                SceneManager.LoadScene("TitleScreen");
+            }
+        }
     }
 
     public void StartNewGame()
     {
         SceneManager.LoadScene("PregameScroll");
+    }
+
+    public void StartCredits()
+    {
+        SceneManager.LoadScene("Credits");
     }
 }
