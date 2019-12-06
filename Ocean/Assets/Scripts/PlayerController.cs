@@ -37,6 +37,12 @@ namespace TheOcean
 		BoxCollider2D bodyCollider;             //The collider component
 		Rigidbody2D rigidBody;                  //The rigidbody component
 
+		// Animation related values
+		Animator Anim;
+		int XVelocityHash = Animator.StringToHash("XVelocity");
+		int IsGroundedHash = Animator.StringToHash("IsGrounded");
+		int GravityGunActiveHash = Animator.StringToHash("GravityGunActive");
+
 		float JumpTime;                         //Variable to hold jump duration
 		float CoyoteTime;                       //Variable to hold coyote duration
 
@@ -63,6 +69,7 @@ namespace TheOcean
 			//Get a reference to the required components
 			input = GetComponent<PlayerInput>();
 			rigidBody = GetComponent<Rigidbody2D>();
+			Anim = GetComponent<Animator>();
 
 			var allPlayerColliders = gameObject.GetComponents<BoxCollider2D>();
 			foreach (BoxCollider2D collider in allPlayerColliders)
@@ -111,6 +118,8 @@ namespace TheOcean
 				IsGrounded = true;
 				PlayerJumped = false;
 			}
+
+			Anim.SetBool(IsGroundedHash, IsGrounded);
 		}
 
 		public void UpdateResetData()
@@ -146,6 +155,7 @@ namespace TheOcean
 
 			//Apply the desired velocity 
 			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
+			Anim.SetFloat(XVelocityHash, Mathf.Abs(rigidBody.velocity.x));
 
 			if (GrabbedBox)
 			{
@@ -229,6 +239,8 @@ namespace TheOcean
 				else
 					GravityGunOff();
 			}
+
+			Anim.SetBool(GravityGunActiveHash, GravityGunActive);
 		}
 
 		void GravityGunOn()
