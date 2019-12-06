@@ -56,6 +56,7 @@ namespace TheOcean
 		private bool GravityGunActive = false;
 		[SerializeField]
 		private BoxController GrabbedBox = null;
+		private BoxCollider2D BoxHitbox;
 		private Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
 
@@ -256,14 +257,15 @@ namespace TheOcean
 				GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 				GrabbedBox.ToggleGrabbed();
 				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
+				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
 
 				foreach (Collider2D collider in boxColliders)
 					if (!collider.isTrigger)
 						collider.enabled = false;
 
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + bodyCollider.size.x, bodyCollider.size.y);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2, bodyCollider.offset.y);
+				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x / 2), bodyCollider.size.y);
+				bodyCollider.offset = new Vector2(Direction * BoxOffset.x, bodyCollider.offset.y);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
