@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
-  Speed: 5
+  Speed: 4
   AirControlMult: 0.25
   CoyoteDuration: 0.05
   MaxFallSpeed: -25
