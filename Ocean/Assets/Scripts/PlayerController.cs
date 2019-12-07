@@ -117,7 +117,7 @@ namespace TheOcean
 			// Before adjusting the collider box myself, it was making the player float above ground weirdly.
 			// That's why we can just use 0,0 as the origin.
 
-			if (Raycast(new Vector2(Vector2.zero.x, -0.1f), Vector2.down, GroundDistance))
+			if (Raycast(new Vector2(0f, -bodyCollider.size.y/2), Vector2.down, GroundDistance))
 			{
 				IsGrounded = true;
 				PlayerJumped = false;
@@ -253,7 +253,7 @@ namespace TheOcean
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right,
+			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0), Direction * Vector2.right,
 										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
@@ -271,8 +271,8 @@ namespace TheOcean
 
 				// Warning: The following numbers are very finicky. If we mess with the x scale of the player this will have to change!!!!
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), bodyCollider.size.y);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2, bodyCollider.offset.y);
+				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), 1);
+				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2 + 0.1f, bodyCollider.offset.y + 0.05f);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
@@ -293,7 +293,7 @@ namespace TheOcean
 
 			GravityGunActive = false;
 			bodyCollider.size = OriginalColliderSize;
-			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y);
+			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y - 0.05f);
 			GrabbedBox.ToggleGrabbed();
 			var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 

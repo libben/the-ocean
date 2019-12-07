@@ -24,6 +24,8 @@ namespace TheOcean
 
 		void Awake()
 		{
+			if (!PlayerObject)
+				PlayerObject = GameObject.FindGameObjectWithTag("Player");
 			Input = PlayerObject.GetComponent<PlayerInput>();
 			PlayerBody = PlayerObject.GetComponent<Rigidbody2D>();
 			Player = PlayerObject.GetComponent<PlayerController>();
