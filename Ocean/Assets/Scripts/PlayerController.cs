@@ -14,7 +14,7 @@ namespace TheOcean
 
 		[Header("Movement Properties")]
 		public float Speed = 5f;                //Player Speed
-		public float AirSpeedDivisor = 3f;      //Speed reduction after player jumps (but not falling)
+		public float AirControlMult = 1f;       // Factor to reduce influence of horizontal input while in air
 		public float CoyoteDuration = .05f;     //How long the player can jump after falling
 		public float MaxFallSpeed = -25f;       //Max Speed player can fall
 
@@ -59,10 +59,11 @@ namespace TheOcean
 		private BoxCollider2D BoxHitbox;
 		private Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
-		public float GravityGunCooldown = 0.2f;
-		public float GravityGunTimer = 0.2f;	
+		private float GravityGunCooldown = 0.2f;
+		private float GravityGunTimer = 0.2f;	
 
 		private bool CanMove = true;
+		public bool PlayerChangedDirections = false;
 
 		private Vector3 PositionToResetTo;
 		private int DirectionToResetTo;
@@ -142,19 +143,22 @@ namespace TheOcean
 
 		void GroundMovement()
 		{
+			// Reduce influence of player horizontal input if they're in the air.
+			if (IsGrounded)
+				PlayerChangedDirections = false;
+			if (!PlayerChangedDirections && (input.Horizontal != 0 && Mathf.Sign(input.Horizontal) != Mathf.Sign(Direction)))
+				PlayerChangedDirections = true;
+
 			//Calculate the desired velocity based on inputs
 			float xVelocity = Speed * input.Horizontal;
-
-			// Tighten the player's jump arc by reducing velocity if they jumped.
-			// We might want to have this happen for all falls OR none at all.
-
-			/*
-			if (PlayerJumped)
-				xVelocity /= AirSpeedDivisor;
-			*/
+			if (!IsGrounded && PlayerChangedDirections)
+			{
+				xVelocity *= AirControlMult;
+				Debug.Log("Air control");
+			}
 
 			//If the sign of the velocity and Direction don't match, flip the character
-			if (xVelocity * Direction < 0f && !GravityGunActive)
+			if (xVelocity * Direction < 0f && !GravityGunActive && IsGrounded)
 				FlipCharacterDirection();
 
 			//Apply the desired velocity 
@@ -253,7 +257,7 @@ namespace TheOcean
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0), Direction * Vector2.right,
+			var boxInRange = Raycast(new Vector2(Direction * 0.5f, -0.2f), Direction * Vector2.right,
 										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
