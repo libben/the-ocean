@@ -59,6 +59,8 @@ namespace TheOcean
 		private BoxCollider2D BoxHitbox;
 		private Vector2 BoxOffset;
 		private Vector2 OriginalColliderSize;
+		public float GravityGunCooldown = 0.2f;
+		public float GravityGunTimer = 0.2f;	
 
 		private bool CanMove = true;
 
@@ -100,6 +102,7 @@ namespace TheOcean
 
 			GravityGunControl();
 
+
 			// TESTING PURPOSES:
 			// See the ray that determines whether a box is within gravity gun range.
 			Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
@@ -114,7 +117,7 @@ namespace TheOcean
 			// Before adjusting the collider box myself, it was making the player float above ground weirdly.
 			// That's why we can just use 0,0 as the origin.
 
-			if (Raycast(Vector2.zero, Vector2.down, GroundDistance))
+			if (Raycast(new Vector2(Vector2.zero.x, -0.1f), Vector2.down, GroundDistance))
 			{
 				IsGrounded = true;
 				PlayerJumped = false;
@@ -156,7 +159,7 @@ namespace TheOcean
 
 			//Apply the desired velocity 
 			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
-			Anim.SetFloat(XVelocityHash, Mathf.Abs(rigidBody.velocity.x));
+			Anim.SetFloat(XVelocityHash, Mathf.Abs(input.Horizontal));
 
 			if (GrabbedBox)
 			{
@@ -226,6 +229,8 @@ namespace TheOcean
 
 		void GravityGunControl()
 		{
+			GravityGunTimer += Time.deltaTime;
+
 			if (GrabbedBox)
 			{
 				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
@@ -233,8 +238,9 @@ namespace TheOcean
 
 			if (!input.GravityGunPressed)
 				return;
-			else
+			else if (GravityGunTimer >= GravityGunCooldown)
 			{
+				GravityGunTimer = 0;
 				if (!GravityGunActive)
 					GravityGunOn();
 				else
@@ -263,9 +269,10 @@ namespace TheOcean
 					if (!collider.isTrigger)
 						collider.enabled = false;
 
+				// Warning: The following numbers are very finicky. If we mess with the x scale of the player this will have to change!!!!
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x) + Mathf.Abs(bodyCollider.size.x / 2), bodyCollider.size.y);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x, bodyCollider.offset.y);
+				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), bodyCollider.size.y);
+				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2, bodyCollider.offset.y);
 
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
