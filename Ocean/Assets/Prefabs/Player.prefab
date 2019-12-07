@@ -434,7 +434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawDebugRaycasts: 1
   Speed: 5
-  AirSpeedDivisor: 3
+  AirControlMult: 0.1
   CoyoteDuration: 0.05
   MaxFallSpeed: -25
   JumpForce: 3
@@ -451,8 +451,7 @@ MonoBehaviour:
   GravityGunRange: 0.5
   GravityGunActive: 0
   GrabbedBox: {fileID: 0}
-  GravityGunCooldown: 0.2
-  GravityGunTimer: 0.2
+  PlayerChangedDirections: 0
 --- !u!114 &4554381124154650810
 MonoBehaviour:
   m_ObjectHideFlags: 0
