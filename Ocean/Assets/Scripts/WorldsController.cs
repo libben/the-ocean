@@ -74,9 +74,11 @@ namespace TheOcean
 
 			if (PlayerCurrentWorld > 0)
 			{
-				
-				PlayerObject.layer = (int)Layers.PLAYERW1;
-
+				if (!Player.GetGravityGunActive())
+				{
+					PlayerObject.layer = (int)Layers.PLAYERW1;
+				}
+				Player.CurrentLayer = (int)Layers.PLAYERW1;
 				// Need to inform the movement controller script that the ground is now world 1's ground
 				Player.GroundLayer = LayersManager.GetLayerMaskWorld1();
 
@@ -93,8 +95,11 @@ namespace TheOcean
 			// 1->2
 			else
 			{
-				PlayerObject.layer = (int)Layers.PLAYERW2;
-
+				if (!Player.GetGravityGunActive())
+				{
+					PlayerObject.layer = (int)Layers.PLAYERW2;
+				}
+				Player.CurrentLayer = (int)Layers.PLAYERW2;
 				Player.GroundLayer = LayersManager.GetLayerMaskWorld2();
 
 				var currentBox = Player.GetGrabbedBox();
@@ -107,7 +112,7 @@ namespace TheOcean
 					}
 				}
 			}
-
+			
 			return true;
 		}
 

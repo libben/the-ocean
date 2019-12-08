@@ -63,8 +63,8 @@ namespace TheOcean
 		private float GravityGunTimer = 0.2f;	
 
 		private bool CanMove = true;
-		public bool PlayerChangedDirections = false;
-
+		private bool PlayerChangedDirections = false;
+		public int CurrentLayer;
 		private Vector3 PositionToResetTo;
 		private int DirectionToResetTo;
 
@@ -87,6 +87,7 @@ namespace TheOcean
 			OriginalColliderSize = bodyCollider.size;
 
 			GroundLayer = LayersManager.GetLayerMaskWorld1();
+			CurrentLayer = gameObject.layer;
 		}
 
 		void FixedUpdate()
@@ -278,6 +279,9 @@ namespace TheOcean
 				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), 1);
 				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2 + 0.1f, bodyCollider.offset.y + 0.05f);
 
+				if (GrabbedBox.gameObject.layer == (int)Layers.OBJECTS_PERSISTENT)
+					gameObject.layer = (int)Layers.OBJECTS_PERSISTENT;
+
 				// If player grabs a box but isn't on the ground, they should be stuck dangling.
 				if (!IsGrounded)
 				{
@@ -305,7 +309,7 @@ namespace TheOcean
 				collider.enabled = true;
 
 			GrabbedBox = null;
-
+			gameObject.layer = CurrentLayer;
 			if (!CanMove)
 			{
 				rigidBody.gravityScale = 1;
