@@ -2,84 +2,249 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OceanGame
+namespace TheOcean
 {
 	public class WorldsController : MonoBehaviour
 	{
 		[SerializeField]
 		private GameObject PlayerObject;
-		[SerializeField]
-		private GameObject PlatformsWorld1;
-		[SerializeField]
-		private GameObject PlatformsWorld2;
-
+		private Rigidbody2D PlayerBody;
+		private PlayerController Player;
 		private PlayerInput Input;
 
-		public int PlayerCurrentWorld = 1; 
+		private const float SwitchCooldown = 1f;
+		private float SwitchTimer = 0f;
+
+		public static int PlayerCurrentWorld = 1;
+
+		private static int WorldToResetTo;
+
+		private readonly int[] World1Layers = {(int) Layers.BG1, (int) Layers.OBJECTS1, (int) Layers.PLATFORMS1};
+		private readonly int[] World2Layers = {(int) Layers.BG2, (int) Layers.OBJECTS2, (int) Layers.PLATFORMS2};
 
 		void Awake()
 		{
+			if (!PlayerObject)
+				PlayerObject = GameObject.FindGameObjectWithTag("Player");
 			Input = PlayerObject.GetComponent<PlayerInput>();
+			PlayerBody = PlayerObject.GetComponent<Rigidbody2D>();
+			Player = PlayerObject.GetComponent<PlayerController>();
+			ToggleRenderers(1);
+
+			foreach (GameObject overlapper in GameObject.FindGameObjectsWithTag("Overlap"))
+			{
+				var overlapSprite = overlapper.GetComponent<SpriteRenderer>();
+				var tempColor = Color.red;
+				tempColor.a = 0;
+				overlapSprite.color = tempColor;
+			}
 		}
 
 		void FixedUpdate()
 		{
-			if (Input.SwitchPressed)
+			if (Input.SwitchPressed && SwitchTimer >= SwitchCooldown)
 			{
-				SwitchPlayerWorld();
+				SwitchTimer = 0;
+				if (SwitchPlayerWorld(true))
+					ToggleRenderers(PlayerCurrentWorld);
+			}
+			SwitchTimer += Time.deltaTime;
+		}
+
+		public void UpdateResetData()
+		{
+			WorldToResetTo = PlayerCurrentWorld;
+		}
+
+		public void Reset()
+		{
+			if (WorldToResetTo != PlayerCurrentWorld) {
+				SwitchPlayerWorld(false);
 				ToggleRenderers(PlayerCurrentWorld);
 			}
 		}
 
-		void SwitchPlayerWorld()
+
+		bool SwitchPlayerWorld(bool CheckForCollision)
 		{
-			// TODO:
-			// - Add logic to make sure the player can't switch worlds if their position in the other world is inside a wall, or things like that.
-			// - Add a cooldown so the player can't repeatedly switch worlds too fast
+			if (CheckForCollision && CollidingInOtherWorld())
+				return false;
 
 			PlayerCurrentWorld *= -1;
-			
-			// 2->1
+
 			if (PlayerCurrentWorld > 0)
 			{
+				
 				PlayerObject.layer = (int)Layers.PLAYERW1;
 
 				// Need to inform the movement controller script that the ground is now world 1's ground
-				var movementController = PlayerObject.GetComponent<PlayerMovement>();
-				movementController.groundLayer = LayerMask.GetMask("Platforms1");
+				Player.GroundLayer = LayersManager.GetLayerMaskWorld1();
+
+				var currentBox = Player.GetGrabbedBox();
+				if (currentBox)
+				{
+					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
+					{
+						currentBox.gameObject.layer = (int)Layers.OBJECTS1;
+						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects1";
+					}
+				}
 			}
 			// 1->2
 			else
 			{
 				PlayerObject.layer = (int)Layers.PLAYERW2;
 
-				var movementController = PlayerObject.GetComponent<PlayerMovement>();
-				movementController.groundLayer = LayerMask.GetMask("Platforms2");
+				Player.GroundLayer = LayersManager.GetLayerMaskWorld2();
+
+				var currentBox = Player.GetGrabbedBox();
+				if (currentBox)
+				{
+					if (currentBox.gameObject.layer != (int)Layers.OBJECTS_PERSISTENT)
+					{
+						currentBox.gameObject.layer = (int)Layers.OBJECTS2;
+						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects2";
+					}
+				}
 			}
+
+			return true;
+		}
+
+		bool CollidingInOtherWorld()
+		{
+			// Check if player is in bound of all overlap colliders and boxes
+			// Todo: add level-specification.
+			foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Overlap"))
+			{
+				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
+				{
+					var tempColor = obj.GetComponent<SpriteRenderer>().color;
+					tempColor.a = 1;
+					obj.GetComponent<SpriteRenderer>().color = tempColor;
+					IEnumerator fadeRoutine = FadeOut(obj.GetComponent<SpriteRenderer>());
+					StartCoroutine(fadeRoutine);
+					return true;
+				}
+			}
+		
+			foreach (GameObject box in GameObject.FindGameObjectsWithTag("Box"))
+			{
+				if (box.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
+				{
+					var tempColor = box.GetComponent<SpriteRenderer>().color;
+					tempColor.a = 1;
+					box.GetComponent<SpriteRenderer>().color = tempColor;
+					IEnumerator fadeRoutine = FadeOutBox(box.GetComponent<SpriteRenderer>());
+					StartCoroutine(fadeRoutine);
+					return true;
+				}
+			}
+			return false;
 		}
 
 		void ToggleRenderers(int newWorld)
 		{
-			var world1renderer = PlatformsWorld1.GetComponent<Renderer>();
-			var world2renderer = PlatformsWorld2.GetComponent<Renderer>();
+			Renderer currentRenderer;
+			UnityEngine.UI.Text currentText;
+			bool enableWorld1 = newWorld > 0;
+			bool enableWorld2 = !enableWorld1;
 
-			// Going from 2 to 1.
-			if (newWorld > 0)
+			foreach (GameObject obj in FindAllObjectsInWorld(World1Layers))
 			{
-				world1renderer.enabled = true;
-				world2renderer.enabled = false;
-
-				// have to go in and enable renderers of all objs in layer Objects1, disable of all in Objects2
+				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
+					currentText.enabled = enableWorld1;
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer) && obj.tag != "Overlap")
+					currentRenderer.enabled = enableWorld1;
 			}
-			// Going from 1 to 2.
-			else
+			foreach (GameObject obj in FindAllObjectsInWorld(World2Layers))
 			{
-				world1renderer.enabled = false;
-				world2renderer.enabled = true;
-				
-				// converse of the other case
+				if (obj.TryGetComponent<UnityEngine.UI.Text>(out currentText))
+					currentText.enabled = enableWorld2;
+				else if (obj.TryGetComponent<Renderer>(out currentRenderer) && obj.tag != "Overlap")
+					currentRenderer.enabled = enableWorld2;
 			}
 		}
+
+		// Gets all the objects in the specified world, so that we can iterate through them and turn off their renderers. Try not to call this too much because Find is slow.
+		public GameObject[] FindAllObjectsInWorld(int[] layers)
+		{
+			GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+			List<GameObject> result = new List<GameObject>();
+			foreach (GameObject obj in allObjects)
+			{
+				if (Contains(layers, obj.layer))
+				{
+					result.Add(obj);
+				}
+			}
+			return result.ToArray();
+		}
+
+		static bool Contains(int[] list, int element)
+		{
+			for (int i = 0; i < list.Length; i++)
+			{
+				if (list[i] == element) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		IEnumerator FadeOut(SpriteRenderer objRenderer)
+		{
+			for (float ft = 1f; ft >= 0; ft -= 0.05f)
+			{
+				if (ft < 0.1)
+					ft = 0;
+				Color c = objRenderer.color;
+				c.a = ft;
+				objRenderer.color = c;
+				yield return null;
+			}
+		}
+
+		IEnumerator FadeOutBox(SpriteRenderer boxRenderer)
+		{
+			// when first called, turn on the renderer (if needed)
+			// same fadeout
+			// when reaching 0 alpha, turn off the renderer (if needed) but also turn the alpha back to 1
+			bool NeedToDisable = false;
+			if (!boxRenderer.enabled)
+			{
+				Debug.Log("enabling a box renderer from the other world");
+				boxRenderer.enabled = true;
+				NeedToDisable = true;
+			}
+			
+			Color c = Color.red;
+			Color originalColor = boxRenderer.color;
+			for (float ft = 1f; ft >= 0; ft -= 0.05f)
+			{
+				if (ft < 0.1)
+				{
+					ft = 0;
+				}
+				c = Color.red;
+				c.a = ft;
+				boxRenderer.color = c;
+
+				yield return null;
+			}
+
+			if (c.a <= 0.1)
+			{
+				boxRenderer.color = originalColor;
+
+				if (NeedToDisable)
+					boxRenderer.enabled = false;
+
+				yield break;
+			}
+		}
+
+
 
 	}
 
