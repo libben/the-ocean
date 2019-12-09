@@ -7,26 +7,19 @@ public class SceneSwitch : MonoBehaviour
 {
     private string SceneName;
 
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         SceneName = currentScene.name;
-        //Debug.Log(SceneName);
         
         if (SceneName == "PregameScroll")
         {
             if (Input.anyKey)
             {
-                SceneManager.LoadScene("PrototypeRoom");
+                SceneManager.LoadScene("Arc 1");
             }
         }  
-
         if(SceneName == "Credits")
         {
             if (Input.anyKey)
