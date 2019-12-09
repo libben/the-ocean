@@ -7,16 +7,26 @@ public class DialogueController : MonoBehaviour
 {
     [SerializeField] GameObject DialogueBox;
     [SerializeField] private Text DialogueText;
-    private bool DialogueActive;
+    public bool DialogueActive;
+    public string[] DialogueLines;
+    public int CurrentDialogueLine;
 
     // Update is called once per frame
     void Update()
     {
-        if(DialogueActive && Input.anyKey)
+        if(DialogueActive && Input.GetKeyDown(KeyCode.E))
+        {
+            CurrentDialogueLine++;
+        }
+
+        if(CurrentDialogueLine >= DialogueLines.Length)
         {
             DialogueBox.SetActive(false);
             DialogueActive = false;
+            CurrentDialogueLine = 0;
         }
+
+        DialogueText.text = DialogueLines[CurrentDialogueLine];
     }
 
     public void ShowDialogueBox(string Dialogue)
@@ -24,6 +34,11 @@ public class DialogueController : MonoBehaviour
         DialogueBox.SetActive(true);
         DialogueActive = true;
         DialogueText.text = Dialogue;
+    }
 
+    public void ShowDialogue()
+    {
+        DialogueBox.SetActive(true);
+        DialogueActive = true;
     }
 }
