@@ -96,7 +96,6 @@ namespace TheOcean
 						currentBox.gameObject.layer = (int)Layers.OBJECTS1;
 						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects1";
 						currentBox.SetCurrentWorld(PlayerCurrentWorld);
-						currentBox.UpdateLayerMask();
 					}
 				}
 			}
@@ -114,7 +113,6 @@ namespace TheOcean
 						currentBox.gameObject.layer = (int)Layers.OBJECTS2;
 						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects2";
 						currentBox.SetCurrentWorld(PlayerCurrentWorld);
-						currentBox.UpdateLayerMask();
 					}
 				}
 			}

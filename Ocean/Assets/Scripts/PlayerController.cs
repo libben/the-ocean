@@ -50,6 +50,7 @@ namespace TheOcean
 		int Direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
+		private bool GravityGunAcquired = true;
 		[SerializeField]
 		private float GravityGunRange = 1f;
 		[SerializeField]
@@ -105,7 +106,8 @@ namespace TheOcean
 				MidAirMovement();
 			}
 
-			GravityGunControl();
+			if (GravityGunAcquired)
+				GravityGunControl();
 
 
 			// TESTING PURPOSES:
@@ -127,7 +129,13 @@ namespace TheOcean
 				IsGrounded = true;
 				PlayerJumped = false;
 			}
-
+			if (GrabbedBox)
+			{
+				if (GrabbedBox.IsGrounded && !IsGrounded)
+					CanMove = false;
+				else
+					CanMove = true;
+			}
 			Anim.SetBool(IsGroundedHash, IsGrounded);
 		}
 
@@ -243,12 +251,18 @@ namespace TheOcean
 
 			if (GrabbedBox && rigidBody.velocity.magnitude > 0)
 			{
+				if (Mathf.Abs(rigidBody.velocity.y) > 0)
+					GrabbedBox.gameObject.transform.position = new Vector2(GrabbedBox.gameObject.transform.position.x, gameObject.transform.position.y + BoxOffset.y);
 				if ((!GrabbedBox.TouchingLeft && Mathf.Sign(rigidBody.velocity.x) < 0))
 					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
 				else if ((!GrabbedBox.TouchingRight && Mathf.Sign(rigidBody.velocity.x) > 0))
 					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
-				else
-					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
+				else if (rigidBody.velocity.y > 0 && rigidBody.velocity.x == 0)
+					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				else if ((GrabbedBox.TouchingLeft && rigidBody.velocity.x < 0) || (GrabbedBox.TouchingRight && rigidBody.velocity.x > 0))
+				{
+					rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
+				}
 			}
 
 			if (!input.GravityGunPressed)
