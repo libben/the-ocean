@@ -31,7 +31,6 @@ namespace TheOcean
 		[Header("Status Flags")]
 		public bool IsGrounded;                 //Is the player on the ground?
 		public bool IsJumping;                  //Is player jumping?
-		public bool PlayerJumped;               // is the fall caused by player action
 
 		PlayerInput input;                      //The current inputs for the player
 		BoxCollider2D bodyCollider;             //The collider component
@@ -50,10 +49,9 @@ namespace TheOcean
 		int Direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
+		private bool GravityGunAcquired = true;
 		[SerializeField]
 		private float GravityGunRange = 1f;
-
-		private bool HasGravityGun = false;
 		
 		[SerializeField]
 		private bool GravityGunActive = false;
@@ -61,13 +59,13 @@ namespace TheOcean
 		private BoxController GrabbedBox = null;
 		private BoxCollider2D BoxHitbox;
 		private Vector2 BoxOffset;
-		private Vector2 OriginalColliderSize;
 		private float GravityGunCooldown = 0.2f;
-		private float GravityGunTimer = 0.2f;	
+		private float GravityGunTimer = 0.2f;
+		private float MinDistance = 0.1f;
 
 		private bool CanMove = true;
 		private bool PlayerChangedDirections = false;
-		public int CurrentLayer;
+
 		private Vector3 PositionToResetTo;
 		private int DirectionToResetTo;
 
@@ -94,10 +92,8 @@ namespace TheOcean
 
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
-			OriginalColliderSize = bodyCollider.size;
 
 			GroundLayer = LayersManager.GetLayerMaskWorld1();
-			CurrentLayer = gameObject.layer;
 		}
 
 		void FixedUpdate()
@@ -112,15 +108,13 @@ namespace TheOcean
 				MidAirMovement();
 			}
 
-			if (HasGravityGun)
-			{
+			if (GravityGunAcquired)
 				GravityGunControl();
-			}
 
 
 			// TESTING PURPOSES:
 			// See the ray that determines whether a box is within gravity gun range.
-			Raycast(new Vector2(Direction * 0.5f, 0.5f), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			Raycast(new Vector2(Direction * 0.5f, 0), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 		}
 
 		void PhysicsCheck()
@@ -135,9 +129,14 @@ namespace TheOcean
 			if (Raycast(new Vector2(0f, -bodyCollider.size.y/2), Vector2.down, GroundDistance))
 			{
 				IsGrounded = true;
-				PlayerJumped = false;
 			}
-
+			if (GrabbedBox)
+			{
+				if (GrabbedBox.IsGrounded && !IsGrounded)
+					CanMove = false;
+				else if (GrabbedBox.IsGrabbable)
+					CanMove = true;
+			}
 			Anim.SetBool(IsGroundedHash, IsGrounded);
 		}
 
@@ -160,11 +159,6 @@ namespace TheOcean
 			if (this.DirectionToResetTo != this.Direction) {
 				FlipCharacterDirection();
 			}
-		}
-
-		public void AddGravityGunPowerup()
-		{
-			HasGravityGun = true;
 		}
 
 		void GroundMovement()
@@ -191,11 +185,6 @@ namespace TheOcean
 			rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
 			Anim.SetFloat(XVelocityHash, Mathf.Abs(input.Horizontal));
 
-			if (GrabbedBox)
-			{
-				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
-			}
-
 			//If the player is on the ground, extend the coyote time window
 			if (IsGrounded)
 				CoyoteTime = Time.time + CoyoteDuration;
@@ -211,7 +200,6 @@ namespace TheOcean
 				//...The player is no longer on the groud and is jumping...
 				IsGrounded = false;
 				IsJumping = true;
-				PlayerJumped = true;
 
 				//...record the time the player will stop being able to boost their jump...
 				JumpTime = Time.time + JumpHoldDuration;
@@ -261,9 +249,21 @@ namespace TheOcean
 		{
 			GravityGunTimer += Time.deltaTime;
 
-			if (GrabbedBox)
+			if (GrabbedBox && rigidBody.velocity.magnitude > 0)
 			{
-				GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				if (Mathf.Abs(rigidBody.velocity.y) > 0)
+					GrabbedBox.gameObject.transform.position = new Vector2(GrabbedBox.gameObject.transform.position.x, gameObject.transform.position.y + BoxOffset.y);
+
+				if ((!GrabbedBox.TouchingLeft && Mathf.Sign(rigidBody.velocity.x) < 0))
+					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				else if ((!GrabbedBox.TouchingRight && Mathf.Sign(rigidBody.velocity.x) > 0))
+					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				else if (rigidBody.velocity.y > 0 && rigidBody.velocity.x == 0)
+					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				else if ((GrabbedBox.TouchingLeft && rigidBody.velocity.x < 0) || (GrabbedBox.TouchingRight && rigidBody.velocity.x > 0))
+				{
+					rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
+				}
 			}
 
 			if (!input.GravityGunPressed)
@@ -283,8 +283,7 @@ namespace TheOcean
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(Direction * 0.5f, -0.2f), Direction * Vector2.right,
-										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
 				GunNoiseSource?.Play();
@@ -294,26 +293,19 @@ namespace TheOcean
 				// Grab box, turn off its colliders, save its position relative to player, expand player collider
 				GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
 				GrabbedBox.ToggleGrabbed();
-				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
 				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
 
-				foreach (Collider2D collider in boxColliders)
-					if (!collider.isTrigger)
-						collider.enabled = false;
-
-				// Warning: The following numbers are very finicky. If we mess with the x scale of the player this will have to change!!!!
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), 1);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2 + 0.1f, bodyCollider.offset.y + 0.05f);
-
-				if (GrabbedBox.gameObject.layer == (int)Layers.OBJECTS_PERSISTENT)
-					gameObject.layer = (int)Layers.OBJECTS_PERSISTENT;
-
-				// If player grabs a box but isn't on the ground, they should be stuck dangling.
+				
+				// If player grabs a box but isn't on the ground OR has something over it, they can't pull it
 				if (!IsGrounded)
 				{
 					rigidBody.velocity = new Vector2(0, 0);
 					rigidBody.gravityScale = 0;
+					CanMove = false;
+				}
+				if (!GrabbedBox.IsGrabbable)
+				{
 					CanMove = false;
 				}
 
@@ -328,23 +320,24 @@ namespace TheOcean
 
 			GravityGunActive = false;
 			SpriteRend.sprite = NormalSprite;
-			bodyCollider.size = OriginalColliderSize;
-			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y - 0.05f);
 			GrabbedBox.ToggleGrabbed();
-			var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
-
-			foreach (Collider2D collider in boxColliders)
-				collider.enabled = true;
 
 			GrabbedBox = null;
-			gameObject.layer = CurrentLayer;
 			if (!CanMove)
 			{
-				rigidBody.gravityScale = 1;
 				CanMove = true;
 			}
 
+			rigidBody.gravityScale = 1;
+
 			Debug.Log("Gravity gun off");
+		}
+
+		public void HaltPlayerJump()
+		{
+			rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0);
+			gameObject.transform.position = new Vector2(transform.position.x, transform.position.y - 0.1f);
+			IsJumping = false;
 		}
 
 		//These two Raycast methods wrap the Physics2D.Raycast() and provide some extra
@@ -385,6 +378,11 @@ namespace TheOcean
 		public BoxController GetGrabbedBox()
 		{
 			return GrabbedBox;
+		}
+
+		public void EnableGravityGun()
+		{
+			GravityGunAcquired = true;
 		}
 	}
 }

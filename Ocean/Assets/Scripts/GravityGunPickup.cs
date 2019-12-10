@@ -18,7 +18,7 @@ public class GravityGunPickup : MonoBehaviour
 
     private void EnableGravityGunOn(PlayerController playCon)
     {
-        playCon.AddGravityGunPowerup();
+        playCon.EnableGravityGun();
     }
 
 }

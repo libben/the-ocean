@@ -84,11 +84,7 @@ namespace TheOcean
 
 			if (PlayerCurrentWorld > 0)
 			{
-				if (!Player.GetGravityGunActive())
-				{
-					PlayerObject.layer = (int)Layers.PLAYERW1;
-				}
-				Player.CurrentLayer = (int)Layers.PLAYERW1;
+				PlayerObject.layer = (int)Layers.PLAYERW1;
 				// Need to inform the movement controller script that the ground is now world 1's ground
 				Player.GroundLayer = LayersManager.GetLayerMaskWorld1();
 
@@ -99,17 +95,14 @@ namespace TheOcean
 					{
 						currentBox.gameObject.layer = (int)Layers.OBJECTS1;
 						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects1";
+						currentBox.SetCurrentWorld(PlayerCurrentWorld);
 					}
 				}
 			}
 			// 1->2
 			else
 			{
-				if (!Player.GetGravityGunActive())
-				{
-					PlayerObject.layer = (int)Layers.PLAYERW2;
-				}
-				Player.CurrentLayer = (int)Layers.PLAYERW2;
+				PlayerObject.layer = (int)Layers.PLAYERW2;
 				Player.GroundLayer = LayersManager.GetLayerMaskWorld2();
 
 				var currentBox = Player.GetGrabbedBox();
@@ -119,6 +112,7 @@ namespace TheOcean
 					{
 						currentBox.gameObject.layer = (int)Layers.OBJECTS2;
 						currentBox.gameObject.GetComponent<Renderer>().sortingLayerName = "Objects2";
+						currentBox.SetCurrentWorld(PlayerCurrentWorld);
 					}
 				}
 			}
@@ -134,11 +128,14 @@ namespace TheOcean
 			{
 				if (obj.GetComponent<Collider2D>().bounds.Contains(Player.transform.position))
 				{
-					var tempColor = obj.GetComponent<SpriteRenderer>().color;
-					tempColor.a = 1;
-					obj.GetComponent<SpriteRenderer>().color = tempColor;
-					IEnumerator fadeRoutine = FadeOut(obj.GetComponent<SpriteRenderer>());
-					StartCoroutine(fadeRoutine);
+					foreach (SpriteRenderer rnd in obj.GetComponents<SpriteRenderer>())
+					{
+						var tempColor = rnd.color;
+						tempColor.a = 1;
+						rnd.color = tempColor;
+						IEnumerator fadeRoutine = FadeOut(rnd);
+						StartCoroutine(fadeRoutine);
+					}
 					return true;
 				}
 			}

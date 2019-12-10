@@ -45,9 +45,34 @@ namespace TheOcean
 				case 1:
 					return LayerMask.GetMask("Objects1", "ObjectsPersistent");
 				default:
-					Debug.Log("ERROR: Bad argument for GetLayerMaskObjects, no such world");
+					Debug.Log($"ERROR: Bad argument {currentWorld} for GetLayerMaskObjects, no such world");
 					return 0;
 			}
+		}
+
+		public static int GetLayerMaskWorld(int currentWorld)
+		{
+			switch (currentWorld)
+			{
+				case -1:
+					return LayerMask.GetMask("Platforms2", "Objects2", "ObjectsPersistent");
+				case 1:
+					return LayerMask.GetMask("Platforms1", "Objects1", "ObjectsPersistent");
+				default:
+					Debug.Log("ERROR: Bad argument for GetLayerMaskWorld, no such world");
+					return 0;
+			}
+		}
+
+		// Converts a Layers enum value to 1 (world 1) or -1 (world 2). Don't use this for persistent objects.
+		public static int GetCurrentWorld(int currentLayer)
+		{
+			if (currentLayer == (int)Layers.OBJECTS1 || currentLayer == (int)Layers.PLATFORMS1 || currentLayer == (int)Layers.PLAYERW1)
+				return 1;
+			else if (currentLayer == (int)Layers.OBJECTS2 || currentLayer == (int)Layers.PLATFORMS2 || currentLayer == (int)Layers.PLAYERW2)
+				return -1;
+			else
+				return 0;
 		}
 
 	}
