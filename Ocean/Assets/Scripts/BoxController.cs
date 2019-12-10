@@ -37,9 +37,7 @@ public class BoxController : MonoBehaviour
 		// Just running into a still box shouldn't kill you. (Though you might hurt your toes)
 		if (other.tag == "Player" && (gameObject.GetComponent<Rigidbody2D>().velocity.magnitude > KillingVelocity))
 		{
-			other.GetComponent<PlayerController>().Reset();
-			GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("Reset");
-			gameObject.GetComponentInParent<ObjectContainer>().ResetObjects();
+			GameObject.FindGameObjectWithTag("ScriptHome").GetComponent<ResetController>().Reset();
 		}
 	}
 }
