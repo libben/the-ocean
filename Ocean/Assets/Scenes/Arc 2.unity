@@ -1790,12 +1790,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 490471738}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &490471740 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1879419736485267291, guid: cc46480ebeb0a401da415facdfef5be8,
-    type: 3}
-  m_PrefabInstance: {fileID: 490471738}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &491043949 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5991128282913263918, guid: ad3d5acfc63f14530b3c726c36f16e2b,
@@ -55189,7 +55183,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1484037594}
   - component: {fileID: 1484037593}
-  - component: {fileID: 1484037595}
   m_Layer: 0
   m_Name: World Manager
   m_TagString: WorldManager
@@ -55224,18 +55217,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1484037595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1484037592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596b28de037b04e4d9bc3bc5135fafc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1507192956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55350,25 +55331,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9466749d2f5a7349bdb1ba8df875acd, type: 3}
---- !u!1 &1507192957 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4554381124154650812, guid: c9466749d2f5a7349bdb1ba8df875acd,
-    type: 3}
-  m_PrefabInstance: {fileID: 1507192956}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1507192958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507192957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5442337c645c6174096c798330496251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EndOfLevel: {fileID: 490471740}
 --- !u!4 &1513212320 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5991128282913263918, guid: ad3d5acfc63f14530b3c726c36f16e2b,
