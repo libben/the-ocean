@@ -18,9 +18,8 @@ public class BoxController : MonoBehaviour
 	[SerializeField]
 	private float CloseDistance = 0.1f;
 	private GameObject PlayerObject;
-	private RaycastHit2D[] Touching;
-	private ContactFilter2D Solids;
 
+		public bool IsGrounded;
 		public bool TouchingLeft;
 		public bool TouchingRight;
 
@@ -30,8 +29,6 @@ public class BoxController : MonoBehaviour
 		Collider = gameObject.GetComponent<BoxCollider2D>();
 		IsGrabbable = true;
 		PlayerObject = GameObject.FindGameObjectWithTag("Player");
-		Touching = new RaycastHit2D[3];
-		Solids.SetLayerMask(LayersManager.GetLayerMaskWorld(CurrentWorld));
 	}
 
 	public void ToggleGrabbed()
@@ -50,12 +47,13 @@ public class BoxController : MonoBehaviour
 
 	void FixedUpdate()
 	{
+			IsGrounded = false;
+
 		var CheckAbove = Raycast(new Vector2(0, Collider.size.y/2 + 0.05f), Vector2.up, CloseDistance, LayersManager.GetLayerMaskObjects(CurrentWorld));
-		var CheckLeft = Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.left, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+			var CheckBelow = Raycast(new Vector2(0, -Collider.size.y / 2 - 0.05f), Vector2.down, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+			var CheckLeft = Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.left, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
 		var CheckRight = Raycast(new Vector2(Collider.size.x / 2 + 0.001f, 0), Vector2.right, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
 
-			var TouchingSides = Physics2D.Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.right, Solids, Touching, CloseDistance * 2 + Collider.size.x);
-			Debug.Log(TouchingSides);
 			if (CheckLeft)
 				TouchingLeft = true;
 			else
@@ -64,6 +62,9 @@ public class BoxController : MonoBehaviour
 				TouchingRight = true;
 			else
 				TouchingRight = false;
+			if (CheckBelow)
+				IsGrounded = true;
+
 
 			if (CheckAbove)
 			{
@@ -126,9 +127,6 @@ public class BoxController : MonoBehaviour
 		return hit;
 	}
 
-	public void UpdateLayerMask()
-	{
-			Solids.SetLayerMask(LayersManager.GetLayerMaskWorld(CurrentWorld));
-	}
+
 	}
 }
