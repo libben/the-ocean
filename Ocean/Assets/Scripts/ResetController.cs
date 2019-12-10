@@ -20,7 +20,6 @@ public class ResetController : MonoBehaviour
 
     public void NotifyNewLevel(GameObject lvl)
     {
-        print("Reset updating new level");
         LvlObject = lvl;
     }
 

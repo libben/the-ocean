@@ -124,3 +124,5 @@ MonoBehaviour:
   UnpushedSprite: {fileID: 21300000, guid: 61abd8e94abc24bb698b32e080258dce, type: 3}
   PushedSprite: {fileID: 21300000, guid: a75f317149a4a4f59a3ad59749b9189b, type: 3}
   LinkedObject: {fileID: 0}
+  SpriteDown: {fileID: 21300000, guid: a75f317149a4a4f59a3ad59749b9189b, type: 3}
+  SpriteUp: {fileID: 21300000, guid: 61abd8e94abc24bb698b32e080258dce, type: 3}
