@@ -28,6 +28,15 @@ You should replay any **bold text** with your relevant information. Liberally us
 
 **Describe your user interface and how it relates to gameplay. This can be done via the template.**
 
+*Title Screen* - The title screen consists of three buttons and a background image. I implemented a [SceneSwitch](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/SceneSwitch.cs#L1) script that is attached to the buttons, with each button leading to its appropriate scene. The "New Game" button leads you to the "PregameScroll" scene which gives the player a bit of backstory to the game. Pressing any button from that scene will lead the player to the scene, "Arc 1", where the player can start playing the game. The "Credits" button will lead to the "Credits" scene. In the "Credits" scene, I listed all of our team members and their roles, as well as the assets and other tutorials we uesd for the project. To achieve the scrolling effect, I recorded an animation using the animator system in Unity. 
+
+*Dialogue Box* - 
+![DialogueBox](https://cdn.discordapp.com/attachments/156926535356514304/653814216452603934/unknown.png)
+The dialogue box consists of the character's picture and the text they are saying. It is controlled through a [DialogueController](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/DialogueController.cs#L1) script. It's primary goal is to hold the actualy dialogue box assets. The text that the characters will be saying comes from the [DialogueHolder](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/DialogueHolder.cs#L1) script. The DialogueHolder script will be triggered when the player collides with a trigger.
+
+
+
+
 ## Movement/Physics
 
 **Describe the basics of movement and physics in your game. Is it the standard physics model? What did you change or modify? Did you make your movement scripts that do not use the physics system?**
