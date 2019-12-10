@@ -10,6 +10,7 @@ public class ResetController : MonoBehaviour
     private WorldsController WorldManager;
     private LevelController LevelCtrl;
     private GameObject LvlObject = null;
+    [SerializeField] private AudioSource Source;
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -28,12 +29,20 @@ public class ResetController : MonoBehaviour
     {
         if (Input.ResetPressed)
         {
-            Reset();
+            ResetWithSound(false);
         }
     }
 
     public void Reset()
     {
+        ResetWithSound(true);
+    }
+    private void ResetWithSound(bool enable)
+    {
+        if (enable)
+        {
+            Source.Play();
+        }
         Player.Reset();
         LvlObject.GetComponent<Level>().ResetObjects();
         WorldManager.Reset();
