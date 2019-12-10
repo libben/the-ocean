@@ -6,6 +6,7 @@ public class DialogueHolder : MonoBehaviour
 {
     private DialogueController DialogueManager;
     [SerializeField] private string Dialogue;
+    public string[] DialogueLines;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,14 @@ public class DialogueHolder : MonoBehaviour
     {
         if(collision.gameObject.name == "Player")
         {
-            DialogueManager.ShowDialogueBox(Dialogue);
+            //DialogueManager.ShowDialogueBox(Dialogue);
+            if(!DialogueManager.DialogueActive)
+            {
+                DialogueManager.DialogueLines = DialogueLines;
+                DialogueManager.CurrentDialogueLine = 0;
+                DialogueManager.ShowDialogue();
+            }
+
         }
     }
 }
