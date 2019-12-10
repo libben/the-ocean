@@ -9,11 +9,9 @@ namespace TheOcean
 		void OnTriggerEnter2D(Collider2D other)
 		{
 			// Spikes should kill the player as soon as they make contact.
-			if (other.tag == "Player")
+			if (other.tag == "Player" || other.tag == "Box")
 			{
-				other.GetComponent<PlayerController>().Reset();
-				GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("Reset");
-				gameObject.GetComponentInParent<ObjectContainer>().ResetObjects();
+				GameObject.FindGameObjectWithTag("ScriptHome").GetComponent<ResetController>().Reset();
 			}
 		}
 	}

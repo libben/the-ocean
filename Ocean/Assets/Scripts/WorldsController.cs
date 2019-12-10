@@ -51,7 +51,13 @@ namespace TheOcean
 			SwitchTimer += Time.deltaTime;
 		}
 
-		public void UpdateResetData()
+		public void NotifyNewLevel(GameObject lvl)
+		{
+			print("Updating worrld new level");
+			UpdateResetData();
+		}
+
+		private void UpdateResetData()
 		{
 			WorldToResetTo = PlayerCurrentWorld;
 		}

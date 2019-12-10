@@ -128,7 +128,13 @@ namespace TheOcean
 			Anim.SetBool(IsGroundedHash, IsGrounded);
 		}
 
-		public void UpdateResetData()
+		public void NotifyNewLevel()
+		{
+			print("Player updating new level");
+			UpdateResetData();
+		}
+
+		private void UpdateResetData()
 		{
 			this.PositionToResetTo = this.transform.position;
 			this.DirectionToResetTo = this.Direction;
@@ -136,6 +142,7 @@ namespace TheOcean
 
 		public void Reset()
 		{
+			print("player resetting");
 			this.transform.position	= PositionToResetTo;
 			if (this.DirectionToResetTo != this.Direction) {
 				FlipCharacterDirection();

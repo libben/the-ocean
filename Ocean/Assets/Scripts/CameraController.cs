@@ -6,29 +6,22 @@ namespace TheOcean
 {
 public class CameraController : MonoBehaviour
 {
-    private GameObject Player;
-    private GameObject[] LevelCenters;
     private Camera Camera;
     private const float SizeOfBlockInPixels = 16;
     [SerializeField] private float CameraViewboxWidthInPixels = 8*SizeOfBlockInPixels;
 
     [SerializeField] private float AspectRatio = 4/3;
-
-    private GameObject currentClosestLevelCenter = null;
     [SerializeField] private float LerpDuration = 0.5f;
     private float TimeSpentLerping = 0f;
     private float TargetX;
     private float LerpOriginX;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        LevelCenters = GameObject.FindGameObjectsWithTag("LevelCenter");
         this.Camera = gameObject.GetComponent<Camera>();
         this.Camera.aspect = AspectRatio;
         this.Camera.orthographicSize = CameraViewboxWidthInPixels * 0.5f / AspectRatio;
-        Refocus(false);
     }
 
     // Update is called once per frame
@@ -42,45 +35,37 @@ public class CameraController : MonoBehaviour
             curPosition.x = newX;
             this.transform.position = curPosition;
         }
-        Refocus(true);
     }
 
-    private GameObject FindClosestLevelCenter()
+    public void InitializeLevel(GameObject levelCenter)
     {
-        GameObject closestLevelCenter = null;
-        float minDistance = float.PositiveInfinity;
-        foreach (var levelCenter in LevelCenters)
-        {
-            float distanceFromPlayerToThisLevelCenter = Mathf.Abs(levelCenter.transform.position.x - Player.transform.position.x);
-            if (distanceFromPlayerToThisLevelCenter < minDistance) {
-                closestLevelCenter = levelCenter;
-                minDistance = distanceFromPlayerToThisLevelCenter;
-            }
-        }
-        return closestLevelCenter;
+        Refocus(false, levelCenter);
     }
 
-    public void Refocus(bool animate)
+    public void NotifyNewLevel(GameObject levelCenter)
     {
-        var closestLevelCenter = FindClosestLevelCenter();
-        if (closestLevelCenter != currentClosestLevelCenter) {
-            currentClosestLevelCenter = closestLevelCenter;
-            StartLerpingTowards(currentClosestLevelCenter);
+        Refocus(true, levelCenter);
+    }
+
+    private void Refocus(bool animate, GameObject levelCenter)
+    {
+        float destinationXValue = levelCenter.transform.position.x;
+        print($"Cam moving to {destinationXValue}");
+        if (TargetX != destinationXValue) {
+            StartLerpingTowards(destinationXValue);
 
             if (!animate)
             {
                 var target = gameObject.transform.position;
-                target.x = TargetX;
+                target.x = destinationXValue;
                 this.gameObject.transform.position = target;
             }
-            Player.GetComponent<PlayerController>().UpdateResetData();
-            GameObject.FindGameObjectWithTag("WorldManager").BroadcastMessage("UpdateResetData");
         }
 
     }
-    private void StartLerpingTowards(GameObject closestLevelCenter)
+    private void StartLerpingTowards(float XPosition)
     {
-        TargetX = closestLevelCenter.transform.position.x;
+        TargetX = XPosition;
         LerpOriginX = gameObject.transform.position.x;
         TimeSpentLerping = 0f;
     }

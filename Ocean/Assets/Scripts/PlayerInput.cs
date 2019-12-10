@@ -19,6 +19,9 @@ namespace TheOcean
 		public bool GravityGunPressed;
 		private bool ReadyToClear;
 
+		[HideInInspector]
+		public bool ResetPressed;
+
 		void Update()
 		{
 			ClearInput();
@@ -42,6 +45,7 @@ namespace TheOcean
 			SwitchPressed = false;
 			ReadyToClear = false;
 			GravityGunPressed = false;
+			ResetPressed = false;
 		}
 
 		private void ProcessInputs()
@@ -51,6 +55,7 @@ namespace TheOcean
 			JumpHeld = JumpHeld || Input.GetButton("Jump");
 			SwitchPressed = SwitchPressed || Input.GetButtonDown("SwitchWorlds");
 			GravityGunPressed = GravityGunPressed || Input.GetButtonDown("GravityGun") || Input.GetButtonDown("Fire2");
+			ResetPressed = ResetPressed || Input.GetButtonDown("Reset");
 		}
 
 
