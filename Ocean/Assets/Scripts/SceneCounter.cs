@@ -8,6 +8,5 @@ public class SceneCounter : MonoBehaviour
     void Start()
     {
         counter += 1;
-        Debug.Log(counter);
     }
 }

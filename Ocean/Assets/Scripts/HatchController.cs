@@ -14,26 +14,22 @@ namespace OceanGame
 
         void OnTriggerEnter2D(Collider2D Player)
         {
-            Debug.Log(this.Hatch.name);
             if (Player.name == "Player")
             {
                 if (this.Hatch.name == "Hatch 1 Open")
                 {
                     SceneManager.LoadScene("Arc 1");
-                    Debug.Log("Enter Arc 1");
                 }
                 else if (this.Hatch.name == "Hatch 2 Open")
                 {
                     SceneManager.LoadScene("Arc 2");
-                    Debug.Log("Enter Arc 2");
                 }
-                else if (this.Hatch.name == "Hatch 2 Open")
+                else if (this.Hatch.name == "Hatch 3 Open")
                 {
-                    SceneManager.LoadScene("Arc 3");
-                    Debug.Log("Enter Arc 3");
+                    // Replace with winning screen later
+                    Debug.Log("Congrats you have won!");
                 }
             }
-            Debug.Log(Player.name);
         }
     }
 }

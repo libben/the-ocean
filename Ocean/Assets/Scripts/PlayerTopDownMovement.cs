@@ -28,6 +28,9 @@ namespace OceanGame
         private GameObject Background;
         [SerializeField]
         private GameObject BackgroundAltered;
+        [SerializeField]
+        private float MaxTimeCanSpendInFireLevel = 4.0f;
+        private float TimeSpentInFireSea = 0.0f;
         private Vector3 LightOffset = new Vector3(0.0f, .25f, 0.0f);
         private float SwitchCoolDown = 0.5f;
         private float CurrentCoolDownTime;
@@ -39,6 +42,7 @@ namespace OceanGame
             // some slight altertaions https://docs.unity3d.com/ScriptReference/Transform-up.html
             this.Light.transform.position = this.transform.position + this.LightOffset;
             canChangeRealities();
+            canForceChange();
 
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
@@ -66,6 +70,8 @@ namespace OceanGame
                 this.Light.transform.Rotate(new Vector3(0, 0, this.RotationSpeed) * Time.deltaTime * this.CurrentThrust, Space.World);
             }
             
+            // Allows player to change realities 
+            // There is a cooldown to prevent spamming
             if (Input.GetKey(KeyCode.Z))
             {
                 if (this.HasUsedSwitch == false){
@@ -124,7 +130,26 @@ namespace OceanGame
                 }
             }
         }
-        
+
+        // Function to force the player out of the fire sea
+        // It's too hot for him to stay there so the max amount of time he can stay there is 4 unity units
+        void canForceChange()
+        {
+            bool isInFireSea = this.BackgroundAltered.active;
+            
+            if (isInFireSea)
+            {
+                this.TimeSpentInFireSea += Time.deltaTime;
+
+                if (this.TimeSpentInFireSea > this.MaxTimeCanSpendInFireLevel)
+                {
+                    this.TimeSpentInFireSea = 0.0f;
+                    this.BackgroundAltered.SetActive(false);
+                    this.Background.SetActive(true);
+                }
+            }
+        }
+
         // Function to get the thrust of the Player
         public float getPlayerThrust()
         {

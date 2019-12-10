@@ -38,6 +38,8 @@ namespace OceanGame
         private GameObject SpawnPointThree;
         [SerializeField]
         private GameObject Eel;
+        [SerializeField]
+        private GameObject BackgroundAltered;
 
         void Start()
         {
@@ -75,5 +77,26 @@ namespace OceanGame
                 this.Eel.transform.position = new Vector3(spawnLocation.x, spawnLocation.y, 0.0f);
             }
         }
+        
+        void Update()
+        {
+            canThirdHatchOpen();
+        }
+
+        // Function to check if the third hatch can be open or not 
+        void canThirdHatchOpen()
+        {
+            bool isInFireWorld = this.BackgroundAltered.active;
+            float distanceFromHatch = Vector3.Distance(this.Eel.transform.position, this.HatchThreeClosedAltered.transform.position);
+            
+            if (isInFireWorld == true && distanceFromHatch < 8.0f)
+            {
+                this.HatchThreeClosedAltered.SetActive(false);
+                this.HatchThreeOpenedAltered.SetActive(true);
+                var eelScript = this.Eel.GetComponent<EelMovement>();
+                eelScript.enabled = false;
+            }
+        }
+        
     }
 }
