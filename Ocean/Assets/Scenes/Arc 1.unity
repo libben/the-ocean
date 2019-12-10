@@ -2097,6 +2097,7 @@ GameObject:
   m_Component:
   - component: {fileID: 570973573}
   - component: {fileID: 570973572}
+  - component: {fileID: 570973574}
   m_Layer: 0
   m_Name: World Manager
   m_TagString: WorldManager
@@ -2131,6 +2132,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &570973574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570973571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596b28de037b04e4d9bc3bc5135fafc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &571545562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 49821221105445376, guid: 1fa1f636cc7c38b4caa26fa3b6cbc197,
@@ -2218,6 +2231,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc46480ebeb0a401da415facdfef5be8, type: 3}
+--- !u!1 &626900201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1879419736485267291, guid: cc46480ebeb0a401da415facdfef5be8,
+    type: 3}
+  m_PrefabInstance: {fileID: 626900200}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &636578439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39665,6 +39684,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9466749d2f5a7349bdb1ba8df875acd, type: 3}
+--- !u!1 &1322818793 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4554381124154650812, guid: c9466749d2f5a7349bdb1ba8df875acd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1322818792}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1322818794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322818793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5442337c645c6174096c798330496251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EndOfLevel: {fileID: 626900201}
 --- !u!1 &1345637706
 GameObject:
   m_ObjectHideFlags: 0
