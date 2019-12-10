@@ -50,7 +50,7 @@ public class BoxController : MonoBehaviour
 			IsGrounded = false;
 
 		var CheckAbove = Raycast(new Vector2(0, Collider.size.y/2 + 0.05f), Vector2.up, CloseDistance, LayersManager.GetLayerMaskObjects(CurrentWorld));
-			var CheckBelow = Raycast(new Vector2(0, -Collider.size.y / 2 - 0.05f), Vector2.down, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+			var CheckBelow = Raycast(new Vector2(0, -Collider.size.y / 2 - 0.01f), Vector2.down, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
 			var CheckLeft = Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.left, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
 		var CheckRight = Raycast(new Vector2(Collider.size.x / 2 + 0.001f, 0), Vector2.right, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
 
@@ -85,6 +85,11 @@ public class BoxController : MonoBehaviour
 				{
 					PlayerObject.GetComponent<PlayerController>().HaltPlayerJump();
 				}
+
+				/*if (IsGrounded && !PlayerObject.GetComponent<PlayerController>().IsGrounded)
+				{
+					PlayerObject.GetComponent<PlayerController>().HaltPlayerJump();
+				}*/
 			}
 		}
 
