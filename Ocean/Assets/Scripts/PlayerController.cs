@@ -31,7 +31,6 @@ namespace TheOcean
 		[Header("Status Flags")]
 		public bool IsGrounded;                 //Is the player on the ground?
 		public bool IsJumping;                  //Is player jumping?
-		public bool PlayerJumped;               // is the fall caused by player action
 
 		PlayerInput input;                      //The current inputs for the player
 		BoxCollider2D bodyCollider;             //The collider component
@@ -59,14 +58,13 @@ namespace TheOcean
 		private BoxController GrabbedBox = null;
 		private BoxCollider2D BoxHitbox;
 		private Vector2 BoxOffset;
-		private Vector2 OriginalColliderSize;
 		private float GravityGunCooldown = 0.2f;
 		private float GravityGunTimer = 0.2f;
 		private float MinDistance = 0.1f;
 
 		private bool CanMove = true;
 		private bool PlayerChangedDirections = false;
-		public int CurrentLayer;
+
 		private Vector3 PositionToResetTo;
 		private int DirectionToResetTo;
 
@@ -88,10 +86,8 @@ namespace TheOcean
 
 			//Record the original x scale of the player
 			originalXScale = transform.localScale.x;
-			OriginalColliderSize = bodyCollider.size;
 
 			GroundLayer = LayersManager.GetLayerMaskWorld1();
-			//CurrentLayer = gameObject.layer;
 		}
 
 		void FixedUpdate()
@@ -127,7 +123,6 @@ namespace TheOcean
 			if (Raycast(new Vector2(0f, -bodyCollider.size.y/2), Vector2.down, GroundDistance))
 			{
 				IsGrounded = true;
-				PlayerJumped = false;
 			}
 			if (GrabbedBox)
 			{
@@ -199,7 +194,6 @@ namespace TheOcean
 				//...The player is no longer on the groud and is jumping...
 				IsGrounded = false;
 				IsJumping = true;
-				PlayerJumped = true;
 
 				//...record the time the player will stop being able to boost their jump...
 				JumpTime = Time.time + JumpHoldDuration;
@@ -294,24 +288,8 @@ namespace TheOcean
 				GrabbedBox.ToggleGrabbed();
 				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
 
-				/*
-				var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
-				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
-
-				foreach (Collider2D collider in boxColliders)
-					if (!collider.isTrigger)
-						collider.enabled = false;
-				*/
-
-				// Warning: The following numbers are very finicky. If we mess with the x scale of the player this will have to change!!!!
 				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				/*
-				bodyCollider.size = new Vector2(Mathf.Abs(BoxOffset.x) + Mathf.Abs(BoxHitbox.size.x/2) + Mathf.Abs(bodyCollider.size.x / 2), 1);
-				bodyCollider.offset = new Vector2(Direction * BoxOffset.x / 2 + 0.1f, bodyCollider.offset.y + 0.05f);
-
-				if (GrabbedBox.gameObject.layer == (int)Layers.OBJECTS_PERSISTENT)
-					gameObject.layer = (int)Layers.OBJECTS_PERSISTENT;
-				*/
+				
 				// If player grabs a box but isn't on the ground OR has something over it, they can't pull it
 				if (!IsGrounded)
 				{
@@ -334,18 +312,9 @@ namespace TheOcean
 				return;
 
 			GravityGunActive = false;
-			//bodyCollider.size = OriginalColliderSize;
-			//bodyCollider.offset = new Vector2(0, bodyCollider.offset.y - 0.05f);
 			GrabbedBox.ToggleGrabbed();
-			/*
-			var boxColliders = GrabbedBox.gameObject.GetComponents<Collider2D>();
-
-			foreach (Collider2D collider in boxColliders)
-				collider.enabled = true;
-			*/
 
 			GrabbedBox = null;
-			//gameObject.layer = CurrentLayer;
 			if (!CanMove)
 			{
 				rigidBody.gravityScale = 1;
