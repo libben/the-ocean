@@ -371,6 +371,11 @@ namespace TheOcean
 		{
 			return GrabbedBox;
 		}
+
+		public void EnableGravityGun()
+		{
+			GravityGunAcquired = true;
+		}
 	}
 }
 
