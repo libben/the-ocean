@@ -19,6 +19,8 @@ namespace TheOcean
 
 		private static int WorldToResetTo;
 
+		[SerializeField] private AudioSource Source;
+
 		private readonly int[] World1Layers = {(int) Layers.BG1, (int) Layers.OBJECTS1, (int) Layers.PLATFORMS1};
 		private readonly int[] World2Layers = {(int) Layers.BG2, (int) Layers.OBJECTS2, (int) Layers.PLATFORMS2};
 
@@ -75,6 +77,8 @@ namespace TheOcean
 		{
 			if (CheckForCollision && CollidingInOtherWorld())
 				return false;
+
+			Source.Play();
 
 			PlayerCurrentWorld *= -1;
 

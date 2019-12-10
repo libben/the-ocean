@@ -68,6 +68,8 @@ namespace TheOcean
 		private Vector3 PositionToResetTo;
 		private int DirectionToResetTo;
 
+		[SerializeField] AudioSource GunNoiseSource;
+
 		void Start()
 		{
 			//Get a reference to the required components
@@ -269,6 +271,7 @@ namespace TheOcean
 										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
+				GunNoiseSource?.Play();
 				GravityGunActive = true;
 
 				// Grab box, turn off its colliders, save its position relative to player, expand player collider
