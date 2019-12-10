@@ -24,7 +24,7 @@ namespace OceanGame
 
         void Update()
         {
-            float newSpeed = this.PlayerMovement.getPlayerThrust();
+  /*          float newSpeed = this.PlayerMovement.getPlayerThrust();
             this.MoveSpeed = newSpeed * this.SpeedIncrease;
             float distanceFromPlayer = Vector3.Distance(this.Player.transform.position, this.transform.position);
             
@@ -32,7 +32,7 @@ namespace OceanGame
             if (distanceFromPlayer < this.AggroRange)
             {
                 this.transform.position = Vector2.MoveTowards(this.transform.position, this.Player.transform.position, this.MoveSpeed * Time.deltaTime);
-            }
+            }*/
         }
     }
 }
