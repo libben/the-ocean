@@ -2,14 +2,61 @@
 
 ## Summary ##
 
-**A paragraph-length pitch for your game.**
+The Ocean is a puzzle platformer set in a future where robots perform all of society’s labor. Human society has grown complacent and decadent by retreating into virtual worlds of luxury. Play as Jacob Richter, an opponent of this decay seeking to free his brother and all of humanity by infiltrating the underwater base housing the servers and freeing humanity from its virtual shackles. Take control of Jacob’s submarine and harness Jacob’s unique ability to swap himself between realities to reach the center of the base and liberate humanity from its virtual delirium!
+
 
 ## Gameplay explanation ##
 
 **In this section, explain how the game should be played. Treat this as a manual within a game. It is encouraged to explain the button mappings and the most optimal gameplay strategy.**
 
+**Features Summary**
 
+*Undersea Exploration:* Brave the dangers of the shadowy depths as you search for a way into the enemy base at the bottom of the ocean!
+*Spatial Reasoning:* Give your parietal lobe a workout as you keep track of the two alternate versions of each level!
+*Parallel World-based Platforming Puzzles:* Sprint, jump, and switch your way past all the hazards to reach the core of the base!
 
+**Controls**
+
+The player traverses around the level using the W, A, and D keys. The W and D keys control left and right movements, and the A key is used for jumping. 
+The Fire2 button will be used to control the gravity gun. Pressing Fire2 will first pick up and object, and pressing it again will drop the object.
+
+**Switching Realities**
+
+(INSERT PIC OF TWO DIFFERENT REALITIES HERE)
+
+Some tiles in the level are part of World A, some are part of world B. Some are part of both. The tiles that are part of both worlds will be glowing. 
+See the state change table below:
+
+| World Player Is Currently In | What Happens When "Change World" Ability Is Activated                                                               |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| A                            | Anything that is in World A AND not in World B is hidden from view, becomes silent, and stops affecting the player. |
+| B                            | Anything that is in World B AND not in World A is hidden from view, becomes silent, and stops affecting the player  |
+
+**Gravity Gun**
+
+![GravityGun](https://cdn.discordapp.com/attachments/156926535356514304/654056375025926165/GloveShooting.png)
+
+This will be a pickup. Once the player picks it up, it disappears from the screen and the player gains a new ability. To activate it, press Fire2 and you will be able to grab a crate (or other player-sized object) and move it around. Using “Change World” while you are grabbing a crate brings the crate with you to the other world. If you grab a crate that is above ground level (stacked on another crate), you will hover next to the crate, in midair, and will not be able to move left or right. This is because your legs will be dangling five feet off the ground. Suppose you move left while you have a crate grabbed on your right. You will continue facing right, and the crate will stay to the right of you. It’s just like dragging a heavy object. You can jump while holding a crate, and it moves upwards with you. You cannot grab onto a wall tile, even though a single tile is the size of a crate.
+
+**Buttons**
+
+![ButtonUnpressed](https://cdn.discordapp.com/attachments/156926535356514304/654056711992115220/WorldBFloorButtonUnpressed.png)
+![ButtonPressed](https://cdn.discordapp.com/attachments/156926535356514304/654058520102043668/WorldAFloorButtonPressed.png)
+
+Every red button is linked to one latchbox on the ceiling. There is only one of each per level, per World. When the button is pressed, the latchbox opens and drops its contents.
+
+**Boxes**
+
+![BrownBox](https://cdn.discordapp.com/attachments/156926535356514304/654055835961393172/Box.png)
+![GreyBox](https://cdn.discordapp.com/attachments/156926535356514304/654058940811968513/SilverBox.png)
+
+The size of one tile, which should be the same as the size of the player character. Can be moved by player if they have the gravity gun. If it falls on the player, it will kill them.
+
+**Spikes**
+
+![Spikes](https://cdn.discordapp.com/attachments/156926535356514304/654058058070229002/Grey_Spikes.png)
+
+Spikes stick up out of the ground, or down from of the ceiling. One set of spikes takes up the width of a tile. Colliding with one from the pointy end kills the player
 
 # Main Roles #
 
@@ -28,9 +75,9 @@ You should replay any **bold text** with your relevant information. Liberally us
 
 **Describe your user interface and how it relates to gameplay. This can be done via the template.**
 
-*Title Screen* - The title screen consists of three buttons and a background image. I implemented a [SceneSwitch](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/SceneSwitch.cs#L1) script that is attached to the buttons, with each button leading to its appropriate scene. The "New Game" button leads you to the "PregameScroll" scene which gives the player a bit of backstory to the game. Pressing any button from that scene will lead the player to the scene, "Arc 1", where the player can start playing the game. The "Credits" button will lead to the "Credits" scene. In the "Credits" scene, I listed all of our team members and their roles, as well as the assets and other tutorials we uesd for the project. To achieve the scrolling effect, I recorded an animation using the animator system in Unity. 
+**Title Screen** : The title screen consists of three buttons and a background image. I implemented a [SceneSwitch](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/SceneSwitch.cs#L1) script that is attached to the buttons, with each button leading to its appropriate scene. The "New Game" button leads you to the "PregameScroll" scene which gives the player a bit of backstory to the game. Pressing any button from that scene will lead the player to the scene, "Arc 1", where the player can start playing the game. The "Credits" button will lead to the "Credits" scene. In the "Credits" scene, I listed all of our team members and their roles, as well as the assets and other tutorials we uesd for the project. To achieve the scrolling effect, I recorded an animation using the animator system in Unity. 
 
-*Dialogue Box* - 
+**Dialogue Box** :
 
 ![DialogueBox](https://cdn.discordapp.com/attachments/156926535356514304/653814216452603934/unknown.png)
 
