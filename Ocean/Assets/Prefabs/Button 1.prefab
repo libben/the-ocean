@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 961154169857749019}
   - component: {fileID: 961154169857749018}
   - component: {fileID: 961154169857749021}
-  - component: {fileID: 961154169857749016}
+  - component: {fileID: 7119494583477559126}
   m_Layer: 12
   m_Name: Button 1
   m_TagString: Untagged
@@ -100,7 +100,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.08}
+    oldSize: {x: 2, y: 0.5}
     newSize: {x: 2.56, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 0.33}
   m_EdgeRadius: 0
---- !u!114 &961154169857749016
+--- !u!114 &7119494583477559126
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +118,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 961154169857749020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24121ec698ab1ef4783df3c0c4f81758, type: 3}
+  m_Script: {fileID: 11500000, guid: f9906f3e3571a495db3b4a02775a901b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnpushedSprite: {fileID: 21300000, guid: 61abd8e94abc24bb698b32e080258dce, type: 3}
+  PushedSprite: {fileID: 21300000, guid: a75f317149a4a4f59a3ad59749b9189b, type: 3}
   LinkedObject: {fileID: 0}

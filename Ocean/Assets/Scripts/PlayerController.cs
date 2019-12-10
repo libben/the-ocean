@@ -52,6 +52,9 @@ namespace TheOcean
 		// Gravity gun related fields
 		[SerializeField]
 		private float GravityGunRange = 1f;
+
+		private bool HasGravityGun = false;
+		
 		[SerializeField]
 		private bool GravityGunActive = false;
 		[SerializeField]
@@ -69,6 +72,9 @@ namespace TheOcean
 		private int DirectionToResetTo;
 
 		[SerializeField] AudioSource GunNoiseSource;
+		private Sprite NormalSprite;
+		[SerializeField] Sprite GravityGunSprite;
+		private SpriteRenderer SpriteRend;
 
 		void Start()
 		{
@@ -76,6 +82,8 @@ namespace TheOcean
 			input = GetComponent<PlayerInput>();
 			rigidBody = GetComponent<Rigidbody2D>();
 			Anim = GetComponent<Animator>();
+			SpriteRend = GetComponent<SpriteRenderer>();
+			NormalSprite = SpriteRend.sprite;
 
 			var allPlayerColliders = gameObject.GetComponents<BoxCollider2D>();
 			foreach (BoxCollider2D collider in allPlayerColliders)
@@ -104,7 +112,10 @@ namespace TheOcean
 				MidAirMovement();
 			}
 
-			GravityGunControl();
+			if (HasGravityGun)
+			{
+				GravityGunControl();
+			}
 
 
 			// TESTING PURPOSES:
@@ -149,6 +160,11 @@ namespace TheOcean
 			if (this.DirectionToResetTo != this.Direction) {
 				FlipCharacterDirection();
 			}
+		}
+
+		public void AddGravityGunPowerup()
+		{
+			HasGravityGun = true;
 		}
 
 		void GroundMovement()
@@ -273,6 +289,7 @@ namespace TheOcean
 			{
 				GunNoiseSource?.Play();
 				GravityGunActive = true;
+				SpriteRend.sprite = GravityGunSprite;
 
 				// Grab box, turn off its colliders, save its position relative to player, expand player collider
 				GrabbedBox = boxInRange.transform.gameObject.GetComponent<BoxController>();
@@ -310,6 +327,7 @@ namespace TheOcean
 				return;
 
 			GravityGunActive = false;
+			SpriteRend.sprite = NormalSprite;
 			bodyCollider.size = OriginalColliderSize;
 			bodyCollider.offset = new Vector2(0, bodyCollider.offset.y - 0.05f);
 			GrabbedBox.ToggleGrabbed();

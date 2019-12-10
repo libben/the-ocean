@@ -30,6 +30,7 @@ public class LevelController : MonoBehaviour
 
     private void InitializeLevel()
     {
+        print("Initializing level");
         CurrentLevel = DistanceFinder.FindMinimumDistance(Player, Levels);
         Cam.InitializeLevel(CurrentLevel);
         Player.BroadcastMessage("NotifyNewLevel");
@@ -41,6 +42,7 @@ public class LevelController : MonoBehaviour
         GameObject newLevel = DistanceFinder.FindMinimumDistance(Player, Levels);
         if (CurrentLevel != newLevel)
         {
+            print("Player changed levels");
             CurrentLevel = newLevel;
             Cam.NotifyNewLevel(CurrentLevel);
             Player.BroadcastMessage("NotifyNewLevel");

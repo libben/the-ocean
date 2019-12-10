@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace TheOcean
+{
 public abstract class DistanceFinder
 {
     public static GameObject FindMinimumDistance(GameObject player, GameObject[] levelCenters)
@@ -18,4 +20,5 @@ public abstract class DistanceFinder
         }
         return closestLevelCenter;
     }
+}
 }
