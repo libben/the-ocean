@@ -10,13 +10,17 @@ namespace TheOcean
 		private GameObject LinkedObject;
 		private LatchboxController LinkedController;
 		private bool IsPressed;
-		private Vector2 OriginalScale;
+		[SerializeField]
+		private Sprite SpriteDown;
+		[SerializeField]
+		private Sprite SpriteUp;
+		private SpriteRenderer ButtonRenderer;
 
 		void Awake()
 		{
 			if (!LinkedObject.TryGetComponent<LatchboxController>(out LinkedController))
 				Debug.Log("Error: Button couldn't find associated latchbox's controller.");
-			OriginalScale = gameObject.transform.localScale;
+			ButtonRenderer = gameObject.GetComponent<SpriteRenderer>();
 		}
 		
 		void OnTriggerEnter2D(Collider2D other)
@@ -24,7 +28,7 @@ namespace TheOcean
 			if (other.tag == "Player" || other.tag == "Box")
 			{
 				IsPressed = true;
-				gameObject.transform.localScale = new Vector2(OriginalScale.x, OriginalScale.y / 2);
+				ButtonRenderer.sprite = SpriteDown;
 				LinkedController.OpenLatchbox();
 			}
 		}
@@ -34,7 +38,7 @@ namespace TheOcean
 			if (other.tag == "Player" || other.tag == "Box")
 			{
 				IsPressed = true;
-				gameObject.transform.localScale = new Vector2(OriginalScale.x, OriginalScale.y / 2);
+				ButtonRenderer.sprite = SpriteDown;
 				LinkedController.OpenLatchbox();
 			}
 		}
@@ -42,7 +46,7 @@ namespace TheOcean
 		void OnTriggerExit2D(Collider2D other)
 		{
 			IsPressed = false;
-			gameObject.transform.localScale = OriginalScale;
+			ButtonRenderer.sprite = SpriteUp;
 			LinkedController.CloseLatchbox();
 		}
 

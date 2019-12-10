@@ -100,7 +100,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.08}
+    oldSize: {x: 2, y: 0.5}
     newSize: {x: 2.56, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -122,3 +122,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LinkedObject: {fileID: 0}
+  SpriteDown: {fileID: 21300000, guid: a75f317149a4a4f59a3ad59749b9189b, type: 3}
+  SpriteUp: {fileID: 21300000, guid: 61abd8e94abc24bb698b32e080258dce, type: 3}

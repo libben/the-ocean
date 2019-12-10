@@ -77,6 +77,28 @@ PrefabInstance:
       propertyPath: LinkedObject
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 961154169857749016, guid: 279ce239d8fc1d546b7575af32525532,
+        type: 3}
+      propertyPath: SpriteDown
+      value: 
+      objectReference: {fileID: 21300000, guid: 222cde387e9984f5383a5539bf68f874,
+        type: 3}
+    - target: {fileID: 961154169857749016, guid: 279ce239d8fc1d546b7575af32525532,
+        type: 3}
+      propertyPath: SpriteUp
+      value: 
+      objectReference: {fileID: 21300000, guid: af8154696323c4c7499f15a6c00940d7,
+        type: 3}
+    - target: {fileID: 961154169857749021, guid: 279ce239d8fc1d546b7575af32525532,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 961154169857749021, guid: 279ce239d8fc1d546b7575af32525532,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 961154169857749018, guid: 279ce239d8fc1d546b7575af32525532,
         type: 3}
       propertyPath: m_SortingLayerID
@@ -108,15 +130,5 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: af8154696323c4c7499f15a6c00940d7,
         type: 3}
-    - target: {fileID: 961154169857749021, guid: 279ce239d8fc1d546b7575af32525532,
-        type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 961154169857749021, guid: 279ce239d8fc1d546b7575af32525532,
-        type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 279ce239d8fc1d546b7575af32525532, type: 3}
