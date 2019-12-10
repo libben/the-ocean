@@ -11,24 +11,88 @@ public class BoxController : MonoBehaviour
 	[SerializeField]
 	private float KillingVelocity = 5;
 	private Rigidbody2D BoxBody;
-
+	private BoxCollider2D Collider;
+	public bool IsGrabbable = false;
 	private bool BeingGrabbed = false;
+	private bool IsSomethingAbove = false;
+	[SerializeField]
+	private float CloseDistance = 0.1f;
+	private GameObject PlayerObject;
+	private RaycastHit2D[] Touching;
+	private ContactFilter2D Solids;
+
+		public bool TouchingLeft;
+		public bool TouchingRight;
 
 	void Awake()
 	{
 		BoxBody = gameObject.GetComponent<Rigidbody2D>();
+		Collider = gameObject.GetComponent<BoxCollider2D>();
+		IsGrabbable = true;
+		PlayerObject = GameObject.FindGameObjectWithTag("Player");
+		Touching = new RaycastHit2D[3];
+		Solids.SetLayerMask(LayersManager.GetLayerMaskWorld(CurrentWorld));
 	}
 
 	public void ToggleGrabbed()
 	{
 		BeingGrabbed = !BeingGrabbed;
 
-		if (BeingGrabbed)
-			BoxBody.gravityScale = 0;
-		else
-			BoxBody.gravityScale = 1;
+			if (BeingGrabbed)
+			{
+				//BoxBody.gravityScale = 0;
+			}
+			else
+			{
+				//BoxBody.gravityScale = 1;
+			}
 	}
-	
+
+	void FixedUpdate()
+	{
+		var CheckAbove = Raycast(new Vector2(0, Collider.size.y/2 + 0.05f), Vector2.up, CloseDistance, LayersManager.GetLayerMaskObjects(CurrentWorld));
+		var CheckLeft = Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.left, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+		var CheckRight = Raycast(new Vector2(Collider.size.x / 2 + 0.001f, 0), Vector2.right, CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+
+			var TouchingSides = Physics2D.Raycast(new Vector2(-Collider.size.x / 2 - 0.001f, 0), Vector2.right, Solids, Touching, CloseDistance * 2 + Collider.size.x);
+			Debug.Log(TouchingSides);
+			if (CheckLeft)
+				TouchingLeft = true;
+			else
+				TouchingLeft = false;
+			if (CheckRight)
+				TouchingRight = true;
+			else
+				TouchingRight = false;
+
+			if (CheckAbove)
+			{
+				IsGrabbable = false;
+				Collider.attachedRigidbody.isKinematic = true;
+			}
+			else
+			{
+				IsGrabbable = true;
+				Collider.attachedRigidbody.isKinematic = false;
+			}
+
+			// If this box is being grabbed, we want it to stop the player if it hits a ceiling/wall
+			if (BeingGrabbed)
+			{
+
+				CheckAbove = Raycast(new Vector2(0, Collider.size.y / 2 + 0.05f), Vector2.up,
+												   CloseDistance, LayersManager.GetLayerMaskWorld(CurrentWorld));
+				if (CheckAbove)
+				{
+					PlayerObject.GetComponent<PlayerController>().HaltPlayerJump();
+				}
+			}
+		}
+
+		public void SetCurrentWorld(int newWorld)
+		{
+			CurrentWorld = newWorld;
+		}
 
     void OnTriggerEnter2D(Collider2D other)
 	{
@@ -40,5 +104,31 @@ public class BoxController : MonoBehaviour
 			GameObject.FindGameObjectWithTag("ScriptHome").GetComponent<ResetController>().Reset();
 		}
 	}
-}
+
+	RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
+	{
+		//Record the player's position
+		Vector2 pos = transform.position;
+
+		//Send out the desired raycasr and record the result
+		RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
+
+		//If we want to show debug raycasts in the scene...
+		if (true)
+		{
+			//...determine the color based on if the raycast hit...
+			Color color = hit ? Color.red : Color.green;
+			//...and draw the ray in the scene view
+			Debug.DrawRay(pos + offset, rayDirection * length, color);
+		}
+
+		//Return the results of the raycast
+		return hit;
+	}
+
+	public void UpdateLayerMask()
+	{
+			Solids.SetLayerMask(LayersManager.GetLayerMaskWorld(CurrentWorld));
+	}
+	}
 }
