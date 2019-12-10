@@ -37,11 +37,11 @@ public class BoxController : MonoBehaviour
 
 			if (BeingGrabbed)
 			{
-				//BoxBody.gravityScale = 0;
+				BoxBody.gravityScale = 0;
 			}
 			else
 			{
-				//BoxBody.gravityScale = 1;
+				BoxBody.gravityScale = 1;
 			}
 	}
 
@@ -69,12 +69,10 @@ public class BoxController : MonoBehaviour
 			if (CheckAbove)
 			{
 				IsGrabbable = false;
-				Collider.attachedRigidbody.isKinematic = true;
 			}
 			else
 			{
 				IsGrabbable = true;
-				Collider.attachedRigidbody.isKinematic = false;
 			}
 
 			// If this box is being grabbed, we want it to stop the player if it hits a ceiling/wall

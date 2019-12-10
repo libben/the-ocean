@@ -128,7 +128,7 @@ namespace TheOcean
 			{
 				if (GrabbedBox.IsGrounded && !IsGrounded)
 					CanMove = false;
-				else
+				else if (GrabbedBox.IsGrabbable)
 					CanMove = true;
 			}
 			Anim.SetBool(IsGroundedHash, IsGrounded);
@@ -247,6 +247,7 @@ namespace TheOcean
 			{
 				if (Mathf.Abs(rigidBody.velocity.y) > 0)
 					GrabbedBox.gameObject.transform.position = new Vector2(GrabbedBox.gameObject.transform.position.x, gameObject.transform.position.y + BoxOffset.y);
+
 				if ((!GrabbedBox.TouchingLeft && Mathf.Sign(rigidBody.velocity.x) < 0))
 					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
 				else if ((!GrabbedBox.TouchingRight && Mathf.Sign(rigidBody.velocity.x) > 0))
@@ -276,8 +277,7 @@ namespace TheOcean
 		void GravityGunOn()
 		{
 			// Check if box is in front of us.
-			var boxInRange = Raycast(new Vector2(Direction * 0.3f, -0.2f), Direction * Vector2.right,
-										GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
+			var boxInRange = Raycast(new Vector2(Direction * 0.5f, 0), Direction * Vector2.right, GravityGunRange, LayersManager.GetLayerMaskObjects(WorldsController.PlayerCurrentWorld));
 			if (boxInRange && boxInRange.transform.gameObject.tag == "Box")
 			{
 				//GunNoiseSource?.Play();
@@ -317,9 +317,10 @@ namespace TheOcean
 			GrabbedBox = null;
 			if (!CanMove)
 			{
-				rigidBody.gravityScale = 1;
 				CanMove = true;
 			}
+
+			rigidBody.gravityScale = 1;
 
 			Debug.Log("Gravity gun off");
 		}
