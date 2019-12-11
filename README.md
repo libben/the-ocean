@@ -2,6 +2,7 @@
 Project Document: https://github.com/libben/the-ocean/blob/master/ProjectDocument.md
 
 Trailer: https://youtu.be/5Yu68m2JVeY
+
 Press kit: https://docs.google.com/document/d/1aqMNFzjgkNZod29HZo7v3B7WtP1A-raiTTXSEkNnwrc/
 
 Name | Main Role | Sub-Role
