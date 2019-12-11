@@ -92,9 +92,56 @@ The dialogue box consists of the character's picture and the text they are sayin
 
 ## Animation and Visuals
 
-**List your assets including their sources and licenses.**
+**List assets**
 
-**Describe how your work intersects with game feel, graphic design, and world-building. Include your visual style guide if one exists.**
+[Underwater background scene](https://assetstore.unity.com/packages/2d/textures-materials/water/underwater-fantasy-87457) - From Unity Asset Store
+
+[Steampunk Tileset](https://opengameart.org/content/steampunk-level-tileset-mega-pack-level-tileset-16x16); CC-BY 3.0 - Author: KnoblePersona
+
+[Pixel Tiles](https://opengameart.org/content/kenney-16x16); CC0 license- Author: Kenney and surt
+
+[FREE 2D Hand Painted-Background](https://assetstore.unity.com/packages/2d/environments/free-2d-hand-painted-background-110959?fbclid=IwAR3jflg1sO-lnLxg9tVxfw7gZiPYqxJBbo5A67UhBW3xjXI0mNpCXOETYhM) - From Unity Asset Store
+
+[Glow Effect](https://github.com/Elringus/SpriteGlow); MIT license - Author: Elringus
+
+Attempting to make the visuals of our game appealing, we first found the appropriate art for the background. We got the underwater background scene and free 2D hand painted-backgrounds from the Unity asset store. In addition, we found a steampunk tileset and pixel tiles from online; these components allowed us to make platforms and components in the game.
+
+For the rest of the animations, they were all drawn from Adobe Photoshop or from GIMP. The things that were originally created include:
+
+  1) Jacob, our main character
+  2) Our main enemy, the older man
+  3) Base defender, electric eel
+  4) Jacob's brother (in an astronaut suit)
+  5) bronze and silver hatch and lid
+  6) bronze and silver spike
+  7) metal and wooden boxes
+  8) gravity gun
+  9) submarine porthole
+  10) submarine
+  11) 2 different torches
+  12) World A/B floor button
+  13) World A/B Box Dispenser
+  14) Title Screen
+  15) Cover Page
+  16) Ending scene (WIN!)
+
+Art Direction
+For building our game world, we used DND storytelling skills to fabricate our story. Inspiration came from a game called The Desolate Hope, where a character flees into a virtual world to escape, and the book Ready Player One. A key idea that lead to our setting was what humans would do when it becomes harder to do something meaningful with their lives. As for the puzzles, Portal was a large inspiration.
+
+We had our protagonist in an old-fashioned diving suit, since he will be arriving to the compound by submarine.
+The main antagonist believes that a digital world that can be protected on servers is “more real” or better than the outside world, where everything decays. The villain present to the player as a man with class.
+There are two main settings of the game, one which is "outside" and underwater, and the other is Arc 1 and Arc2 which is "inside" as the player makes their way deeper into the base.
+
+For characters with motions, including our main character Jacob and the electric eel, the animation was made through adobe and each "moving part" of the character was drawn on a separate layer. By drawing them on different layers, when uploading them onto Unity, each body part was able to have its own movement. By giving animations, it definitely added game feel.
+
+In addition to animating the characters, we would draw a scene on paper, along with each component and each functionality; this allowed us to see what needs to interact with what. Because of our careful design plan, what seemed like hard tasks turned out to be manageable. After the design from photoshop, Unity can split up those body parts. From there, searching Unity documents, we learned that we can attach bones to the sprites. For human character movements, by referencing real human bone movements, we were able to fine tuned the character's body motions. Using this aspect the animator tool in Unity, we were able to enhance the graphic design. The characters have sprites displaying transitions of the movements. With all these design elements, it allowed the components of the game to come together.
+
+When the character is outside the base, the goal is to get to the latches in order to go inside and escape from the electronic eel. If the character is  near the latches, the eel will start chasing and will always be faster, meaning the character can never outrun it. This warns the player to get inside as fast as possible (giving the player an intense and nerve-racking feeling, adding game feel)!
+
+There were several things that we wanted to add to the animations and visuals to add game juice to our game; however, because of the time constraint, some were unable to be implemented. With more time we would have added things like shaking effects (when the eel comes in contact with the character) and particle effects.
+
+We used all the skills we learned from class and applied everything we gained from the exercises to tie the visuals and animations together and define our own style for our game.  
+
 
 ## Input
 
@@ -111,10 +158,35 @@ The dialogue box consists of the character's picture and the text they are sayin
 ## Audio
 
 **List your assets including their sources and licenses.**
+[Switch Game World](https://freesound.org/people/InspectorJ/sounds/403006/#); CC0 license - Author: InspectorJ
+
+[Game-Over](https://freesound.org/people/myfox14/sounds/382310/); CC0 license - Author: myfox14
+
+[Gun](https://freesound.org/people/kretopi/sounds/406754/) ; CC0 license - Author: kretopi
+
+[Continue Dialogue](https://freesound.org/people/harrietniamh/sounds/415083/) ; CC-by 3.0 - Author: harrietniamh
+
+[Title Screen Song](https://github.com/libben/the-ocean/blob/master/Ocean/Assets/Sounds/Project%202%20-%20for%20title%20screen.wav) ; Author - Ben Rausch
+
+[GamePlay Song](https://github.com/libben/the-ocean/blob/master/Ocean/Assets/Sounds/Project%202%20Companion%20Track.ogg) ; Author - Ben Rausch
+
+[Credits Song](https://github.com/libben/the-ocean/blob/master/Ocean/Assets/Sounds/Morning_Mood_by_Grieg.mp3); Author - Edvard Grieg
 
 **Describe the implementation of your audio system.**
+For the audio effects of the game, including the switch game world, game-over, gun, and continue dialogue sounds,
+it matches with the movements and choices of the main character (or the players actions).
+By adding these sound effects to the characters movements, it adds game juice to the game.
 
-**Document the sound style.** 
+We found all the small sound effects through freesound.org.
+
+In adding the sounds to the game, we simply attached an Audio Source to the GameObject. In Unity, we did Add Component, Audio, and Audio Source. Then in the Audio Source slot, we added the sound effect that we downloaded. In the actual script, we added a private AudioSource source, and in the section of the code where we wanted to have the sound effect play, we included the the code source.Play(). Lastly, we un-clicked the Play on Awake button so that it didn't play the sound every time we played the game and only when it was called at the appropriate time.
+
+**Document the sound style.**
+Adding sound effects definitely enhances the overall feel of the game. For the overall GamePlay sound, we used a song produced by Ben Rausch.
+This song was written to evoke the feeling of traveling through space, only to find that things are more dangerous than expected. The theme of our game is intended to give the player a tense feeling; the feeling of mystery and emptiness, being alone in the unknown. The song evolved into a dialogue between noise and tone, which matched our theme which is why we decided to make it play as the background song when the game was playing.
+
+The song inserted for the credits scene by Edvard Grieg is on the happier side, giving a more cheerful feeling as the main character has FREED HUMANITY. The feeling of inner peace as the great burden has been lifted off his shoulder, feeling a sense of accomplish. 
+ 
 
 ## Gameplay Testing
 
@@ -129,6 +201,8 @@ The dialogue box consists of the character's picture and the text they are sayin
 ## Press Kit and Trailer
 
 **Include links to your presskit materials and trailer.**
+* [Press Kit](https://docs.google.com/document/d/1aqMNFzjgkNZod29HZo7v3B7WtP1A-raiTTXSEkNnwrc/edit?usp=sharing)  
+* [Trailer]()  
 
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
 
