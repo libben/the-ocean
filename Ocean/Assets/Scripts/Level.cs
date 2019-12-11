@@ -6,19 +6,24 @@ namespace TheOcean
 {
 public class Level : MonoBehaviour
 {
-    private Transform[] Children;
+    private GameObject[] Children;
     private Vector3[] ChildPositions;
     private int[] ChildLayers;
     [SerializeField] private int Index;
 
     void Start()
     {
-        this.Children = GetComponentsInChildren<Transform>();
+        var transforms = GetComponentsInChildren<Transform>();
+        this.Children = new GameObject[transforms.Length];
+        for (int i = 0; i < transforms.Length; i++)
+        {
+            Children[i] = transforms[i].gameObject;
+        }
         this.ChildPositions = new Vector3[Children.Length];
         this.ChildLayers = new int[Children.Length];
         for (int i = 0; i < Children.Length; i++)
         {
-            this.ChildPositions[i] = this.Children[i].position;
+            this.ChildPositions[i] = this.Children[i].transform.position;
             this.ChildLayers[i] = this.Children[i].gameObject.layer;
         }
     }
@@ -26,8 +31,11 @@ public class Level : MonoBehaviour
     {
         for (int i = 0; i < Children.Length; i++)
         {
-            this.Children[i].position = this.ChildPositions[i];
-            this.Children[i].gameObject.layer = this.ChildLayers[i];
+            if (this.Children[i] != null)
+            {
+                this.Children[i].layer = this.ChildLayers[i];
+                this.Children[i].transform.position = this.ChildPositions[i];
+            }
         }
     }
 

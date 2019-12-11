@@ -55,7 +55,6 @@ namespace TheOcean
 
 		public void NotifyNewLevel(GameObject lvl)
 		{
-			print("Updating worrld new level");
 			UpdateResetData();
 		}
 
