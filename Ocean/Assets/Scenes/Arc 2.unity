@@ -385,6 +385,10 @@ PrefabInstance:
       propertyPath: ContinueNoise
       value: 
       objectReference: {fileID: 1415387602}
+    - target: {fileID: 834060151, guid: dd04cdc6e8563407e9867a5596dd00bc, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6b51376f217384cc185020b1cd8f6c65, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd04cdc6e8563407e9867a5596dd00bc, type: 3}
 --- !u!1001 &125663889
