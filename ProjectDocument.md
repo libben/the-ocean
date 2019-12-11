@@ -164,13 +164,12 @@ We used all the skills we learned from class and applied everything we gained fr
 
 #### Controllers
 
-#### TopDownMovement(PlayerTopDownMovement.cs)
-
-This script was used to control the player when they are in the submarine. This includes the execute commands when a key is pressed. 
+#### TopDownMovement
+[PlayerTopDownMovement.cs](https://github.com/libben/the-ocean/blob/24e933d6c9ca1aad83f648cd772b27f46d770f8c/Ocean/Assets/Scripts/PlayerTopDownMovement.cs#L7) was used to control the player when they are in the submarine. This includes the execute commands when a key is pressed. 
 
 #### Puzzle Level Scripts
 
-Used PlayerInput.cs and PlayerController.cs. PlayerInput.cs labeled out the keys used to move the player while PlayerController.cs dealt with the physics system of the player. 
+Used [PlayerInput.cs](https://github.com/libben/the-ocean/blob/24e933d6c9ca1aad83f648cd772b27f46d770f8c/Ocean/Assets/Scripts/PlayerInput.cs#L8) and [PlayerController.cs](https://github.com/libben/the-ocean/blob/24e933d6c9ca1aad83f648cd772b27f46d770f8c/Ocean/Assets/Scripts/PlayerController.cs#L8). PlayerInput.cs labeled out the keys used to move the player while PlayerController.cs dealt with the physics system of the player. 
 
 For this project we had two different types of input for our character. 
 
@@ -297,6 +296,7 @@ I chose to cast the trailer as a remote mission briefing from Jacob's mysterious
 From the art to the sounds, there were many juice items that were used to improve game feel. 
 
 LIGHTING- For the ocean level, we purposely made the whole screen dark. The only source of light is from the submarine, the eel, and the hatches. This is used again to make the user feel a little bit scared since they are exploring a dark area. There is light around the hatches to give the user a source of hope when finding it. Since the player is in the dark, they don't know where the robotic eel is and it can only be seen when the player gets close to an opening hatch. The light on the eel's head is used to once again frighten the player when they see it for the first time. 
+[Link used to learn lighting](https://www.youtube.com/watch?v=nkgGyO9VG54&t=308s)
 
 ART- For art, we decided to go for an aesthetic art style for the ocean level. The ocean level is a slight dark blue with some coral and rocks in the background. Since the level is dark, the user can observe the beauty of it when exploring in their submarine. When the user changes world's in the ocean, they are brought to a volcanic water level. We decided to make the alternate world to be the exact opposite of the regular level. Instead of the calm and beautiful nature, we wanted to put the user in a destructive and uneasy environment. 
 
