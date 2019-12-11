@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DialogueHolder : MonoBehaviour
 {
-    private DialogueController DialogueManager;
+    /* private DialogueController DialogueManager;
     [SerializeField] private string Dialogue;
     public string[] DialogueLines;
 
@@ -33,5 +33,5 @@ public class DialogueHolder : MonoBehaviour
             }
 
         }
-    }
+    }*/
 }

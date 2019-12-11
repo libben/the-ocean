@@ -132,10 +132,16 @@ namespace TheOcean
 			}
 			if (GrabbedBox)
 			{
-				if (GrabbedBox.IsGrounded && !IsGrounded)
+				if (GrabbedBox.IsGrounded && !IsGrounded && !IsJumping)
+				{
 					CanMove = false;
+					//rigidBody.gravityScale = 0;
+				}
 				else if (GrabbedBox.IsGrabbable)
+				{
 					CanMove = true;
+					rigidBody.gravityScale = 1;
+				}
 			}
 			Anim.SetBool(IsGroundedHash, IsGrounded);
 		}
@@ -249,12 +255,14 @@ namespace TheOcean
 		{
 			GravityGunTimer += Time.deltaTime;
 
-			if (GrabbedBox && rigidBody.velocity.magnitude > 0)
+			if (GrabbedBox && GrabbedBox.IsGrabbable && rigidBody.velocity.magnitude > 0)
 			{
+				// Sorry. This part is a huge mess.
 				if (Mathf.Abs(rigidBody.velocity.y) > 0)
 					GrabbedBox.gameObject.transform.position = new Vector2(GrabbedBox.gameObject.transform.position.x, gameObject.transform.position.y + BoxOffset.y);
-
-				if ((!GrabbedBox.TouchingLeft && Mathf.Sign(rigidBody.velocity.x) < 0))
+				if (!GrabbedBox.TouchingLeft && !GrabbedBox.TouchingRight)
+					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
+				else if ((!GrabbedBox.TouchingLeft && Mathf.Sign(rigidBody.velocity.x) < 0))
 					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
 				else if ((!GrabbedBox.TouchingRight && Mathf.Sign(rigidBody.velocity.x) > 0))
 					GrabbedBox.gameObject.transform.position = BoxOffset + (Vector2)gameObject.transform.position;
@@ -295,10 +303,13 @@ namespace TheOcean
 				GrabbedBox.ToggleGrabbed();
 				BoxHitbox = GrabbedBox.gameObject.GetComponent<BoxCollider2D>();
 
-				BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x, GrabbedBox.transform.position.y - gameObject.transform.position.y);
-				
+				if (GrabbedBox.transform.position.x - gameObject.transform.position.x < 0)
+					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x - MinDistance, GrabbedBox.transform.position.y - gameObject.transform.position.y);
+				else
+					BoxOffset = new Vector2(GrabbedBox.transform.position.x - gameObject.transform.position.x + MinDistance, GrabbedBox.transform.position.y - gameObject.transform.position.y);
+
 				// If player grabs a box but isn't on the ground OR has something over it, they can't pull it
-				if (!IsGrounded)
+				if (!IsGrounded && GrabbedBox.IsGrounded)
 				{
 					rigidBody.velocity = new Vector2(0, 0);
 					rigidBody.gravityScale = 0;

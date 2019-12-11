@@ -17,7 +17,7 @@ public class SceneSwitch : MonoBehaviour
         {
             if (Input.anyKey)
             {
-                SceneManager.LoadScene("Arc 1");
+                SceneManager.LoadScene("OceanBase");
             }
         }  
         if(SceneName == "Credits")

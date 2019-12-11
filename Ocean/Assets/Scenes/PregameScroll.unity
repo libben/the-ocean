@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -155,8 +155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 41.814}
-  m_SizeDelta: {x: 400, y: 518.97}
+  m_AnchoredPosition: {x: -200, y: 0.814}
+  m_SizeDelta: {x: 330, y: 635.97}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &22081583
 MonoBehaviour:
@@ -177,36 +177,26 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 35
+    m_Font: {fileID: 12800000, guid: 0e4918b13eb5944ca8739ad20a38c438, type: 3}
+    m_FontSize: 15
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.3
-  m_Text: 'This is placeholder text!
-
-    Wowee
-
-    testingggggggggggggggg
-
-    :0
-
-    dsagsdsdfs
-
-    sksksksksksksksk
-
-    *insert
-    super cool backstory here*
-
-
-
-'
+    m_LineSpacing: 0.5
+  m_Text: "The machines that replaced human labor worked perfectly, freeing us from
+    fear of our next meal. To my horror, we used them as an excuse to stop creating.
+    Now, everyone is glued to virtual worlds, my little brother included.\nI\u2019ve
+    made connections to other virtual reality opponents, and today, they pay off:
+    we\u2019ve got a submarine, and we\u2019re sending it to the subsea station where
+    the virtual reality servers are held, to destroy them. Everyone agrees that I
+    should pilot the sub, alone. The base is well-guarded; however, I have a gift:
+    I can see how events might have unfolded. I can visit a parallel universe.\n\n\n"
 --- !u!222 &22081584
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -586,7 +576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: -259.5}
+  m_AnchoredPosition: {x: -150, y: -300.5}
   m_SizeDelta: {x: 400, y: 107.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1291831170
@@ -621,18 +611,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 35
+    m_Font: {fileID: 12800000, guid: 0e4918b13eb5944ca8739ad20a38c438, type: 3}
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.3
+    m_LineSpacing: 0.5
   m_Text: Press any button to continue....
 --- !u!222 &1291831172
 CanvasRenderer:
