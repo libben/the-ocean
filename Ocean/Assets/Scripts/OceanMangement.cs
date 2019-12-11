@@ -120,12 +120,13 @@ namespace TheOcean
             bool isInFireWorld = this.BackgroundAltered.active;
             float distanceFromHatch = Vector3.Distance(this.Eel.transform.position, this.HatchThreeClosedAltered.transform.position);
             
-            if (isInFireWorld == true && distanceFromHatch < 8.0f)
+            if (Input.GetKey(KeyCode.Z) && distanceFromHatch < 8.0f)
             {
                 this.HatchThreeClosedAltered.SetActive(false);
                 this.HatchThreeOpenedAltered.SetActive(true);
                 var eelScript = this.Eel.GetComponent<EelMovement>();
                 eelScript.enabled = false;
+                this.Eel.SetActive(false);
             }
         }
         
