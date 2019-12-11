@@ -138,6 +138,22 @@ namespace TheOcean
 					}
 					return true;
 				}
+
+				if (Player.GetGravityGunActive())
+				{
+					if (obj.GetComponent<Collider2D>().bounds.Contains(Player.GetGrabbedBox().transform.position))
+					{
+						foreach (SpriteRenderer rnd in obj.GetComponents<SpriteRenderer>())
+						{
+							var tempColor = rnd.color;
+							tempColor.a = 1;
+							rnd.color = tempColor;
+							IEnumerator fadeRoutine = FadeOut(rnd);
+							StartCoroutine(fadeRoutine);
+						}
+						return true;
+					}
+				}
 			}
 		
 			foreach (GameObject box in GameObject.FindGameObjectsWithTag("Box"))
@@ -150,6 +166,22 @@ namespace TheOcean
 					IEnumerator fadeRoutine = FadeOutBox(box.GetComponent<SpriteRenderer>());
 					StartCoroutine(fadeRoutine);
 					return true;
+				}
+
+				if (Player.GetGravityGunActive())
+				{
+					if (box.GetComponent<Collider2D>().bounds.Contains(Player.GetGrabbedBox().transform.position) && !box.GetComponent<BoxController>().GetBeingGrabbed())
+					{
+						foreach (SpriteRenderer rnd in box.GetComponents<SpriteRenderer>())
+						{
+							var tempColor = rnd.color;
+							tempColor.a = 1;
+							rnd.color = tempColor;
+							IEnumerator fadeRoutine = FadeOut(rnd);
+							StartCoroutine(fadeRoutine);
+						}
+						return true;
+					}
 				}
 			}
 			return false;
