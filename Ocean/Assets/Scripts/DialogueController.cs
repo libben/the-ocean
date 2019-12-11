@@ -130,9 +130,9 @@ public class DialogueController : MonoBehaviour
         return ArcDialogue;
     }
 
-    public void ShowUnderwaterDialogue(int index)
+    public void ShowUnderwaterDialogue()
     {
-        if (index == 0)
+        if (SceneCounter.counter == 1)
         {
             var comments = new Comment[5];
             comments[0] = new Comment(Jacob, "FOUND IT. MY SCHEMATICS SHOW THAT ONLY ONE ENTRANCE TO THE BASE IS OPEN. TO FORCE THE OTHER TWO TO OPEN, I’LL HAVE TO GO DEEP INTO THE BASE.");
@@ -142,7 +142,7 @@ public class DialogueController : MonoBehaviour
             comments[4] = new Comment(Sub,  "PRESS UP ARROW TO MOVE FORWARD, RIGHT ARROW TO TURN CLOCKWISE, AND LEFT ARROW TO TURN COUNTERCLOCKWISE");
             Show(comments, () => {});
         }
-        else if (index == 1)
+        else if (SceneCounter.counter == 5)
         {
             var comments = new Comment[1];
             comments[0] = new Comment(Jacob, "OK, LAST HATCH. THE SERVERS SHOULD BE ACCESSIBLE FROM THE BOW ENTRANCE OF THE BASE. THAT ENTRANCE APPEARS TO BE UP AND TO THE LEFT OF MY CURRENT LOCATION.");
@@ -188,7 +188,7 @@ public class DialogueController : MonoBehaviour
         ProfilePicRenderer.sprite = comment.Speaker.ProfilePic;
     }
 
-    void ShowHatchSightedDialogue()
+    public void ShowHatchSightedDialogue()
     {
         var dialogue = new Comment[2];
         dialogue[0] = new Comment(Schaden, "CONFUSED? THE AI OF THIS STATION OBEYS ME. IT ONLY TOLD YOU THAT IT OPENED THE BOW ENTRANCE.");

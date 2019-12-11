@@ -40,11 +40,16 @@ namespace TheOcean
         private GameObject Eel;
         [SerializeField]
         private GameObject BackgroundAltered;
+        [SerializeField]
+        private float DistanceFromHatchToTriggerDialogue = 8.0f;
         private DialogueController MDialogueController;
+        private GameObject Player;
+        private bool ThirdHatchHasBeenSightedInSceneFive = false;
 
         void Awake()
         {
             MDialogueController = gameObject.GetComponent<DialogueController>();
+            Player = GameObject.FindGameObjectWithTag("Player");
         }
         void Start()
         {
@@ -84,15 +89,25 @@ namespace TheOcean
                 this.HatchThreeClosedAltered.SetActive(false);
                 var spawnLocation = SpawnPointThree.transform.position;
                 this.Eel.transform.position = new Vector3(spawnLocation.x, spawnLocation.y, 0.0f);
-            } else
-            {
-                MDialogueController.ShowUnderwaterDialogue(0);
+                MDialogueController.ShowUnderwaterDialogue();
             }
+            MDialogueController.ShowUnderwaterDialogue();
         }
         
         void Update()
         {
             canThirdHatchOpen();
+        }
+
+        void FixedUpdate()
+        {
+            if (!ThirdHatchHasBeenSightedInSceneFive &&
+                SceneCounter.counter == 5 &&
+                Vector3.Distance(Player.transform.position, this.HatchThreeClosed.transform.position) < DistanceFromHatchToTriggerDialogue)
+            {
+                ThirdHatchHasBeenSightedInSceneFive = true;
+                MDialogueController.ShowHatchSightedDialogue();
+            }
         }
 
         // Function to check if the third hatch can be open or not 

@@ -26,8 +26,7 @@ namespace OceanGame
                 }
                 else if (this.Hatch.name == "Hatch 3 Open")
                 {
-                    // Replace with winning screen later
-                    Debug.Log("Congrats you have won!");
+                    SceneManager.LoadScene("PostgameScroll");
                 }
             }
         }

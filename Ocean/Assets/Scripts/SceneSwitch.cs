@@ -10,23 +10,26 @@ public class SceneSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneName = currentScene.name;
-        
-        if (SceneName == "PregameScroll")
+        if (Input.anyKey)
         {
-            if (Input.anyKey)
+            Scene currentScene = SceneManager.GetActiveScene();
+            SceneName = currentScene.name;
+
+            switch(currentScene.name)
             {
-                SceneManager.LoadScene("OceanBase");
-            }
-        }  
-        if(SceneName == "Credits")
-        {
-            if (Input.anyKey)
-            {
-                SceneManager.LoadScene("TitleScreen");
-            }
+                case "PregameScroll":
+                    SceneCounter.counter = 0;
+                    SceneManager.LoadScene("OceanBase");
+                    break;
+                case "PostgameScroll":
+                    SceneManager.LoadScene("Credits");
+                    break;
+                case "Credits":
+                    SceneManager.LoadScene("TitleScreen");
+                    break;
+            }      
         }
+        
     }
 
     public void StartNewGame()
