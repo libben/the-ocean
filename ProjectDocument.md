@@ -18,7 +18,7 @@ The Ocean is a puzzle platformer set in a future where robots perform all of soc
 **Controls**
 
 The player traverses around the level using the W, A, and D keys. The W and D keys control left and right movements, and the A key is used for jumping. 
-The Fire2 button will be used to control the gravity gun. Pressing Fire2 will first pick up and object, and pressing it again will drop the object.
+The X button will be used to control the gravity gun. Pressing X will first pick up and object, and pressing it again will drop the object.
 
 **Switching Realities**
 
@@ -91,6 +91,20 @@ The dialogue box consists of the character's picture and the text they are sayin
 
 **Describe the basics of movement and physics in your game. Is it the standard physics model? What did you change or modify? Did you make your movement scripts that do not use the physics system?**
 
+In *The Ocean*, there are two theaters of gameplay: outside the base where the player rides a submarine, and inside the base where the player directly controls Jacob. These two very different environments required two very different models of physics in the game.
+
+Outside the base, Jacob's submarine uses a [rotation-based, tank-style movement](https://github.com/libben/the-ocean/blob/master/Ocean/Assets/Scripts/PlayerTopDownMovement.cs) where the player's horizontal inputs turn the sub and hitting W accelerates the sub in the direction it's facing. As the whole area is deep under the ocean, we wanted the submarine's motion to feel weighty, with a lot of inertia to simulate the difficulty of moving underwater.
+
+Within the relative safety of the base, Jacob is able to disembark from the sub and move in a more traditional platformer style. Here, the main obstacles are no longer the darkness and the robotic sentry, but spikes, buttons, boxes, and of course walls. After hearing about the sheer size of dedicated physics code bases in games like *Celeste* (5400+ lines!!!), we opted to take advantage of Unity's built-in 2D physics systems. Each object in the game has an attached collider and rigid body, through which Unity's universal physics can take care of the basics like gravity and collision. Taking inspiration from the [2D Platformer Training presentation](https://www.youtube.com/watch?v=j29NgzV8Dw4) from Unite Berlin 2018, we had the player's horizontal inputs add velocity to Jacob's rigid body horizontally. Pressing the jump key adds an upward force to the player independently of the horizontal inputs, and doing a longer press of the jump key leads to a higher jump. This way, the player can control how high they travel vertically, allowing for more precise jumps. 
+
+However, the player character's motion was not the main focus of the gameplay. Rather, we chose to focus on providing the tools the player would need to rely on to advance through the puzzles inside the base. These are the **world switch** and the **gravity gun** (though it's less of a gun and more of a glove).
+
+[World switching](https://github.com/libben/the-ocean/blob/master/Ocean/Assets/Scripts/WorldsController.cs) was one of the core ideas of our game and part of what we think makes our game unique. Jacob can transport himself between two different realities in a flash, though this of course has its limitations. The key supporting pillars of this gameplay dynamic are layers and the [Collision Matrix](https://github.com/libben/the-ocean/blob/eadd4c7de5cc00847adedbe95daac002b129be10/Ocean/ProjectSettings/Physics2DSettings.asset#L56) in the Unity Physics 2D project settings. (Note: it does not look nearly as impressive on Github as it does in the Unity editor.) By changing the values in this matrix, we could enable and disable collisions between objects on any two given layers. For example, we had two layers dedicated solely for the player, `PlayerW1` and `PlayerW2`. By default, the player is in world 1 and shouldn't be blocked by walls in world 2, so we disabled collision between `PlayerW1` and `Platforms2`, the layer we used for the walls and floor of world 2. 
+
+One of the biggest challenges was figuring out how to prevent Jacob from switching from an open space in the first world into a wall in the second world and breaking the game. For this, we had to create a dedicated function, `CollidingInOtherWorld()`, to see if the player should be allowed to switch in the first place. Though I initially attempted to use the `Collider.IsTouchingLayers()` method, this didn't turn out to work well, so instead I opted to place game objects with colliders delineating where the player is not allowed to switch. When the player's position is inside one of these colliders, the switch is blocked. This also allowed us to neatly show the player which wall or other solid object was stopping the player from switching by having the blocking object briefly appear in red. These overlap markers are visible in the scene before running the game, but all have their `SpriteRenderer`s turned off in `WorldsController.cs`. (The player can also switch worlds outside the base, but this leads them into a very dangerous version of the ocean, so they are forced to switch back after a short period.)
+
+- [The gravity gun](https://github.com/libben/the-ocean/blob/eadd4c7de5cc00847adedbe95daac002b129be10/Ocean/Assets/Scripts/PlayerController.cs#L254) was the only equipment upgrade we had planned that survived to the final cut of the game, and a great source of physics-based entertainment. With this tool, Jacob can grab boxes and move them around the levels, enabling him to open new paths deeper into the base. Boxes that used to serve only as obstacles and falling hazards are now usable as stepping stones to jump a bit higher, for example. Just like world switching, this mechanic implementation had a lot of challenges regarding physics. Though it seems as simple as moving the box's transform to keep it in the same position relative to the player, it was actually more complicated. For example, jumping and having the box be blocked by a ceiling while the player isn't should have had the box-player combo stop moving upward. However, without any guards, the player would continue ascending and the box would get dragged inside the ceiling, which was clearly bad. We came up with two approaches to solve this: disabling the box's collider and expanding the player's to encompass the box, and keeping both colliders active but having checks to stop the box from always blindly being moved. Each solution had its own issues, but we decided to go with the second one as it had fewer truly catastrophic game-breaking bugs and worked more generally.
+
 ## Animation and Visuals
 
 **List assets**
@@ -130,8 +144,8 @@ Art Direction
 For building our game world, we used DND storytelling skills to fabricate our story. Inspiration came from a game called The Desolate Hope, where a character flees into a virtual world to escape, and the book Ready Player One. A key idea that lead to our setting was what humans would do when it becomes harder to do something meaningful with their lives. As for the puzzles, Portal was a large inspiration.
 
 We had our protagonist in an old-fashioned diving suit, since he will be arriving to the compound by submarine.
-The main antagonist believes that a digital world that can be protected on servers is “more real” or better than the outside world, where everything decays. The villain present to the player as a man with class.
-There are two main settings of the game, one which is "outside" and underwater, and the other is Arc 1 and Arc2 which is "inside" as the player makes their way deeper into the base.
+The main antagonist believes that a digital world that can be protected on servers is “more real” or better than the outside world, where everything decays. The villain presents himself to the player as a man with class.
+There are two main settings of the game, one which is "outside" and underwater, and the other is Arc 1 and Arc 2 which is "inside" as the player makes their way deeper into the base.
 
 For characters with motions, including our main character Jacob and the electric eel, the animation was made through adobe and each "moving part" of the character was drawn on a separate layer. By drawing them on different layers, when uploading them onto Unity, each body part was able to have its own movement. By giving animations, it definitely added game feel.
 
@@ -153,17 +167,17 @@ We used all the skills we learned from class and applied everything we gained fr
 ## Game Logic
 
 **Document what game states and game data you managed and what design patterns you used to complete your task.**
-*World-Switching* - We managed the "world"/universe that the player and each object (box, button, etc) were in. When the player tries to swap worlds, we check whether something at Jacob's position in the other world. If so, we forbid the world-swap. []()
+*World-Switching* - We managed the "world"/universe that the player and each object (box, button, etc) were in. When the player tries to swap worlds, we check whether something at Jacob's position in the other world. If so, we forbid the world-swap. [The line that cancels world swapping](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/WorldsController.cs#L78)
 
-*Resetting a Level* - The player can die or force a reset of the current level. We tracked objects' initial positions, and the worlds they are in when the player starts the level, to reset them later. []()
+*Resetting a Level* - The player can die or force a reset of the current level. We tracked objects' positions when the player starts the level, to reset them later. [This script was attached to game objects that were containers for boxes; it saves its children's positions](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/Level.cs#L21)
 
-*Movement with Box* - While holding a box, a player is allowed to move if and only if Jacob's feet are touching the ground, the box is not blocked, and there is not another box stacked on the held box. We tracked these things with the aid of colliders. []()
+*Movement with Box* - While holding a box, a player is allowed to move if and only if Jacob's feet are touching the ground, the box is not blocked, and there is not another box stacked on the held box. We tracked these things with the aid of colliders. [GravityGunControl](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/PlayerController.cs#L254)
 
-*Current Level* - Every time a player moves 16 tiles left or right, we consider them to be in a new room/level/puzzle. Several scripts needed to know when a player changed levels: the DialgoueController, the PlayerController, et cetera. We used a notification system - akin to a lightweight, hardcoded PubSub - to inform scripts what level a player was on. Our camera was even subscribed to this script; it is how the camera knows when to change its position. []()
+*Current Level* - Every time a player moves 16 tiles left or right, we consider them to be in a new room/level/puzzle. Several scripts needed to know when a player changed levels: the DialgoueController, the PlayerController, et cetera. We used a notification system - akin to a lightweight, hardcoded PubSub - to inform scripts what level a player was on. Our camera was even subscribed to this script; it is how the camera knows when to change its position. [The notification function](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/LevelController.cs#L47)
 
-*Post-dialogue events* - After pressing yellow buttons, the AI talks to Jacob. As soon as the player is done reading dialogue, we need the scene to change to OceanBase again. We implemented this with callbacks: Our ShowDialogue() function took a lambda as a parameter. ShowDialogue() ran this lambda after all dialogue had been shown.
+*Post-dialogue events* - After pressing yellow buttons, the AI talks to Jacob. As soon as the player is done reading dialogue, we need the scene to change to OceanBase again. We implemented this with callbacks: Our ShowDialogue() function took a lambda as a parameter. ShowDialogue() ran this lambda after all dialogue had been shown. [ShowDialogue](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/DialogueController.cs#L181)
 
-*Time scene visited* - The player returns to the game's undersea area several times, appearing in a different position each time. We wanted to reuse the underwater Scene in Unity. To do this, while changing the player's position each time they visit the Scene, we created a static int field to track how many scenes we had visited in the current play session. 1 indicated it was our first time on this scene, 3 our second, and so on. []()
+*Time scene visited* - The player returns to the game's undersea area several times, appearing in a different position each time. We wanted to reuse the underwater Scene in Unity. To do this, while changing the player's position each time they visit the Scene, we created a static int field to track how many scenes we had visited in the current play session. 1 indicated it was our first time on this scene, 3 our second, and so on. [The counter](https://github.com/libben/the-ocean/blob/b3ba1617428d7c9f0c52d4a9669ca3e3c1935976/Ocean/Assets/Scripts/SceneCounter.cs#L6)
 
 # Sub-Roles
 
@@ -204,7 +218,12 @@ The song inserted for the credits scene by Edvard Grieg is on the happier side, 
 
 **Add a link to the full results of your gameplay tests.**
 
-**Summarize the key findings from your gameplay tests.**
+[Playtest Results](https://docs.google.com/spreadsheets/d/1bntlGgbuPto_3fwz1-TcayCDT3jjdzfVY4g4PuD5tOI/edit?usp=sharing)
+
+* Overall, the feedback from our gameplay testers was that the game was very interesting and fun to play.
+*  The biggest problem that most testers faced was that the controls could feel a bit awkward at times. They couldn't exactly pinpoint the reason exactly, but it might have had something to do with how the player moved through the air and certain keybinds for certain actions
+  * They also mentioned that the submarine sections of the game could feel a bit disorientating and hard to navigate through
+* Other than the issue of the controls, the second most reported thing was that the gravity gun could be a bit glitchy at times. There were times where performing certain actions with the gravity gun would break the level entirely and they would be unable to progress
 
 ## Narrative Design
 
@@ -222,11 +241,13 @@ The main gameplay mechanic is that Jacob can change dimensions. Schaden's dialog
 
 **Include links to your presskit materials and trailer.**
 * [Press Kit](https://docs.google.com/document/d/1aqMNFzjgkNZod29HZo7v3B7WtP1A-raiTTXSEkNnwrc/edit?usp=sharing)  
-* [Trailer]()  
+* [Trailer](https://youtu.be/5Yu68m2JVeY)  
 
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
 
+For the press kit, I mainly took inspiration on what to include from Yacht Club Games' [Shovel Knight press kit](https://yachtclubgames.com/shovel-knight-treasure-trove/). A quick fact list gives readers quick information about us and our game at a glance. I also wrote a little background information about our team and how we formed. People interested in the game would definitely like to see some art of the characters, so I included the sprites for our hero Jacob, his brother Dillon, and the villainous Schaden. The title screen background art was the closest we had to a logo, so I also included it. 
 
+I chose to cast the trailer as a remote mission briefing from Jacob's mysterious anti-virtual-reality allies. This allowed for a more immersive way to give the viewers exposition about the background behind the game. The text-to-speech narration, a privacy measure by the message's sender, let us describe both the story and a bit of the gameplay. Of course, I definitely wanted to show both of the two main phases of gameplay, so I made sure to show footage from both the submarine and inside the base. The submarine gameplay section shows what the player can expect to see at the bottom of the ocean, and also gives sharp-eyed viewers a brief glimpse at the reason why players don't want to be outside for too long. On the other hand, the inside-base section shows some platforming action, the spike hazards common in the base, and demonstrates a bit of the air control and physics. I also made sure to include the two main mechanics that prospective players could expect to be seeing a lot of: world switching and gravity gun box grabbing. Showing a a level being cleared by switching while carrying a box was a great way to show both of these mechanics in action. However, I also wanted to avoid showing too many of the puzzle solutions and story dialogue boxes.
 
 ## Game Feel
 
