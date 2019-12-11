@@ -59,6 +59,7 @@ public class DialogueController : MonoBehaviour
     {
         var comments = new Comment[1];
         comments[0] = new Comment(GravityGlove, "NOW, YOU CAN PRESS X TO GRAB A BOX. PRESS X AGAIN TO RELEASE.");
+        Show(comments, () => {});
     }
 
     private Comment[][] GenerateArc1Dialogue()
