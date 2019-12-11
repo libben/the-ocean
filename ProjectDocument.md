@@ -82,7 +82,7 @@ You should replay any **bold text** with your relevant information. Liberally us
 
 ![DialogueBox](https://cdn.discordapp.com/attachments/156926535356514304/653814216452603934/unknown.png)
 
-The dialogue box consists of the character's picture and the text they are saying. It is controlled through a [DialogueController](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/DialogueController.cs#L1) script. It's primary goal is to hold the actualy dialogue box assets. The text that the characters will be saying comes from the [DialogueHolder](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/DialogueHolder.cs#L1) script. The DialogueHolder script will be triggered when the player collides with a trigger.
+The dialogue box consists of the character's picture and the text they are saying. It is controlled through a [DialogueController](https://github.com/libben/the-ocean/blob/66aacc4f3c25e676e954b238f7abf0be0e6bb5a5/Ocean/Assets/Scripts/DialogueController.cs#L1) script. It's primary goal is to hold the actualy dialogue box assets and the characters' dialogue. The script checks which arc the player is currently in and keeps an index of the current line of dialogue in order to display the correct lines to the player.
 
 
 
