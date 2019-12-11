@@ -22,7 +22,8 @@ The Fire2 button will be used to control the gravity gun. Pressing Fire2 will fi
 
 **Switching Realities**
 
-(INSERT PIC OF TWO DIFFERENT REALITIES HERE)
+![WorldA](https://cdn.discordapp.com/attachments/156926535356514304/654156482157215747/unknown.png)
+![WorldB](https://cdn.discordapp.com/attachments/156926535356514304/654156689104175106/unknown.png)
 
 Some tiles in the level are part of World A, some are part of world B. Some are part of both. The tiles that are part of both worlds will be glowing. 
 See the state change table below:
@@ -75,7 +76,7 @@ You should replay any **bold text** with your relevant information. Liberally us
 
 **Describe your user interface and how it relates to gameplay. This can be done via the template.**
 
-**Title Screen** : The title screen consists of three buttons and a background image. I implemented a [SceneSwitch](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/SceneSwitch.cs#L1) script that is attached to the buttons, with each button leading to its appropriate scene. The "New Game" button leads you to the "PregameScroll" scene which gives the player a bit of backstory to the game. Pressing any button from that scene will lead the player to the scene, "Arc 1", where the player can start playing the game. The "Credits" button will lead to the "Credits" scene. In the "Credits" scene, I listed all of our team members and their roles, as well as the assets and other tutorials we uesd for the project. To achieve the scrolling effect, I recorded an animation using the animator system in Unity. 
+**Title Screen** : The title screen consists of three buttons and a background image. We implemented a [SceneSwitch](https://github.com/libben/the-ocean/blob/1d995eae9d50da6eb35afd6c4b814f74d8cebcbf/Ocean/Assets/Scripts/SceneSwitch.cs#L1) script that is attached to the buttons, with each button leading to its appropriate scene. The "New Game" button leads you to the "PregameScroll" scene which gives the player a bit of backstory to the game. Pressing any button from that scene will lead the player to the scene, "Arc 1", where the player can start playing the game. The "Credits" button will lead to the "Credits" scene. In the "Credits" scene, we listed all of our team members and their roles, as well as the assets and other tutorials we uesd for the project. To achieve the scrolling effect, we recorded an animation using the animator system in Unity. 
 
 **Dialogue Box** :
 
