@@ -770,6 +770,12 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!82 &117044126 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 834060152, guid: dd04cdc6e8563407e9867a5596dd00bc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1144185769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &122800431 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 49821221105445376, guid: 1fa1f636cc7c38b4caa26fa3b6cbc197,
@@ -13996,6 +14002,11 @@ PrefabInstance:
       propertyPath: PlayerObject
       value: 
       objectReference: {fileID: 1322818793}
+    - target: {fileID: 4000296588181415250, guid: dd04cdc6e8563407e9867a5596dd00bc,
+        type: 3}
+      propertyPath: Source
+      value: 
+      objectReference: {fileID: 117044126}
     - target: {fileID: 834060149, guid: dd04cdc6e8563407e9867a5596dd00bc, type: 3}
       propertyPath: DialogueBox
       value: 

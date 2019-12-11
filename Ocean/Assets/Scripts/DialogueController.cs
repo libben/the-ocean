@@ -44,7 +44,7 @@ public class DialogueController : MonoBehaviour
         Schaden = new Character("SCHADEN", SchadenProfilePic);
         Jacob = new Character("JACOB", JacobProfilePic);
         Brother = new Character("DILLON", BrotherProfilePic);
-        GravityGlove = new Character("YOU GAINED THE GRAVITY GLOVE", GravGunPic);
+        GravityGlove = new Character("YOU FOUND THE GRAVITY GLOVE", GravGunPic);
         Sub = new Character("SUB CONTROLS", SubPic);
         JacobFullBody = new Character("CONTROLS", JacobFullBodyPic);
         AI = new Character("AI", AIPic);
@@ -53,6 +53,12 @@ public class DialogueController : MonoBehaviour
         LevelDialogue = new Comment[3][][]; // for arcs
         LevelDialogue[1] = GenerateArc1Dialogue();
         LevelDialogue[2] = GenerateArc2Dialogue();
+    }
+
+    public void ShowGravityGunInstructions()
+    {
+        var comments = new Comment[1];
+        comments[0] = new Comment(GravityGlove, "NOW, YOU CAN PRESS X TO GRAB A BOX. PRESS X AGAIN TO RELEASE.");
     }
 
     private Comment[][] GenerateArc1Dialogue()

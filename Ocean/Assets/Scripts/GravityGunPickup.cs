@@ -11,7 +11,7 @@ public class GravityGunPickup : MonoBehaviour
         if (other.tag == "Player")
         {
             EnableGravityGunOn(other.gameObject.GetComponent<PlayerController>());
-            print("Show a dialog message now instructing the player how to use the gravity gun");
+            GameObject.FindGameObjectWithTag("ScriptHome").GetComponent<DialogueController>().ShowGravityGunInstructions();
             Destroy(gameObject);
         }
     }

@@ -35,6 +35,10 @@ namespace TheOcean
         private float SwitchCoolDown = 0.5f;
         private float CurrentCoolDownTime;
         private bool HasUsedSwitch = false;
+        [SerializeField]
+        private GameObject OverheatingMessage;
+        [SerializeField]
+        private AudioSource WorldSwapSound;
 
         void Update()
         {
@@ -104,15 +108,18 @@ namespace TheOcean
         void ChangeRealities()
         {
             this.HasUsedSwitch = true;
+            WorldSwapSound.Play();
 
             if (this.Background.active) {
                 this.Background.SetActive(false);
                 this.BackgroundAltered.SetActive(true);
+                this.OverheatingMessage.SetActive(true);
             }
             else
             {
                 this.BackgroundAltered.SetActive(false);
                 this.Background.SetActive(true);
+                this.OverheatingMessage.SetActive(false);
             }
         }
 
@@ -143,9 +150,11 @@ namespace TheOcean
 
                 if (this.TimeSpentInFireSea > this.MaxTimeCanSpendInFireLevel)
                 {
+                    WorldSwapSound.Play();
                     this.TimeSpentInFireSea = 0.0f;
                     this.BackgroundAltered.SetActive(false);
                     this.Background.SetActive(true);
+                    this.OverheatingMessage.SetActive(false);
                 }
             }
         }

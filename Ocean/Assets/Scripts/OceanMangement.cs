@@ -49,13 +49,13 @@ namespace TheOcean
         [SerializeField]
         private float DistanceFromHatchToTriggerDialogue = 8.0f;
         private DialogueController MDialogueController;
-        private GameObject Player;
         private bool ThirdHatchHasBeenSightedInSceneFive = false;
 
         void Awake()
         {
             MDialogueController = gameObject.GetComponent<DialogueController>();
-            Player = GameObject.FindGameObjectWithTag("Player");
+            if (Player == null)
+                Player = GameObject.FindGameObjectWithTag("Player");
         }
         void Start()
         {

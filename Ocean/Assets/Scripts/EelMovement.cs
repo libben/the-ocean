@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TheOcean
 {
+    [RequireComponent(typeof(AudioSource))]
     public class EelMovement : MonoBehaviour
     {
         [SerializeField]
@@ -18,6 +19,7 @@ namespace TheOcean
         private Rigidbody2D EelBody;
         private PlayerTopDownMovement PlayerMovement;
         private float MoveSpeed;
+        [SerializeField] private AudioSource LevelResetNoise;
 
         void Start()
         {
@@ -42,6 +44,7 @@ namespace TheOcean
         {
             if (Collider.name == "Player")
             {
+                LevelResetNoise.Play();
                 this.Player.transform.position = this.PlayerSpawnPoint;
                 this.transform.position = this.EelCurrentSpawnPoint.transform.position;
             }
