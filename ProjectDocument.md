@@ -162,7 +162,49 @@ We used all the skills we learned from class and applied everything we gained fr
 
 **Describe the default input configuration.**
 
+#### Controllers
+
+#### TopDownMovement(PlayerTopDownMovement.cs)
+
+This script was used to control the player when they are in the submarine. This includes the execute commands when a key is pressed. 
+
+#### Puzzle Level Scripts
+
+Used PlayerInput.cs and PlayerController.cs. PlayerInput.cs labeled out the keys used to move the player while PlayerController.cs dealt with the physics system of the player. 
+
+For this project we had two different types of input for our character. 
+
+#### Puzzle Levels
+
+When solving puzzles, we used the arrow keys and WASD keys to move our player. 
+
+* Up arrow and W where used to jump
+
+* Right arrow and D where used to move the character right
+
+* Left arrow and a A were used to move the player left
+* Z key was used to change worlds
+* X key was used to use the gravity gun
+
+#### Ocean Level
+
+On the other hand we had different inputs when the player is moving in their submarine. For the submarine controls, we wanted to use a top down controls so the user can explore the whole map. Once again we decided to use the arrow keys and WASD keys. 
+
+* Up arrow and W were used to move the submarine forward in the direction that it is facing 
+* Right arrow and D key were used to rotate the submarine in a clockwise direction 
+* Left arrow and A key were used to rotate the submarine in the counter clockwise direction
+* Z key was used to change worlds
+
+#### Main Menu
+
+For the main menu the player can press the new game button to start the game or the credits button to view the credits of the game. 
+
+#### Navigating through text
+
+We used the 'E' key to navigate the player through text boxes when they appear. 
+
 **Add an entry for each platform or input style your project supports.**
+Our game currently supports unity games on a Windows, Linux, or Mac machine. Our project can only support keyboard commands. If we had more time, we thought about moving the controls to a PS4 controller or some other handheld controller. 
 
 ## Game Logic
 
@@ -252,3 +294,16 @@ I chose to cast the trailer as a remote mission briefing from Jacob's mysterious
 ## Game Feel
 
 **Document what you added to and how you tweaked your game to improve its game feel.**
+From the art to the sounds, there were many juice items that were used to improve game feel. 
+
+LIGHTING- For the ocean level, we purposely made the whole screen dark. The only source of light is from the submarine, the eel, and the hatches. This is used again to make the user feel a little bit scared since they are exploring a dark area. There is light around the hatches to give the user a source of hope when finding it. Since the player is in the dark, they don't know where the robotic eel is and it can only be seen when the player gets close to an opening hatch. The light on the eel's head is used to once again frighten the player when they see it for the first time. 
+
+ART- For art, we decided to go for an aesthetic art style for the ocean level. The ocean level is a slight dark blue with some coral and rocks in the background. Since the level is dark, the user can observe the beauty of it when exploring in their submarine. When the user changes world's in the ocean, they are brought to a volcanic water level. We decided to make the alternate world to be the exact opposite of the regular level. Instead of the calm and beautiful nature, we wanted to put the user in a destructive and uneasy environment. 
+
+Since our theme was connecting the past and future, we wanted our puzzle levels to reflect that. We decided to make the normal levels of our puzzles to look more futuristic while making the altered levels a bit more steampunky. We did this so that the player realizes the connection between each world when solving puzzles. 
+
+AUDIO- For sound we had a sound effect play whenever the player goes through text. That is use make it more engaging and fun since pressing a button and making a sound is more engaging than pressing a button and have no sound happen. We also used two soundtracks that Ben composed. For the ocean level, the music is more ominous to reinforce the creepy feeling that user should be feeling. For the puzzles levels, the music is used to make you feel secluded from the rest of the world much like how most of humanity was secluded from the real world in our game.
+
+MOVEMENT- For movement, we had two different types of movement for the player, one when solving puzzles and one for moving in the submarine. In the submarine, the player is slow and sluggish. We wanted to simulate this as if the player was actual piloting a submarine in real life. This is also used to make the player feel more tense since they are moving in a dark area with little movement. 
+
+For the puzzle levels, we wanted to make the movement as smoothly as possible. We made the character feel more floaty since we thought it was the best way for the player to control their character. One thing that we implemented was the ability to move in the air when jumping. We did this since we wanted to give the user as much control as possible. 
