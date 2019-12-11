@@ -7,6 +7,10 @@ namespace TheOcean
     public class OceanMangement : MonoBehaviour
     {
         [SerializeField]
+        private GameObject HatchOne;
+        [SerializeField]
+        private GameObject HatchTwo;
+        [SerializeField]
         private GameObject HatchOneOpened;
         [SerializeField]
         private GameObject HatchOneClosed;
@@ -39,6 +43,8 @@ namespace TheOcean
         [SerializeField]
         private GameObject Eel;
         [SerializeField]
+        private GameObject Player;
+        [SerializeField]
         private GameObject BackgroundAltered;
         private DialogueController MDialogueController;
 
@@ -54,8 +60,7 @@ namespace TheOcean
             {
                 // Opens up the hatch 2 and closes hatch 1.
                 // Spawns Eel in spawn location 2
-                var eelScript = this.Eel.GetComponent<EelMovement>();
-                eelScript.EelCurrentSpawnPoint.transform.position = this.SpawnPointTwo.transform.position;
+                this.Player.transform.position = this.HatchOne.transform.position;
                 this.HatchOneOpened.SetActive(false);
                 this.HatchOneOpenedAltered.SetActive(false);
                 this.HatchOneClosed.SetActive(true);
@@ -71,8 +76,7 @@ namespace TheOcean
             {
                 // Opens up the hatch 3 and closes hatch 2.
                 // Spawns Eel in spawn location 3
-                var eelScript = this.Eel.GetComponent<EelMovement>();
-                eelScript.EelCurrentSpawnPoint.transform.position = this.SpawnPointThree.transform.position;
+                this.Player.transform.position = this.HatchTwo.transform.position;
                 this.HatchTwoOpened.SetActive(false);
                 this.HatchTwoOpenedAltered.SetActive(false);
                 this.HatchTwoClosed.SetActive(true);
