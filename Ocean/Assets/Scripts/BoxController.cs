@@ -98,6 +98,11 @@ public class BoxController : MonoBehaviour
 			CurrentWorld = newWorld;
 		}
 
+		public bool GetBeingGrabbed()
+		{
+			return BeingGrabbed;
+		}
+
     void OnTriggerEnter2D(Collider2D other)
 	{
 		// Expected: if the box falls on the player, the player should die.

@@ -49,7 +49,7 @@ namespace TheOcean
 		int Direction = 1;                      //Direction player is facing
 
 		// Gravity gun related fields
-		private bool GravityGunAcquired = true;
+		private bool GravityGunAcquired = false;
 		[SerializeField]
 		private float GravityGunRange = 1f;
 		
