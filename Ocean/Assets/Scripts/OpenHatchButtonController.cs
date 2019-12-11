@@ -10,7 +10,7 @@ public class OpenHatchButtonController : AbstractButtonController
         base.OnTriggerEnter2D(other);
         if (other.tag == "Player" || other.tag == "Box")
         {
-            print("Show end-of-arc dialog now");
+            GameObject.FindGameObjectWithTag("ScriptHome").GetComponent<DialogueController>().ShowHatchOpenDialogue();
         }
     }
 }

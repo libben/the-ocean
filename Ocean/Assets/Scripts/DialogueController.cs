@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace TheOcean
 {
@@ -25,20 +26,27 @@ public class DialogueController : MonoBehaviour
     private Character Jacob;
     private Character Brother;
     private Character GravityGlove;
+    private Character Sub;
+    private Character JacobFullBody;
     private Character AI;
 
     private Comment[][][] LevelDialogue;
     private Image ProfilePicRenderer;
+
+    [SerializeField] private Sprite JacobFullBodyPic;
+    [SerializeField] private Sprite SubPic;
 
     [SerializeField] private AudioSource ContinueNoise;
 
     void Awake()
     {
         ProfilePicRenderer = ProfilePicObj.GetComponent<Image>();
-        Schaden = new Character("Schaden", SchadenProfilePic);
-        Jacob = new Character("Jacob", JacobProfilePic);
-        Brother = new Character("Brother", BrotherProfilePic);
-        GravityGlove = new Character("Gravity Glove", GravGunPic);
+        Schaden = new Character("SCHADEN", SchadenProfilePic);
+        Jacob = new Character("JACOB", JacobProfilePic);
+        Brother = new Character("DILLON", BrotherProfilePic);
+        GravityGlove = new Character("YOU GAINED THE GRAVITY GLOVE", GravGunPic);
+        Sub = new Character("SUB CONTROLS", SubPic);
+        JacobFullBody = new Character("CONTROLS", JacobFullBodyPic);
         AI = new Character("AI", AIPic);
 
         
@@ -50,72 +58,74 @@ public class DialogueController : MonoBehaviour
     private Comment[][] GenerateArc1Dialogue()
     {
         var ArcDialogue = new Comment[11][];
-        ArcDialogue[1] = new Comment[2];
-        ArcDialogue[1][0] = new Comment(AI, "Intruder: your presence has been detected. Remain still until our personnel arrive to arrest you.");
+        ArcDialogue[1] = new Comment[3];
+        ArcDialogue[1][0] = new Comment(AI, "INTRUDER: YOUR PRESENCE HAS BEEN DETECTED. REMAIN STILL UNTIL OUR PERSONNEL ARRIVE TO ARREST YOU.");
         ArcDialogue[1][1] = new Comment(Jacob, "...");
+        ArcDialogue[1][2] = new Comment(JacobFullBody, "PRESS RIGHT ARROW TO MOVE RIGHT, AND LEFT ARROW TO MOVE LEFT.");
         ArcDialogue[4] = new Comment[4];
-        ArcDialogue[4][0] = new Comment(Schaden, "Hello, this is Schaden. You’re quite clever, making it this far into my base.");
-        ArcDialogue[4][2] = new Comment(Schaden, "My sensors show me your position, and I can’t fathom how you got there. Boring through the floor, perhaps?");
-        ArcDialogue[4][2] = new Comment(Schaden, "So, who are you?");
+        ArcDialogue[4][0] = new Comment(Schaden, "HELLO, THIS IS SCHADEN. YOU’RE QUITE CLEVER, MAKING IT THIS FAR INTO MY BASE. ");
+        ArcDialogue[4][1] = new Comment(Schaden, "MY SENSORS SHOW ME YOUR POSITION, AND I CAN’T FATHOM HOW YOU GOT THERE. BORING THROUGH THE FLOOR, PERHAPS?");
+        ArcDialogue[4][2] = new Comment(Schaden, "SO, WHO ARE YOU?");
         ArcDialogue[4][3] = new Comment(Jacob, "...");
         ArcDialogue[7] = new Comment[5];
-        ArcDialogue[7][0] = new Comment(Schaden, "Further and further you come, but why? Maybe you are a fan, coming to embrace me.");
-        ArcDialogue[7][1] = new Comment(Jacob, "No.");
-        ArcDialogue[7][2] = new Comment(Schaden, "Oh; he speaks. AI, analyze that voice.");
-        ArcDialogue[7][3] = new Comment(AI, "Yes, sir.");
+        ArcDialogue[7][0] = new Comment(Schaden, "FURTHER AND FURTHER YOU COME, BUT WHY? MAYBE YOU ARE A FAN, COMING TO EMBRACE ME.");
+        ArcDialogue[7][1] = new Comment(Jacob, "NO.");
+        ArcDialogue[7][2] = new Comment(Schaden, "OH; HE SPEAKS. AI, ANALYZE THAT VOICE.");
+        ArcDialogue[7][3] = new Comment(AI, "YES, SIR.");
         ArcDialogue[7][4] = new Comment(Jacob, "......");
         ArcDialogue[10] = new Comment[5];
-        ArcDialogue[10][0] = new Comment(Schaden, "AI, what is your analysis of this intruder’s voice?");
-        ArcDialogue[10][1] = new Comment(AI, "Voice does not match any of our users. However, it closely matches background noise");
-        ArcDialogue[10][2] = new Comment(AI, "recorded on 31 occasions from user Dillon Richter’s headset. Given census data,");
-        ArcDialogue[10][3] = new Comment(AI, "probability is 80% that the intruder is Dillon Richter’s brother, Jacob.");
-        ArcDialogue[10][4] = new Comment(Schaden, "Not a user at all. Surprising. I’ll be in touch.");
+        ArcDialogue[10][0] = new Comment(Schaden, "AI, WHAT IS YOUR ANALYSIS OF THIS INTRUDER’S VOICE?");
+        ArcDialogue[10][1] = new Comment(AI, "VOICE DOES NOT MATCH ANY OF OUR USERS. HOWEVER, IT CLOSELY MATCHES BACKGROUND NOISE RECORDED ON");
+        ArcDialogue[10][2] = new Comment(AI, "31 OCCASIONS FROM USER DILLON RICHTER’S HEADSET. GIVEN CENSUS DATA, PROBABILITY IS 80 PERCENT");
+        ArcDialogue[10][3] = new Comment(AI, "THAT THE INTRUDER IS DILLON RICHTER’S BROTHER, JACOB.");
+        ArcDialogue[10][4] = new Comment(Schaden, "NOT A USER AT ALL. SURPRISING. I’LL BE IN TOUCH.");
         return ArcDialogue;
     }
 
     private Comment[][] GenerateArc2Dialogue()
     {
         var ArcDialogue = new Comment[11][];
-        ArcDialogue[0] = new Comment[17];
-        ArcDialogue[0][0] = new Comment(Schaden, "Still evading my robotic guard? I’m pleased, as it gives us another chance to talk.");
-        ArcDialogue[0][1] = new Comment(Schaden, "While you were out there flitting about, I listened to the conversations we have recorded between you and your brother.");
-        ArcDialogue[0][2] = new Comment(Schaden, "You’re quite angry, and it’s because you misunderstand my work.");
-        ArcDialogue[0][3] = new Comment(Schaden, "In our recordings of you, you compare my technology to a dream, saying, \"We all wake up eventually to discover that the dream left no mark on reality.\"");
-        ArcDialogue[0][4] = new Comment(Schaden, "That’s backwards thinking. Go to any beach in the so-called \"real\" world and write your name on the sand.");
-        ArcDialogue[0][5] = new Comment(Schaden, "In moments your work is washed away. However, I can save the positions of virtual grains of sand indefinitely.");
-        ArcDialogue[0][6] = new Comment(Schaden, "Within the worlds that I have created, no effort is voided or forgotten. We can rewind any world to a previous state.");
-        ArcDialogue[0][7] = new Comment(Schaden, "To invest in a digital world is to protect your work for future generations.");
-         ArcDialogue[0][8] = new Comment(Schaden, "Here on the ocean floor, the servers holding these digital worlds are shielded from the weathering of time.");
-        ArcDialogue[0][9] = new Comment(Schaden, "Although, heh, whether they are protected from you remains to be seen.");
-        ArcDialogue[0][10] = new Comment(Schaden, "The room you’re in is a holographic virtual reality environment I have been working on. I’ve set it to display one of the worlds I run: a Mars simulation.");
-        ArcDialogue[0][11] = new Comment(Schaden, "Here, your brother is telling his own story of homesteading on the red planet.");
-        ArcDialogue[0][12] = new Comment(Brother, "Jacob? What are you doing on Mars?");
-        ArcDialogue[0][12] = new Comment(Jacob, "Nothing. Because I’m not on Mars, and neither are you. You’re in your bedroom, playing a glorified video game, and I’m… somewhere else.");
-        ArcDialogue[0][13] = new Comment(Brother, "Do you always have to be condescending, sourpuss?");
-        ArcDialogue[0][14] = new Comment(Schaden, "Yes, would you rather he risked his life atop a tube of rocket fuel? He can find adventure and challenge just as well in my virtual worlds, and live a long, happy life.");
-        ArcDialogue[0][15] = new Comment(Schaden, "Everything action he takes on Mars will be recorded, and the civilization he is helping to create will be accessible for future generations to build upon, forever.");
-        ArcDialogue[0][15] = new Comment(Schaden, "Stay. Make something that will last. I think that what you truly want is to bond with your brother, and you can have it here.");
-        ArcDialogue[0][16] = new Comment(Jacob, "...");
+        ArcDialogue[0] = new Comment[19];
+        ArcDialogue[0][0] = new Comment(Schaden, "STILL EVADING MY ROBOTIC GUARD? I’M PLEASED, AS IT GIVES US ANOTHER CHANCE TO TALK.");
+        ArcDialogue[0][1] = new Comment(Schaden, "WHILE YOU WERE OUT THERE FLITTING ABOUT, I LISTENED TO THE CONVERSATIONS WE HAVE RECORDED BETWEEN YOU AND YOUR BROTHER.");
+        ArcDialogue[0][2] = new Comment(Schaden, "YOU’RE QUITE ANGRY, AND IT’S BECAUSE YOU MISUNDERSTAND MY WORK.");
+        ArcDialogue[0][3] = new Comment(Schaden, "IN OUR RECORDINGS OF YOU, YOU COMPARE MY TECHNOLOGY TO A DREAM, SAYING, \"WE ALL WAKE UP EVENTUALLY TO DISCOVER THAT THE DREAM LEFT NO MARK ON REALITY.\"");
+        ArcDialogue[0][4] = new Comment(Schaden, "THAT’S BACKWARDS THINKING. GO TO ANY BEACH IN THE SO-CALLED \"REAL\" WORLD AND WRITE YOUR NAME ON THE SAND.");
+        ArcDialogue[0][5] = new Comment(Schaden, "IN MOMENTS YOUR WORK IS WASHED AWAY. HOWEVER, I CAN SAVE THE POSITIONS OF VIRTUAL GRAINS OF SAND INDEFINITELY.");
+        ArcDialogue[0][6] = new Comment(Schaden, "WITHIN THE WORLDS THAT I HAVE CREATED, NO EFFORT IS VOIDED OR FORGOTTEN. WE CAN REWIND ANY WORLD TO A PREVIOUS STATE.");
+        ArcDialogue[0][7] = new Comment(Schaden, "TO INVEST IN A DIGITAL WORLD IS TO PROTECT YOUR WORK FOR FUTURE GENERATIONS.");
+         ArcDialogue[0][8] = new Comment(Schaden, "HERE ON THE OCEAN FLOOR, THE SERVERS HOLDING THESE DIGITAL WORLDS ARE SHIELDED FROM THE WEATHERING OF TIME.");
+        ArcDialogue[0][9] = new Comment(Schaden, "ALTHOUGH, HEH, WHETHER THEY ARE PROTECTED FROM YOU REMAINS TO BE SEEN.");
+        ArcDialogue[0][10] = new Comment(Schaden, "THE ROOM YOU’RE IN IS A HOLOGRAPHIC VIRTUAL REALITY ENVIRONMENT I HAVE BEEN WORKING ON. I’VE SET IT TO DISPLAY ONE OF THE WORLDS I RUN: A MARS SIMULATION.");
+        ArcDialogue[0][11] = new Comment(Schaden, "HERE, YOUR BROTHER IS TELLING HIS OWN STORY OF HOMESTEADING ON THE RED PLANET.");
+        ArcDialogue[0][12] = new Comment(Brother, "JACOB? WHAT ARE YOU DOING ON MARS?");
+        ArcDialogue[0][12] = new Comment(Jacob, "NOTHING. BECAUSE I’M NOT ON MARS, AND NEITHER ARE YOU. YOU’RE IN YOUR BEDROOM, PLAYING A GLORIFIED VIDEO GAME, AND I’M... SOMEWHERE ELSE.");
+        ArcDialogue[0][13] = new Comment(Brother, "DO YOU ALWAYS HAVE TO BE CONDESCENDING, SOURPUSS?");
+        ArcDialogue[0][14] = new Comment(Schaden, "YES, WOULD YOU RATHER HE RISKED HIS LIFE ATOP A TUBE OF ROCKET FUEL? HE CAN FIND ADVENTURE AND CHALLENGE JUST AS WELL IN MY VIRTUAL WORLDS,");
+        ArcDialogue[0][15] = new Comment(Schaden, "AND LIVE A LONG, HAPPY LIFE. EVERY ACTION HE TAKES ON MARS WILL BE RECORDED, AND THE CIVILIZATION HE IS HELPING TO CREATE WILL BE ACCESSIBLE");
+        ArcDialogue[0][16] = new Comment(Schaden, "FOR FUTURE GENERATIONS TO BUILD UPON, FOREVER.");
+        ArcDialogue[0][17] = new Comment(Schaden, "STAY. MAKE SOMETHING THAT WILL LAST. I THINK THAT WHAT YOU TRULY WANT IS TO BOND WITH YOUR BROTHER, AND YOU CAN HAVE IT HERE.");
+        ArcDialogue[0][18] = new Comment(Jacob, "...");
         ArcDialogue[1] = new Comment[5];
-        ArcDialogue[1][0] = new Comment(Jacob, "I can’t.");
-        ArcDialogue[1][1] = new Comment(Jacob, "Dillon’s not making civilization on Mars, he’s changing 0’s to 1’s on a computer.");
-        ArcDialogue[1][2] = new Comment(Jacob, "Humans exist in a physical, messy world, and if we want to benefit humanity we should benefit them there.");
-        ArcDialogue[1][3] = new Comment(Schaden, "And as sand runs through the hourglass, every benefit you bring will erode into nothing.");
-        ArcDialogue[1][4] = new Comment(Schaden, "Regardless, this is the end of your journey. There are no spikes to avoid; whatever drill you have been using won’t help here. I’m sorry you came all this way only to turn back.");
+        ArcDialogue[1][0] = new Comment(Jacob, "I CAN'T.");
+        ArcDialogue[1][1] = new Comment(Jacob, "DILLON’S NOT MAKING CIVILIZATION ON MARS, HE’S CHANGING 0’S TO 1’S ON A COMPUTER.");
+        ArcDialogue[1][2] = new Comment(Jacob, "HUMANS EXIST IN A PHYSICAL, MESSY WORLD, AND IF WE WANT TO BENEFIT HUMANITY WE SHOULD BENEFIT THEM THERE.");
+        ArcDialogue[1][3] = new Comment(Schaden, "AND AS SAND RUNS THROUGH THE HOURGLASS, EVERY BENEFIT YOU BRING WILL ERODE INTO NOTHING.");
+        ArcDialogue[1][4] = new Comment(Schaden, "REGARDLESS, THIS IS THE END OF YOUR JOURNEY. THERE ARE NO SPIKES TO AVOID; WHATEVER DRILL YOU HAVE BEEN USING WON’T HELP HERE. I’M SORRY YOU CAME ALL THIS WAY ONLY TO TURN BACK.");
         ArcDialogue[2] = new Comment[1];
-        ArcDialogue[2][0] = new Comment(Schaden, "My geolocation sensors need to be replaced; they say you’re on the other side of the barrier. Ha!");
+        ArcDialogue[2][0] = new Comment(Schaden, "MY GEOLOCATION SENSORS NEED TO BE REPLACED; THEY SAY YOU’RE ON THE OTHER SIDE OF THE BARRIER. HA!");
         ArcDialogue[3] = new Comment[1];
-        ArcDialogue[3][0] = new Comment(Schaden, "Wait, this room’s sensors say the same thing. Are… are you on the other side?");
+        ArcDialogue[3][0] = new Comment(Schaden, "WAIT, THIS ROOM’S SENSORS SAY THE SAME THING. ARE… ARE YOU ON THE OTHER SIDE?");
         ArcDialogue[4] = new Comment[5];
-        ArcDialogue[4][0] = new Comment(Schaden, "What. Was. That.");
-        ArcDialogue[4][1] = new Comment(Schaden, "What on EARTH was that?");
-        ArcDialogue[4][2] = new Comment(Schaden, "How could you possibly have made it this far into the base?");
-        ArcDialogue[4][3] = new Comment(Jacob, "Good fortune.");
+        ArcDialogue[4][0] = new Comment(Schaden, "WHAT. WAS. THAT.");
+        ArcDialogue[4][1] = new Comment(Schaden, "WHAT ON EARTH WAS THAT?");
+        ArcDialogue[4][2] = new Comment(Schaden, "HOW COULD YOU POSSIBLY HAVE MADE IT THIS FAR INTO THE BASE?");
+        ArcDialogue[4][3] = new Comment(Jacob, "GOOD FORTUNE.");
         ArcDialogue[4][4] = new Comment(Schaden, "...");
 
         ArcDialogue[5] = new Comment[3];
-        ArcDialogue[5][0] = new Comment(Schaden, "Why are you in my base? You merely want your brother back, right? As much as it pains me, I’ll cancel his account. Just turn back.");
-        ArcDialogue[5][1] = new Comment(Jacob, "It’s not just my brother, it’s everyone else’s too.");
+        ArcDialogue[5][0] = new Comment(Schaden, "WHY ARE YOU IN MY BASE? YOU MERELY WANT YOUR BROTHER BACK, RIGHT? AS MUCH AS IT PAINS ME, I’LL CANCEL HIS ACCOUNT. JUST TURN BACK.");
+        ArcDialogue[5][1] = new Comment(Jacob, "IT’S NOT JUST MY BROTHER, IT’S EVERYONE ELSE’S TOO.");
         ArcDialogue[5][2] = new Comment(Schaden, "...");
         return ArcDialogue;
     }
@@ -124,18 +134,18 @@ public class DialogueController : MonoBehaviour
     {
         if (index == 0)
         {
-            var comments = new Comment[4];
-            comments[0] = new Comment(Jacob, "Found it. My schematics show that only one entrance to the base is open. To force the other two to open, I’ll have to go deep into the base.");
-            comments[1] = new Comment(Jacob, "The aft entrance, to my right, is open now. Every entrance is supposed to be lit up, but it seems that everything else down here will be painfully dark.");
-            comments[2] = new Comment(AI, "Hello, subsea vessel. This is an automated radio transmission from Schaden Virtual Reality Labs. We are not expecting any deliveries. Please depart.");
+            var comments = new Comment[5];
+            comments[0] = new Comment(Jacob, "FOUND IT. MY SCHEMATICS SHOW THAT ONLY ONE ENTRANCE TO THE BASE IS OPEN. TO FORCE THE OTHER TWO TO OPEN, I’LL HAVE TO GO DEEP INTO THE BASE.");
+            comments[1] = new Comment(Jacob, "THE AFT ENTRANCE, TO MY RIGHT, IS OPEN NOW. EVERY ENTRANCE WILL BE LIT, BUT IT SEEMS THAT EVERYTHING ELSE DOWN HERE WILL BE PAINFULLY DARK.");
+            comments[2] = new Comment(AI, "HELLO, SUBSEA VESSEL. THIS IS AN AUTOMATED RADIO TRANSMISSION FROM SCHADEN VIRTUAL REALITY LABS. WE ARE NOT EXPECTING ANY DELIVERIES. PLEASE DEPART.");
             comments[3] = new Comment(Jacob, "...");
+            comments[4] = new Comment(Sub,  "PRESS UP ARROW TO MOVE FORWARD, RIGHT ARROW TO TURN CLOCKWISE, AND LEFT ARROW TO TURN COUNTERCLOCKWISE");
             Show(comments, () => {});
         }
         else if (index == 1)
         {
-            var comments = new Comment[2];
-            comments[0] = new Comment(Jacob, "Ok, last hatch. The servers should be accessible from the bow entrance of the base.");
-            comments[1] = new Comment(Jacob, "That entrance appears to be up and to the left of my current location.");
+            var comments = new Comment[1];
+            comments[0] = new Comment(Jacob, "OK, LAST HATCH. THE SERVERS SHOULD BE ACCESSIBLE FROM THE BOW ENTRANCE OF THE BASE. THAT ENTRANCE APPEARS TO BE UP AND TO THE LEFT OF MY CURRENT LOCATION.");
             Show(comments, () => {});
         }
     }
@@ -144,17 +154,16 @@ public class DialogueController : MonoBehaviour
     {
         if (Arc == 1)
         {
-            var dialogue = new Comment[3];
-            dialogue[0] = new Comment(AI, "Entrance to the underside of the labs is now open.");
-            dialogue[1] = new Comment(Schaden, "Hahaha… and I thought my one-entrance-open policy would be enough to minimize damages.");
-            dialogue[2] = new Comment(Schaden, "I didn’t count on you, Jacob, did I?");
-            Show(dialogue, () => {/* load outdoors */});
+            var dialogue = new Comment[2];
+            dialogue[0] = new Comment(AI, "ENTRANCE TO THE UNDERSIDE OF THE LABS IS NOW OPEN.");
+            dialogue[1] = new Comment(Schaden, "HAHAHA... AND I THOUGHT MY ONE-ENTRANCE-OPEN POLICY WOULD BE ENOUGH TO MINIMIZE DAMAGES. I DIDN’T COUNT ON YOU, JACOB, DID I?");
+            Show(dialogue, () => {SceneManager.LoadScene("OceanBase");});
         }
         else if (Arc == 2)
         {
             var dialogue = new Comment[1];
-            dialogue[0] = new Comment(AI, "The lab’s bow entrance is now open.");
-            Show(dialogue, () => {/* load outdoors */});
+            dialogue[0] = new Comment(AI, "THE LAB’S BOW ENTRANCE IS NOW OPEN.");
+            Show(dialogue, () => {SceneManager.LoadScene("OceanBase");});
         }
     }
 
@@ -182,8 +191,8 @@ public class DialogueController : MonoBehaviour
     void ShowHatchSightedDialogue()
     {
         var dialogue = new Comment[2];
-        dialogue[0] = new Comment(Schaden, "Confused? The AI of this station obeys me. It only told you that it opened the bow entrance.");
-        dialogue[1] = new Comment(Schaden, "I hate to hurt anyone, but I won’t let you destroy the digital culture my users have created. My robotic sentry is on its way.");
+        dialogue[0] = new Comment(Schaden, "CONFUSED? THE AI OF THIS STATION OBEYS ME. IT ONLY TOLD YOU THAT IT OPENED THE BOW ENTRANCE.");
+        dialogue[1] = new Comment(Schaden, "I HATE TO HURT ANYONE, BUT I WON’T LET YOU DESTROY THE DIGITAL CULTURE MY USERS HAVE CREATED. MY ROBOTIC SENTRY IS ON ITS WAY.");
         Show(dialogue, null);
     }
 

@@ -32291,6 +32291,8 @@ MonoBehaviour:
   AIPic: {fileID: 21300000, guid: a4e9a2f0a23784397a085cf25f498cb1, type: 3}
   DialogueActive: 0
   Arc: 0
+  JacobFullBodyPic: {fileID: 21300000, guid: 0aafdab76795347049bb755db6cb3411, type: 3}
+  SubPic: {fileID: 21300000, guid: 02bff7c8cb53cc04e8fefbd623ad5d49, type: 3}
   ContinueNoise: {fileID: 1421739693}
 --- !u!1 &1441664662
 GameObject:
