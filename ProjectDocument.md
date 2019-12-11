@@ -201,6 +201,8 @@ The song inserted for the credits scene by Edvard Grieg is on the happier side, 
 ## Press Kit and Trailer
 
 **Include links to your presskit materials and trailer.**
+* [Press Kit](https://docs.google.com/document/d/1aqMNFzjgkNZod29HZo7v3B7WtP1A-raiTTXSEkNnwrc/edit?usp=sharing)  
+* [Trailer]()  
 
 **Describe how you showcased your work. How did you choose what to show in the trailer? Why did you choose your screenshots?**
 
