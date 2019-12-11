@@ -18,7 +18,7 @@ The Ocean is a puzzle platformer set in a future where robots perform all of soc
 **Controls**
 
 The player traverses around the level using the W, A, and D keys. The W and D keys control left and right movements, and the A key is used for jumping. 
-The Fire2 button will be used to control the gravity gun. Pressing Fire2 will first pick up and object, and pressing it again will drop the object.
+The X button will be used to control the gravity gun. Pressing X will first pick up and object, and pressing it again will drop the object.
 
 **Switching Realities**
 
