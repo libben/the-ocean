@@ -218,7 +218,12 @@ The song inserted for the credits scene by Edvard Grieg is on the happier side, 
 
 **Add a link to the full results of your gameplay tests.**
 
-**Summarize the key findings from your gameplay tests.**
+[Playtest Results](https://docs.google.com/spreadsheets/d/1bntlGgbuPto_3fwz1-TcayCDT3jjdzfVY4g4PuD5tOI/edit?usp=sharing)
+
+* Overall, the feedback from our gameplay testers was that the game was very interesting and fun to play.
+*  The biggest problem that most testers faced was that the controls could feel a bit awkward at times. They couldn't exactly pinpoint the reason exactly, but it might have had something to do with how the player moved through the air and certain keybinds for certain actions
+  * They also mentioned that the submarine sections of the game could feel a bit disorientating and hard to navigate through
+* Other than the issue of the controls, the second most reported thing was that the gravity gun could be a bit glitchy at times. There were times where performing certain actions with the gravity gun would break the level entirely and they would be unable to progress
 
 ## Narrative Design
 
