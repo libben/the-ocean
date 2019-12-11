@@ -29533,16 +29533,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4393338622036057908, guid: f61d8c259a37a4aec99728f0ffe42c49,
-        type: 3}
-      propertyPath: m_Name
-      value: DialogueCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 4393338621728720836, guid: f61d8c259a37a4aec99728f0ffe42c49,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4393338622036057911, guid: f61d8c259a37a4aec99728f0ffe42c49,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29646,6 +29636,16 @@ PrefabInstance:
     - target: {fileID: 4393338622036057911, guid: f61d8c259a37a4aec99728f0ffe42c49,
         type: 3}
       propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393338622036057908, guid: f61d8c259a37a4aec99728f0ffe42c49,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogueCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393338621728720836, guid: f61d8c259a37a4aec99728f0ffe42c49,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -33404,7 +33404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725663348}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 94.04, y: -28.12, z: 0}
+  m_LocalPosition: {x: 95.6, y: -28.8, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 1}
   m_Children:
   - {fileID: 2035605267}
