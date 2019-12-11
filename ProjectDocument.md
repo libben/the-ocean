@@ -153,6 +153,17 @@ We used all the skills we learned from class and applied everything we gained fr
 ## Game Logic
 
 **Document what game states and game data you managed and what design patterns you used to complete your task.**
+*World-Switching* - We managed the "world"/universe that the player and each object (box, button, etc) were in. When the player tries to swap worlds, we check whether something at Jacob's position in the other world. If so, we forbid the world-swap. []()
+
+*Resetting a Level* - The player can die or force a reset of the current level. We tracked objects' initial positions, and the worlds they are in when the player starts the level, to reset them later. []()
+
+*Movement with Box* - While holding a box, a player is allowed to move if and only if Jacob's feet are touching the ground, the box is not blocked, and there is not another box stacked on the held box. We tracked these things with the aid of colliders. []()
+
+*Current Level* - Every time a player moves 16 tiles left or right, we consider them to be in a new room/level/puzzle. Several scripts needed to know when a player changed levels: the DialgoueController, the PlayerController, et cetera. We used a notification system - akin to a lightweight, hardcoded PubSub - to inform scripts what level a player was on. Our camera was even subscribed to this script; it is how the camera knows when to change its position. []()
+
+*Post-dialogue events* - After pressing yellow buttons, the AI talks to Jacob. As soon as the player is done reading dialogue, we need the scene to change to OceanBase again. We implemented this with callbacks: Our ShowDialogue() function took a lambda as a parameter. ShowDialogue() ran this lambda after all dialogue had been shown.
+
+*Time scene visited* - The player returns to the game's undersea area several times, appearing in a different position each time. We wanted to reuse the underwater Scene in Unity. To do this, while changing the player's position each time they visit the Scene, we created a static int field to track how many scenes we had visited in the current play session. 1 indicated it was our first time on this scene, 3 our second, and so on. []()
 
 # Sub-Roles
 
@@ -197,7 +208,15 @@ The song inserted for the credits scene by Edvard Grieg is on the happier side, 
 
 ## Narrative Design
 
-**Document how the narrative is present in the game via assets, gameplay systems, and gameplay.** 
+**Document how the narrative is present in the game via assets, gameplay systems, and gameplay.**
+
+Most of our narrative is presented with text. We have pre-game and post-game information dumps onboarding the player. During gameplay, textboxes appear onscreen with character dialogue.
+
+The metanarrative of the game is that Jacob must open hatches to find a room of servers to destroy. **spoilers ahead**: At the game's climax, the player is as shocked as Jacob is to discover that the third hatch never opened - the station AI only told Jacob that he opened it. So, the narrative of someone actively preventing you from entering their base affects gameplay.
+
+At the beginning of the second set of puzzles, the player finds a Mars simulation instead of a puzzle. Once there, Schaden begins lecturing the player on why he should stay. Even the player's puzzles aren't safe from the narrative - the player is interrupted from what they expect. By changing the map, we linked the player's feelings to the character's: both are surprised and disoriented.
+
+The main gameplay mechanic is that Jacob can change dimensions. Schaden's dialogue interacts with this by progressing from doubt of its existence to fear of what he doesn't understand.
 
 ## Press Kit and Trailer
 
