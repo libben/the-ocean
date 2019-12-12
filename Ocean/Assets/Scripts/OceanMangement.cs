@@ -60,7 +60,7 @@ namespace TheOcean
         void Start()
         {
             int currentSceneCounter = SceneCounter.counter;
-
+            print(currentSceneCounter);
             if (currentSceneCounter == 3)
             {
                 // Opens up the hatch 2 and closes hatch 1.
@@ -77,7 +77,7 @@ namespace TheOcean
                 this.HatchTwoClosedAltered.SetActive(false);
                 var spawnLocation = SpawnPointTwo.transform.position;
                 this.Eel.transform.position = new Vector3(spawnLocation.x, spawnLocation.y, 0.0f);
-            } else if (currentSceneCounter == 5)
+            } else if (currentSceneCounter == 6)
             {
                 // Opens up the hatch 3 and closes hatch 2.
                 // Spawns Eel in spawn location 3
